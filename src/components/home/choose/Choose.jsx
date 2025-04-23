@@ -1,0 +1,185 @@
+import CommonTitle from "../../shared/CommonTitle";
+import CustomContainer from "../../shared/CustomContainer";
+
+const Choose = () => {
+  return (
+    <section className="bg-[#f6f6f6] pb-32">
+      <CustomContainer>
+        <div className=" mt-[30px]">
+          <div className="flex flex-col lg:flex-row justify-between gap-8 pt-[300px]">
+            <div className="order-2 lg:order-1">
+              <CommonTitle text={"Why choose us ?"} />
+              <p className="text-[24px] text-[#000000] text-wrap font-degular pt-3">
+                At------we are dedicated to providing top-notch car washing and
+                detailing services with quality, efficiency, and care.
+              </p>
+              <h3 className="font-semibold font-degular text-[32px] text-[#000000] pt-[25px] pb-[34px]">
+                Our Commitment
+              </h3>
+              {/* list items */}
+              <div>
+                <div className="flex  items-center gap-2">
+                  <span>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM8.823 12.14L6.058 9.373L5 10.431L8.119 13.552C8.30653 13.7395 8.56084 13.8448 8.826 13.8448C9.09116 13.8448 9.34547 13.7395 9.533 13.552L15.485 7.602L14.423 6.54L8.823 12.14Z"
+                        fill="#0063E6"
+                      />
+                    </svg>
+                  </span>
+                  <p className="text-[24px] font-degular">
+                    Premium Service – Expert car cleaning with attention to
+                    detail.
+                  </p>
+                </div>
+
+                <div className="flex  items-center gap-2">
+                  <span>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM8.823 12.14L6.058 9.373L5 10.431L8.119 13.552C8.30653 13.7395 8.56084 13.8448 8.826 13.8448C9.09116 13.8448 9.34547 13.7395 9.533 13.552L15.485 7.602L14.423 6.54L8.823 12.14Z"
+                        fill="#0063E6"
+                      />
+                    </svg>
+                  </span>
+                  <p className="text-[24px] font-degular">
+                    Advanced Equipment – High-end tools for superior results
+                  </p>
+                </div>
+
+                <div className="flex  items-center gap-2">
+                  <span>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM8.823 12.14L6.058 9.373L5 10.431L8.119 13.552C8.30653 13.7395 8.56084 13.8448 8.826 13.8448C9.09116 13.8448 9.34547 13.7395 9.533 13.552L15.485 7.602L14.423 6.54L8.823 12.14Z"
+                        fill="#0063E6"
+                      />
+                    </svg>
+                  </span>
+                  <p className="text-[24px] font-degular">
+                    Affordable Pricing – Best value with competitive rates.
+                  </p>
+                </div>
+
+                <div className="flex  items-center gap-2">
+                  <span>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM8.823 12.14L6.058 9.373L5 10.431L8.119 13.552C8.30653 13.7395 8.56084 13.8448 8.826 13.8448C9.09116 13.8448 9.34547 13.7395 9.533 13.552L15.485 7.602L14.423 6.54L8.823 12.14Z"
+                        fill="#0063E6"
+                      />
+                    </svg>
+                  </span>
+                  <p className="text-[24px] font-degular">
+                    Eco-Friendly Approach – Water-saving and biodegradable
+                    products.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM8.823 12.14L6.058 9.373L5 10.431L8.119 13.552C8.30653 13.7395 8.56084 13.8448 8.826 13.8448C9.09116 13.8448 9.34547 13.7395 9.533 13.552L15.485 7.602L14.423 6.54L8.823 12.14Z"
+                        fill="#0063E6"
+                      />
+                    </svg>
+                  </span>
+                  <p className="text-[24px] font-degular">
+                    Customer Satisfaction – A spotless shine, every time.
+                  </p>
+                </div>
+
+                <div className="">
+                  <p className="text-[24px] font-degular">
+                    Trust ------ for a professional and reliable car wash
+                    experience!
+                  </p>
+                </div>
+
+                <div className="pt-8 lg:pt-[137px] flex items-center gap-2">
+                  <button className="bg-primary text-[#ffff] text-[20px] px-6 py-2 md:py-2 lg:py-4 md:px-[30px] lg:px-[57px] rounded-full">
+                    Book Now
+                  </button>
+                  <button className="bg-primary text-[#ffff] p-4 lg:p-6 rounded-full">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 13 13"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0.843277 10.7425L9.03582 2.55001L2.67186 2.55001L2.67185 0.550313H12.4497L12.4497 10.3282L10.45 10.3282L10.45 3.96422L2.25749 12.1568L0.843277 10.7425Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* right site image */}
+            <div className="order-1 lg:order-2 pb-20 md:pb-44 lg:pb-0 flex justify-center">
+              <div className="relative flex justify-center items-center w-full">
+                <img
+                  src="/choose/photo1.png"
+                  alt="choose"
+                  className="w-[70%] md:w-[60%] lg:w-full"
+                />
+
+                <img
+                  src="/choose/photo2.png"
+                  alt="choose"
+                  className="absolute w-[70%] md:w-[60%] lg:w-full top-[40%] right-[30%] md:right-[40%] lg:right-[40%]"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </CustomContainer>
+    </section>
+  );
+};
+
+export default Choose;
