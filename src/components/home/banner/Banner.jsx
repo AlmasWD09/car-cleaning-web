@@ -3,11 +3,11 @@ import GroupAvater from "../../shared/GroupAvater";
 
 const Banner = () => {
   return (
-    <section className="bg-[#f6f6f6] font-degular relative">
+    <section className="bg-[#f6f6f6] font-degular relative pt-20 lg:pt-0">
       <CustomContainer>
         <div className="pb-[200px]">
           <div className="py-16">
-            <div className="flex justify-between ">
+            <div className="flex flex-col lg:flex-row justify-between ">
               <div className="max-w-[705px] text-wrap">
                 <h1 className="font-semibold md:text-[68px] ">
                   Keep your car clean always
@@ -66,8 +66,8 @@ const Banner = () => {
                 </div>
 
 
-
-                <div className="absolute z-20 bottom-[230px] -left-[200px]">
+                {/* css.glass morpizom component */}
+                <div className="absolute z-10 bottom-[230px] -left-[200px]">
                   <div className="flex gap-2 w-[296px] rounded-xl p-4" style={{
                     background: 'rgba(255, 255, 255, 0.06)',
                     borderRadius: '16px',
