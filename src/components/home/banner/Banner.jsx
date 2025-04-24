@@ -36,10 +36,6 @@ const Banner = () => {
                   </button>
                 </div>
 
-                <div className="flex justify-end">
-                <button>ccccccccc</button>
-                </div>
-
                 {/* group avater component */}
                 <div className="pt-[109px]">
                   <h2 className="font-bold text-[24px] text-[#000000]">
@@ -52,7 +48,7 @@ const Banner = () => {
 
 
               {/* right side image */}
-              <div className="relative">
+              <div className="relative top-16">
                 <svg
                   width="608"
                   height="126"
@@ -69,76 +65,87 @@ const Banner = () => {
                   <img src="/bannerCar1.png" alt="car" />
                 </div>
 
-                {/* <div className="flex gap-2 w-[296px] rounded-xl bg-gray-200 p-4 ">
-                  <img src="/bannerAvater/prity1.png" alt="photo" />
-                  <div>
-                    <h4 className="font-medium text-[20px] text-[#000000]">
-                      Jenifer Lopej
-                    </h4>
-                    <span className="flex items-center gap-1">
-                      <svg
-                        width="20"
-                        height="19"
-                        viewBox="0 0 20 19"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
-                          fill="#FFAE00"
-                        />
-                      </svg>
-                      <svg
-                        width="20"
-                        height="19"
-                        viewBox="0 0 20 19"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
-                          fill="#FFAE00"
-                        />
-                      </svg>
-                      <svg
-                        width="20"
-                        height="19"
-                        viewBox="0 0 20 19"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
-                          fill="#FFAE00"
-                        />
-                      </svg>
-                      <svg
-                        width="20"
-                        height="19"
-                        viewBox="0 0 20 19"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
-                          fill="#FFAE00"
-                        />
-                      </svg>
-                      <svg
-                        width="20"
-                        height="19"
-                        viewBox="0 0 20 19"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
-                          fill="#FFAE00"
-                        />
-                      </svg>
-                    </span>
+
+
+                <div className="absolute z-20 bottom-[230px] -left-[200px]">
+                  <div className="flex gap-2 w-[296px] rounded-xl p-4" style={{
+                    background: 'rgba(255, 255, 255, 0.06)',
+                    borderRadius: '16px',
+                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.3)',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                    border: '1px solid #ffffff'
+                  }}>
+                    <img src="/bannerAvater/prity1.png" alt="photo" />
+                    <div>
+                      <h4 className="font-medium text-[20px] text-[#000000]">
+                        Jenifer Lopej
+                      </h4>
+                      <span className="flex items-center gap-1">
+                        <svg
+                          width="20"
+                          height="19"
+                          viewBox="0 0 20 19"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
+                            fill="#FFAE00"
+                          />
+                        </svg>
+                        <svg
+                          width="20"
+                          height="19"
+                          viewBox="0 0 20 19"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
+                            fill="#FFAE00"
+                          />
+                        </svg>
+                        <svg
+                          width="20"
+                          height="19"
+                          viewBox="0 0 20 19"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
+                            fill="#FFAE00"
+                          />
+                        </svg>
+                        <svg
+                          width="20"
+                          height="19"
+                          viewBox="0 0 20 19"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
+                            fill="#FFAE00"
+                          />
+                        </svg>
+                        <svg
+                          width="20"
+                          height="19"
+                          viewBox="0 0 20 19"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
+                            fill="#FFAE00"
+                          />
+                        </svg>
+                      </span>
+                    </div>
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>
