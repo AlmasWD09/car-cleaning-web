@@ -4,6 +4,7 @@ import { useState } from "react";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineArrowOutward } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [form] = Form.useForm();
@@ -111,9 +112,11 @@ const Login = () => {
                       Remember me
                     </Checkbox>
                   </div>
-                  <p className="font-degular text-[20px]">
+                  <Link to='/forget-password'>
+                  <p className="font-degular text-[20px] cursor-pointer">
                     Forgot password ?
                   </p>
+                  </Link>
                 </div>
 
                 {/* submit button component */}

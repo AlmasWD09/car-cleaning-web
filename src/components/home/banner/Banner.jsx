@@ -36,6 +36,10 @@ const Banner = () => {
                   </button>
                 </div>
 
+                <div className="flex justify-end">
+                <button>ccccccccc</button>
+                </div>
+
                 {/* group avater component */}
                 <div className="pt-[109px]">
                   <h2 className="font-bold text-[24px] text-[#000000]">
@@ -45,6 +49,7 @@ const Banner = () => {
                   <GroupAvater />
                 </div>
               </div>
+
 
               {/* right side image */}
               <div className="relative">

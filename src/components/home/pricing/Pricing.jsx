@@ -51,7 +51,7 @@ const Pricing = () => {
     },
   ];
   return (
-    <section className="w-full overflow-x-auto">
+    <section className="w-full overflow-x-auto pt-10">
       <CustomContainer>
         <div>
           <CommonTitle text={"Pricing"} />

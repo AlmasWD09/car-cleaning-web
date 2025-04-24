@@ -6,6 +6,10 @@ import Service from "../pages/service/Service";
 import Pricing from "../pages/pricing/Pricing";
 import CreateAccount from "../pages/authentication/createAccount/CreateAccount";
 import Login from "../pages/authentication/login/Login";
+import ForgetPassword from "../pages/authentication/forgetPassword/ForgetPassword";
+import OtpCode from "../pages/authentication/otpCode/OtpCode";
+import CreateNewPassword from "../pages/authentication/createNewPassword/CreateNewPassword";
+import PasswordSuccessfully from "../pages/authentication/passwordSuccessfully/PasswordSuccessfully";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +32,22 @@ const router = createBrowserRouter([
       {
         path: "/create-account",
         element: <CreateAccount />,
+      },
+      {
+        path: "/forget-password",
+        element: <ForgetPassword />,
+      },
+      {
+        path: "/otp-code",
+        element: <OtpCode/>,
+      },
+      {
+        path: "/create-new-password",
+        element: <CreateNewPassword/>,
+      },
+      {
+        path: "/password-successfull",
+        element: <PasswordSuccessfully/>,
       },
       {
         path: "/login",
