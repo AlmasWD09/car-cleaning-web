@@ -319,7 +319,7 @@ const CreateAccount = () => {
                     </span>{" "}
                     <MdOutlineArrowOutward className="text-[24px]" />
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     className="flex items-center justify-between h-[60px] rounded-[20px] px-[20px] border border-[#ccc] cursor-pointer"
                   >
@@ -343,7 +343,7 @@ const CreateAccount = () => {
                       Continue with Facebook
                     </span>{" "}
                     <MdOutlineArrowOutward className="text-[24px]" />
-                  </button>
+                  </button> */}
                 </div>
               </Form>
             </div>
