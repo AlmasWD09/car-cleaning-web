@@ -41,6 +41,10 @@ const Navbar = () => {
     navigate("/");
   };
 
+  const handleServiceBookPage = () => {
+    navigate("/service-book");
+  };
+
   return (
     <nav>
       <div className="font-degular bg-[#f6f6f6]">
@@ -110,7 +114,7 @@ const Navbar = () => {
                 </NavLink>
 
                 <div className="p-2">
-                  <button className="text-[#ffffff] text-[20px] font-semibold bg-primary rounded-full py-4 px-[57px]">
+                  <button onClick={()=>handleServiceBookPage()} className="cursor-pointer text-[#ffffff] text-[20px] font-semibold bg-primary rounded-full py-4 px-[57px]">
                     Book Now
                   </button>
                 </div>

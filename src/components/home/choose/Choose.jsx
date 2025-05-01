@@ -1,7 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import CommonTitle from "../../shared/CommonTitle";
 import CustomContainer from "../../shared/CustomContainer";
 
 const Choose = () => {
+  const navigate = useNavigate();
+
+  const handleServiceBookPage = () => {
+    navigate("/service-book");
+  };
   return (
     <section className="bg-[#f6f6f6] pb-32">
       <CustomContainer>
@@ -138,7 +144,7 @@ const Choose = () => {
                 </div>
 
                 <div className="pt-8 lg:pt-[137px] flex items-center gap-2">
-                  <button className="bg-primary text-[#ffff] text-[20px] px-6 py-2 md:py-2 lg:py-4 md:px-[30px] lg:px-[57px] rounded-full">
+                  <button onClick={() => handleServiceBookPage()} className="bg-primary text-[#ffff] text-[20px] px-6 py-2 md:py-2 lg:py-4 md:px-[30px] lg:px-[57px] rounded-full">
                     Book Now
                   </button>
                   <button className="bg-primary text-[#ffff] p-4 lg:p-6 rounded-full">

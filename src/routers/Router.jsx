@@ -10,6 +10,13 @@ import ForgetPassword from "../pages/authentication/forgetPassword/ForgetPasswor
 import OtpCode from "../pages/authentication/otpCode/OtpCode";
 import CreateNewPassword from "../pages/authentication/createNewPassword/CreateNewPassword";
 import PasswordSuccessfully from "../pages/authentication/passwordSuccessfully/PasswordSuccessfully";
+import About from "../pages/about/About";
+import PhotoGallery from "../pages/photoGallery/PhotoGallery";
+import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";
+import TermsConditions from "../pages/termsConditions/TermsConditions";
+import ServiceBook from "../pages/serviceBook/ServiceBook";
+import UserProfile from "../pages/profile/UserProfile";
+import EditUserProfile from "../pages/profile/EditUserProfile";
 
 const router = createBrowserRouter([
   {
@@ -22,12 +29,40 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "/about",
+        element: <About />,
+      },
+      {
         path: "/service",
         element: <Service />,
       },
       {
         path: "/pricing",
         element: <Pricing />,
+      },
+      {
+        path: "/photo-gallery",
+        element: <PhotoGallery />,
+      },
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "/terms-condition",
+        element: <TermsConditions />,
+      },
+      {
+        path: "/service-book",
+        element: <ServiceBook />,
+      },
+      {
+        path: "/user-profile",
+        element: <UserProfile />,
+      },
+      {
+        path: "/edit-user-profile",
+        element: <EditUserProfile />,
       },
       {
         path: "/create-account",
@@ -39,15 +74,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/otp-code",
-        element: <OtpCode/>,
+        element: <OtpCode />,
       },
       {
         path: "/create-new-password",
-        element: <CreateNewPassword/>,
+        element: <CreateNewPassword />,
       },
       {
         path: "/password-successfull",
-        element: <PasswordSuccessfully/>,
+        element: <PasswordSuccessfully />,
       },
       {
         path: "/login",

@@ -56,16 +56,16 @@ const Footer = () => {
               <a href="/" className="text-[18px] font-degular">
                 Home
               </a>
-              <a href="/" className="text-[18px] font-degular">
+              <a href="/about" className="text-[18px] font-degular">
                 About us
               </a>
-              <a href="/" className="text-[18px] font-degular">
+              <a href="/service" className="text-[18px] font-degular">
                 Services
               </a>
-              <a href="/" className="text-[18px] font-degular">
+              <a href="/pricing" className="text-[18px] font-degular">
                 Pricing
               </a>
-              <a href="/" className="text-[18px] font-degular">
+              <a href="/photo-gallery" className="text-[18px] font-degular">
                 Photo gallery
               </a>
             </div>
@@ -76,13 +76,13 @@ const Footer = () => {
               Others
             </h3>
             <div className="flex flex-col  space-y-3 pt-4">
-              <a href="/" className="text-[18px] font-degular">
+              <a href="/privacy-policy" className="text-[18px] font-degular">
                 Privacy policy
               </a>
-              <a href="/" className="text-[18px] font-degular">
+              <a href="/terms-condition" className="text-[18px] font-degular">
                 Terms & Conditions
               </a>
-              <a href="/" className="text-[18px] font-degular">
+              <a href="/support" className="text-[18px] font-degular">
                 Support
               </a>
             </div>

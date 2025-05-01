@@ -1,7 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import CustomContainer from "../../shared/CustomContainer";
 import GroupAvater from "../../shared/GroupAvater";
 
 const Banner = () => {
+  const navigate = useNavigate();
+
+  const handleServiceBookPage = () => {
+    navigate("/service-book");
+  };
   return (
     <section className="bg-[#f6f6f6] font-degular relative pt-20 lg:pt-0">
       <CustomContainer>
@@ -17,7 +23,7 @@ const Banner = () => {
                   people think about car cleaning.
                 </p>
                 <div className="pt-[60px] flex items-center gap-2">
-                  <button className="bg-primary text-[#ffff] text-[20px] py-4 px-[57px] rounded-full">
+                  <button onClick={()=>handleServiceBookPage()} className="bg-primary text-[#ffff] text-[20px] py-4 px-[57px] rounded-full">
                     Book Now
                   </button>
                   <button className="bg-primary text-[#ffff] p-6 rounded-full">
