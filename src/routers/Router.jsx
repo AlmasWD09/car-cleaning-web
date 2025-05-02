@@ -20,6 +20,19 @@ import EditUserProfile from "../pages/profile/EditUserProfile";
 import Notification from "../pages/notification/Notification";
 import Support from "../pages/support/Support";
 import ServiceAviablity from "../pages/serviceAviablity/ServiceAviablity";
+import Dashboard from "../layout/Dashboard";
+import Bookings from "../pages/dashboardPage/bookings/Bookings";
+import Services from "../pages/dashboardPage/services/Services";
+import ManageImages from "../pages/dashboardPage/manageImages/ManageImages";
+import ManageDates from "../pages/dashboardPage/manageDates/ManageDates";
+import Transactions from "../pages/dashboardPage/transactions/Transactions";
+import Feedbacks from "../pages/dashboardPage/feedbacks/Feedbacks";
+import ChangePassword from "../pages/dashboardPage/settings/changePassword/ChangePassword";
+import TermsAndConditions from "../pages/dashboardPage/settings/termsAndConditions/TermsAndConditions";
+import CommonDashboard from "../pages/dashboardPage/commonDashboard/CommonDashboard";
+import PrivacyAndPolicy from "../pages/dashboardPage/settings/privacyPolicy/PrivacyAndPolicy";
+import { DesignTokenContext } from "antd/es/theme/context";
+import create from "@ant-design/icons/lib/components/IconFont";
 
 const router = createBrowserRouter([
   {
@@ -43,10 +56,10 @@ const router = createBrowserRouter([
         path: "/pricing",
         element: <Pricing />,
       },
-      {
-        path: "/photo-gallery",
-        element: <PhotoGallery />,
-      },
+      // {
+      //   path: "/photo-gallery",
+      //   element: <PhotoGallery />,
+      // },
       {
         path: "/privacy-policy",
         element: <PrivacyPolicy />,
@@ -105,6 +118,61 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  // dashboard routers =========================================
+  {
+    path:"/admin/dashboard",
+    element:<Dashboard />,
+    children:[
+      {
+        path:"/admin/dashboard",
+        element:<CommonDashboard />
+      },
+      {
+        path:"bookings",
+        element:<Bookings />
+      },
+      {
+        path:"services",
+        element:<Services />
+      },
+      {
+        path:"manage-images",
+        element:<ManageImages />
+      },
+      {
+        path:"manage-dates",
+        element:<ManageDates />
+      },
+      {
+        path:"transactions",
+        element:<Transactions />
+      },
+      {
+        path:"feedbacks",
+        element:<Feedbacks />
+      },
+      {
+        path:"change-password",
+        element:<ChangePassword />
+      },
+      {
+        path:"privacy&policy",
+        element:<PrivacyAndPolicy />
+      },
+      {
+        path:"terms-condition",
+        element:<TermsAndConditions />
+      },
+
+    ]
+  }
 ]);
 
 export default router;
+
+
+// ======= dashboard layout design for =======
+// 1. Dashboard name a layout Design ----> sidebar/navbar/outlet ai page a hova
+// 2. route create
+// 3. 
