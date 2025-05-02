@@ -19,6 +19,7 @@ import UserProfile from "../pages/profile/UserProfile";
 import EditUserProfile from "../pages/profile/EditUserProfile";
 import Notification from "../pages/notification/Notification";
 import Support from "../pages/support/Support";
+import ServiceAviablity from "../pages/serviceAviablity/ServiceAviablity";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: "/service-book",
         element: <ServiceBook />,
+      },
+      {
+        path: "/service-aviablity",
+        element: <ServiceAviablity />,
       },
       {
         path: "/user-profile",

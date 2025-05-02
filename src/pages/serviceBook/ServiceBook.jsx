@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CustomContainer from '../../components/shared/CustomContainer'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Modal } from 'antd';
 
 const ServiceBook = () => {
     const navigate = useNavigate();
+    const [modalOpen, setModalOpen] = useState(false);
     const priceAllData = [
         {
             name: "Compact",
@@ -52,6 +54,38 @@ const ServiceBook = () => {
         },
     ];
 
+    const serviceBookAllData = [
+        {
+            title: "Interior",
+            price: "70.00"
+        },
+        {
+            title: "Interior",
+            price: "80.00"
+        },
+        {
+            title: "Interior",
+            price: "60.00"
+        },
+        {
+            title: "Interior",
+            price: "50.00"
+        },
+        {
+            title: "Interior",
+            price: "700.0"
+        },
+    ];
+
+    const showModal = () => {
+        setModalOpen(true)
+    }
+    const handleModalOkPenOk = () => {
+
+    }
+    const handleModalCancel = () => {
+        setModalOpen(false)
+    }
     return (
         <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
             <CustomContainer>
@@ -107,10 +141,56 @@ const ServiceBook = () => {
                                         </div>
 
                                         <div className="lg:w-[200px] flex justify-end ">
-                                            <button className="bg-primary text-[#ffffff] px-[74px] py-[14px] text-[24px] rounded-full my-2">
+                                            <button onClick={showModal} className="bg-primary text-[#ffffff] px-[74px] py-[14px] text-[24px] rounded-full my-2">
                                                 Select
                                             </button>
                                         </div>
+
+
+                                        {/* modal component */}
+                                        <Modal
+                                            title={
+                                                <div className="flex justify-center px-6 py-2">
+                                                    <h2 className="text-2xl font-semibold font-degular text-center">Compact</h2>
+                                                </div>
+                                            }
+                                            centered
+                                            open={modalOpen}
+                                            onOk={handleModalOkPenOk}
+                                            onCancel={handleModalCancel}
+                                            footer={null}
+                                            width={600}
+                                            className='custom-service-modal'
+                                        >
+                                            <p className='text-[24px] font-degular font-medium text-center'>Which service you wants to book ?</p>
+
+                                            {
+                                                serviceBookAllData.map((item, index) => {
+                                                    return (
+                                                        <div key={index}>
+                                                            <div className='flex justify-between items-center border border-[#ccc] rounded-xl p-4 mb-4 hover:bg-primary hover:bg-opacity-15'>
+                                                                <div>
+                                                                    <p className='text-[24px] font-degular'>{item.title}</p>
+                                                                    <p className='text-[24px] font-degular font-semibold text-primary'>$ {item.price}</p>
+                                                                </div>
+                                                                <Link to="/service-aviablity">
+                                                                    <span className="cursor-pointer">
+                                                                        <svg
+                                                                            className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
+                                                                            viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <rect width="60" height="60" rx="30" fill="#0063E6" />
+                                                                            <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
+                                                                        </svg>
+                                                                    </span>
+                                                                </Link>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+
+
+                                        </Modal>
                                     </div>
                                 );
                             })}
