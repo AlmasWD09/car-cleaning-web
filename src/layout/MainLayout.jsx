@@ -1,12 +1,16 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/shared/navbar/Navbar";
 import Footer from "../components/shared/footer/Footer";
 
 const MainLayout = () => {
+  const location = useLocation()
+  const hideNavbarPaths = ["/user-profile","/edit-user-profile"];
+  const shouldHideNavbar = hideNavbarPaths.includes(location.pathname);
   return (
     <>
       <div>
-        <Navbar />
+        {/* Navbar conditionally show */}
+        {!shouldHideNavbar && <Navbar />}
       </div>
       <Outlet />
       <Footer />
