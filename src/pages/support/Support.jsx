@@ -35,7 +35,7 @@ const Support = () => {
         </div>
 
 
-        <div className="lg:w-[70%] mx-auto border border-red-500 p-4">
+        <div className="lg:w-[70%] mx-auto  p-4">
           <div >
             <div className="flex flex-col justify-center items-center pb-8">
               <h2 className="text-[24px] lg:text-[50px] font-medium font-degular">Support</h2>
@@ -104,8 +104,23 @@ const Support = () => {
                   </Form.Item>
                 </div>
 
-                <div>
-                  <Button >Send <ArrowRightOutlined /></Button>
+                <div className="flex justify-end">
+                  <Button
+                    style={{
+                      width:"200px",
+                      backgroundColor: "#0063E5",
+                      color: "#ffffff",
+                      fontSize: "20px",
+                      fontWeight: "600",
+                      height: "60px",
+                      borderRadius: "30px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "10px",
+                      
+                    }}
+                  >Send <ArrowRightOutlined /></Button>
                 </div>
               </Form>
             </div>
