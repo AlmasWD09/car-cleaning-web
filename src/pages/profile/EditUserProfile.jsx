@@ -279,7 +279,7 @@ const EditUserProfile = () => {
               <div className=" col-span-1 h-[146px] rounded-2xl"> <img src="/profileCar/photo3.png" alt="" className="w-full h-full object-cover rounded-2xl" /></div>
               <div className=" col-span-1 h-[146px] rounded-2xl"> <img src="/profileCar/photo4.png" alt="" className="w-full h-full object-cover rounded-2xl" /></div>
               <div className=" col-span-1 h-[146px] rounded-2xl"> <img src="/profileCar/photo5.png" alt="" className="w-full h-full object-cover rounded-2xl" /></div>
-              <div className=" col-span-1 h-[146px] rounded-2xl"> <img src="/profileCar/photo6.png" alt="" className="w-full h-full object-cover rounded-2xl" /></div>
+              <div className=" col-span-1 h-[146px] rounded-2xl border border-[#ccc] text-7xl flex justify-center items-center">+</div>
             </div>
           </div>
         </div>

@@ -17,6 +17,7 @@ import TermsConditions from "../pages/termsConditions/TermsConditions";
 import ServiceBook from "../pages/serviceBook/ServiceBook";
 import UserProfile from "../pages/profile/UserProfile";
 import EditUserProfile from "../pages/profile/EditUserProfile";
+import Notification from "../pages/notification/Notification";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
       {
         path: "/edit-user-profile",
         element: <EditUserProfile />,
+      },
+      {
+        path: "/notification",
+        element: <Notification />,
       },
       {
         path: "/create-account",
