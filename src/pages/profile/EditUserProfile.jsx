@@ -1,11 +1,5 @@
 import { Button, Form, Input } from "antd";
 import { useState } from "react";
-import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { FcGoogle } from "react-icons/fc";
-import { MdOutlineArrowOutward } from "react-icons/md";
-import { BsFacebook } from "react-icons/bs";
-
-import { useForm } from "antd/es/form/Form";
 import CustomContainer from "../../components/shared/CustomContainer";
 import { useNavigate } from "react-router-dom";
 

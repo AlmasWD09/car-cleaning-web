@@ -18,6 +18,7 @@ import ServiceBook from "../pages/serviceBook/ServiceBook";
 import UserProfile from "../pages/profile/UserProfile";
 import EditUserProfile from "../pages/profile/EditUserProfile";
 import Notification from "../pages/notification/Notification";
+import Support from "../pages/support/Support";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: "/notification",
         element: <Notification />,
+      },
+      {
+        path: "/support",
+        element: <Support />,
       },
       {
         path: "/create-account",
