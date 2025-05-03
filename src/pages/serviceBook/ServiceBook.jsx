@@ -149,12 +149,12 @@ const ServiceBook = () => {
 
                                         {/* modal component */}
                                         <Modal
+                                        centered
                                             title={
-                                                <div className="flex justify-center px-6 py-2">
-                                                    <h2 className="text-2xl font-semibold font-degular text-center">Compact</h2>
+                                                <div className="text-center bg-primary text-[#ffffff] py-4 font-degular text-[18px]  font-semibold rounded-t-lg">
+                                                  Compact
                                                 </div>
-                                            }
-                                            centered
+                                              }
                                             open={modalOpen}
                                             onOk={handleModalOkPenOk}
                                             onCancel={handleModalCancel}
