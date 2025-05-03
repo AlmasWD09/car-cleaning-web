@@ -56,7 +56,6 @@ const ServiceAviablity = () => {
               }}
               value={value}
               onChange={setValue}
-    
               multiple
             />
             <div className="flex flex-col md:flex-row justify-between gap-3 lg:gap-0 rounded-lg p-4 font-degular mt-6">
