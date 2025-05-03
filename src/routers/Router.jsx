@@ -31,6 +31,7 @@ import CommonDashboard from "../pages/dashboardPage/commonDashboard/CommonDashbo
 import PrivacyAndPolicy from "../pages/dashboardPage/settings/privacyPolicy/PrivacyAndPolicy";
 import Service from "../pages/service/Service";
 import DashboardService from "../pages/dashboardPage/dashboardService/DashboardService";
+import CheckoutPage from "../pages/checkout/CheckoutPage";
 
 
 
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
         element: <ServiceAviablity />,
       },
       {
+        path: "/checkout",
+        element: <CheckoutPage />,
+      },
+      {
         path: "/user-profile",
         element: <UserProfile />,
       },
@@ -121,48 +126,48 @@ const router = createBrowserRouter([
 
   // dashboard routers =========================================
   {
-    path:"/admin/dashboard",
-    element:<Dashboard />,
-    children:[
+    path: "/admin/dashboard",
+    element: <Dashboard />,
+    children: [
       {
-        path:"/admin/dashboard",
-        element:<CommonDashboard />
+        path: "/admin/dashboard",
+        element: <CommonDashboard />
       },
       {
-        path:"bookings",
-        element:<Bookings />
+        path: "bookings",
+        element: <Bookings />
       },
       {
-        path:"services",
-        element:<DashboardService />
+        path: "services",
+        element: <DashboardService />
       },
       {
-        path:"manage-images",
-        element:<ManageImages />
+        path: "manage-images",
+        element: <ManageImages />
       },
       {
-        path:"manage-dates",
-        element:<ManageDates />
+        path: "manage-dates",
+        element: <ManageDates />
       },
       {
-        path:"transactions",
-        element:<Transactions />
+        path: "transactions",
+        element: <Transactions />
       },
       {
-        path:"feedbacks",
-        element:<Feedbacks />
+        path: "feedbacks",
+        element: <Feedbacks />
       },
       {
-        path:"change-password",
-        element:<ChangePassword />
+        path: "change-password",
+        element: <ChangePassword />
       },
       {
-        path:"privacy&policy",
-        element:<PrivacyAndPolicy />
+        path: "privacy&policy",
+        element: <PrivacyAndPolicy />
       },
       {
-        path:"terms-condition",
-        element:<TermsAndConditions />
+        path: "terms-condition",
+        element: <TermsAndConditions />
       },
 
     ]

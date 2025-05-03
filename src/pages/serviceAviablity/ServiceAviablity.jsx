@@ -16,7 +16,9 @@ const ServiceAviablity = () => {
 
 
 
-
+const handleCheckoutPage = () =>{
+  navigate("/checkout")
+}
 
 
   const handleData = (dateValue) => {
@@ -114,8 +116,8 @@ const ServiceAviablity = () => {
               <div className="bg-gray-300 w-fit px-[80px] py-2 hover:bg-primary hover:text-[#ffff] text-[20px] cursor-pointer rounded-lg">03.00Pm</div>
             </div>
             <div>
-              <button onClick={() => handleData(value)} className="w-full flex justify-center items-center bg-gray-300 text-[#ffff] text-[20px] py-2 md:py-4  rounded-full gap-2 my-8">
-                Go to next date
+              <button onClick={handleCheckoutPage} className="w-full flex justify-center items-center bg-gray-300 text-[#ffff] text-[20px] py-2 md:py-4  rounded-full gap-2 my-8">
+                next 
                 <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6.29425e-05 6L11.5861 6L7.08606 1.5L8.50006 0.0859985L15.4141 7L8.50006 13.914L7.08606 12.5L11.5861 8L6.29425e-05 8V6Z" fill="white" />
                 </svg>
