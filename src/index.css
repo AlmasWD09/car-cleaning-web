@@ -26,7 +26,7 @@
 
 
 
-/*================ ant modal custom style ============= */
+/*================ ant modal custom style start ============= */
 .ant-modal-content {
   background-color: green !important;
   padding: 0px !important;
@@ -66,3 +66,6 @@
   padding: 0px;
   border-radius: 10px !important;
 }
+
+
+/*================ ant modal custom style end ============= */

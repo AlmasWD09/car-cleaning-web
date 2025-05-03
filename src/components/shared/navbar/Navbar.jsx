@@ -8,8 +8,16 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [navbar, setNavbar] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const location = useLocation();
+  // =============== conditionali loaction set=========
+  const location = useLocation()
+  const hideNavbarButton = ["/forget-password", "/otp-code","/create-new-password","/password-successfull",];
+  const shouldHideNavbarButton = hideNavbarButton.includes(location.pathname);
+
   const isCreateAccountRoute = location.pathname === "/create-account";
+
+
+
+
 
   // Background color change on scroll
   useEffect(() => {
@@ -49,20 +57,18 @@ const Navbar = () => {
     <nav>
       <div className="font-degular bg-[#f6f6f6]">
         <div
-          className={`hidden lg:flex py-2 transition-all duration-700 ${
-            navbar ? "fixed top-0 left-0 right-0 z-50 bg-[#f6f6f6]" : "relative"
-          }`}
+          className={`hidden lg:flex py-2 transition-all duration-700 ${navbar ? "fixed top-0 left-0 right-0 z-50 bg-[#f6f6f6]" : "relative"
+            }`}
         >
           <CustomContainer>
             {/* large devie */}
-            <div className=" lg:flex justify-between items-center  ">
-              <div onClick={handleNavigate} className="cursor-pointer">
+            <div className={`lg:flex items-center  ${!shouldHideNavbarButton ? "justify-between" : "justify-start gap-10 transition-all duration-300"}`}>
+              <div onClick={handleNavigate} className="cursor-pointer ">
                 <img src="/logo1.png" alt="" />
               </div>
               <div
-                className={`flex justify-end items-center rounded-full space-x-20 font-medium text-[20px] pl-6 ${
-                  navbar ? "bg-[#f6f6f6]" : "bg-[#ffffff]"
-                }`}
+                className={`flex ${shouldHideNavbarButton ? "justify-start items-center " : "justify-end items-center"} rounded-full space-x-20 font-medium text-[20px] pl-6 ${navbar ? "bg-[#f6f6f6] " : "bg-[#ffffff] "
+                  }`}
               >
                 <NavLink
                   to="/"
@@ -70,8 +76,8 @@ const Navbar = () => {
                     isPending
                       ? "pending"
                       : isActive
-                      ? "active text-primary font-bold"
-                      : ""
+                        ? "active text-primary font-bold"
+                        : ""
                   }
                 >
                   Home
@@ -82,8 +88,8 @@ const Navbar = () => {
                     isPending
                       ? "pending"
                       : isActive
-                      ? "active text-primary font-bold"
-                      : ""
+                        ? "active text-primary font-bold"
+                        : ""
                   }
                 >
                   Services
@@ -94,8 +100,8 @@ const Navbar = () => {
                     isPending
                       ? "pending"
                       : isActive
-                      ? "active text-primary font-bold"
-                      : ""
+                        ? "active text-primary font-bold"
+                        : ""
                   }
                 >
                   Pricing
@@ -106,73 +112,74 @@ const Navbar = () => {
                     isPending
                       ? "pending"
                       : isActive
-                      ? "active text-primary font-bold"
-                      : ""
+                        ? "active text-primary font-bold"
+                        : ""
                   }
                 >
                   Photo Gallery
                 </NavLink>
 
                 <div className="p-2">
-                  <button onClick={()=>handleServiceBookPage()} className="cursor-pointer text-[#ffffff] text-[20px] font-semibold bg-primary rounded-full py-4 px-[57px]">
+                  <button onClick={() => handleServiceBookPage()} className="cursor-pointer text-[#ffffff] text-[20px] font-semibold bg-primary rounded-full py-4 px-[57px]">
                     Book Now
                   </button>
                 </div>
               </div>
 
-              <div className="flex justify-center items-center gap-8">
-                <span className="bg-primary rounded-full p-4">
-                  <svg
-                    width="22"
-                    height="22"
-                    viewBox="0 0 18 22"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+              {
+                !shouldHideNavbarButton && <div className="flex justify-center items-center gap-8">
+                  <span className="bg-primary rounded-full p-4">
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 18 22"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5.645 19.4437C5.86103 20.1824 6.30417 20.8302 6.90858 21.2907C7.513 21.7513 8.24645 22 9 22C9.75355 22 10.487 21.7513 11.0914 21.2907C11.6958 20.8302 12.139 20.1824 12.355 19.4437H5.645ZM0 18.4203H18V15.3503L16 12.2802V7.16345C16 6.22273 15.8189 5.29123 15.4672 4.42212C15.1154 3.55301 14.5998 2.76331 13.9497 2.09813C13.2997 1.43294 12.5281 0.905282 11.6788 0.545285C10.8295 0.185288 9.91925 0 9 0C8.08075 0 7.17049 0.185288 6.32122 0.545285C5.47194 0.905282 4.70026 1.43294 4.05025 2.09813C3.40024 2.76331 2.88463 3.55301 2.53284 4.42212C2.18106 5.29123 2 6.22273 2 7.16345V12.2802L0 15.3503V18.4203Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </span>
+                  <button
+                    className={`${isCreateAccountRoute
+                        ? "border border-gray-600 py-4 px-8 rounded-full"
+                        : "flex items-center rounded-full gap-2 p-4 bg-primary"
+                      }`}
                   >
-                    <path
-                      d="M5.645 19.4437C5.86103 20.1824 6.30417 20.8302 6.90858 21.2907C7.513 21.7513 8.24645 22 9 22C9.75355 22 10.487 21.7513 11.0914 21.2907C11.6958 20.8302 12.139 20.1824 12.355 19.4437H5.645ZM0 18.4203H18V15.3503L16 12.2802V7.16345C16 6.22273 15.8189 5.29123 15.4672 4.42212C15.1154 3.55301 14.5998 2.76331 13.9497 2.09813C13.2997 1.43294 12.5281 0.905282 11.6788 0.545285C10.8295 0.185288 9.91925 0 9 0C8.08075 0 7.17049 0.185288 6.32122 0.545285C5.47194 0.905282 4.70026 1.43294 4.05025 2.09813C3.40024 2.76331 2.88463 3.55301 2.53284 4.42212C2.18106 5.29123 2 6.22273 2 7.16345V12.2802L0 15.3503V18.4203Z"
-                      fill="white"
-                    />
-                  </svg>
-                </span>
-                <button
-                  className={`${
-                    isCreateAccountRoute
-                      ? "border border-gray-600 py-4 px-8 rounded-full"
-                      : "flex items-center rounded-full gap-2 p-4 bg-primary"
-                  }`}
-                >
-                  {isCreateAccountRoute ? (
-                    <p className="text-[20px] font-semibold tracking-wider flex items-center gap-2">
-                      Have an account?
-                      <Link to="/login">Login</Link>
-                    </p>
-                  ) : (
-                    <>
-                      <span
-                        onClick={() => handleCreateAccount()}
-                        className="flex items-center bg-primary rounded-full gap-2"
-                      >
-                        <svg
-                          width="17"
-                          height="16"
-                          viewBox="0 0 17 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+                    {isCreateAccountRoute ? (
+                      <p className="text-[20px] font-semibold tracking-wider flex items-center gap-2">
+                        Have an account?
+                        <Link to="/login">Login</Link>
+                      </p>
+                    ) : (
+                      <>
+                        <span
+                          onClick={() => handleCreateAccount()}
+                          className="flex items-center bg-primary rounded-full gap-2"
                         >
-                          <path
-                            d="M8.5 0C9.56087 0 10.5783 0.421427 11.3284 1.17157C12.0786 1.92172 12.5 2.93913 12.5 4C12.5 5.06087 12.0786 6.07828 11.3284 6.82843C10.5783 7.57857 9.56087 8 8.5 8C7.43913 8 6.42172 7.57857 5.67157 6.82843C4.92143 6.07828 4.5 5.06087 4.5 4C4.5 2.93913 4.92143 1.92172 5.67157 1.17157C6.42172 0.421427 7.43913 0 8.5 0ZM8.5 10C12.92 10 16.5 11.79 16.5 14V16H0.5V14C0.5 11.79 4.08 10 8.5 10Z"
-                            fill="white"
-                          />
-                        </svg>
-                        <p className="text-[#ffffff] text-[20px] font-semibold tracking-wider">
-                          Create your account
-                        </p>
-                      </span>
-                    </>
-                  )}
-                </button>
-              </div>
+                          <svg
+                            width="17"
+                            height="16"
+                            viewBox="0 0 17 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8.5 0C9.56087 0 10.5783 0.421427 11.3284 1.17157C12.0786 1.92172 12.5 2.93913 12.5 4C12.5 5.06087 12.0786 6.07828 11.3284 6.82843C10.5783 7.57857 9.56087 8 8.5 8C7.43913 8 6.42172 7.57857 5.67157 6.82843C4.92143 6.07828 4.5 5.06087 4.5 4C4.5 2.93913 4.92143 1.92172 5.67157 1.17157C6.42172 0.421427 7.43913 0 8.5 0ZM8.5 10C12.92 10 16.5 11.79 16.5 14V16H0.5V14C0.5 11.79 4.08 10 8.5 10Z"
+                              fill="white"
+                            />
+                          </svg>
+                          <p className="text-[#ffffff] text-[20px] font-semibold tracking-wider">
+                            Create your account
+                          </p>
+                        </span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              }
             </div>
           </CustomContainer>
         </div>
@@ -212,9 +219,8 @@ const Navbar = () => {
 
           {/* Sidebar (Mobile Menu) */}
           <div
-            className={`fixed top-0 right-0 h-full w-2/3 p-4 bg-[#f6f6f6] shadow-lg z-[200] transition-transform overflow-y-auto ${
-              menuOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+            className={`fixed top-0 right-0 h-full w-2/3 p-4 bg-[#f6f6f6] shadow-lg z-[200] transition-transform overflow-y-auto ${menuOpen ? "translate-x-0" : "translate-x-full"
+              }`}
           >
             <button
               onClick={() => setMenuOpen(false)}
@@ -229,8 +235,8 @@ const Navbar = () => {
                   isPending
                     ? "pending"
                     : isActive
-                    ? "active text-primary font-bold"
-                    : ""
+                      ? "active text-primary font-bold"
+                      : ""
                 }
               >
                 Home
@@ -241,8 +247,8 @@ const Navbar = () => {
                   isPending
                     ? "pending"
                     : isActive
-                    ? "active text-primary font-bold"
-                    : ""
+                      ? "active text-primary font-bold"
+                      : ""
                 }
               >
                 Services
@@ -253,8 +259,8 @@ const Navbar = () => {
                   isPending
                     ? "pending"
                     : isActive
-                    ? "active text-primary font-bold"
-                    : ""
+                      ? "active text-primary font-bold"
+                      : ""
                 }
               >
                 Pricing
@@ -265,8 +271,8 @@ const Navbar = () => {
                   isPending
                     ? "pending"
                     : isActive
-                    ? "active text-primary font-bold"
-                    : ""
+                      ? "active text-primary font-bold"
+                      : ""
                 }
               >
                 Photo Gallery
