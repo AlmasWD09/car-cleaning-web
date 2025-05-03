@@ -9,10 +9,10 @@ const Choose = () => {
     navigate("/service-book");
   };
   return (
-    <section className="bg-[#f6f6f6] pb-32">
+    <section className="bg-[#f6f6f6]">
       <CustomContainer>
         <div className=" mt-[30px]">
-          <div className="flex flex-col lg:flex-row justify-between gap-8 pt-[300px]">
+          <div className="flex flex-col lg:flex-row justify-between gap-8 pt-[40px] lg:pt-[300px]">
             <div className="order-2 lg:order-1">
               <CommonTitle text={"Why choose us ?"} />
               <p className="text-[24px] text-[#000000] text-wrap font-degular pt-3">
@@ -24,8 +24,9 @@ const Choose = () => {
               </h3>
               {/* list items */}
               <div>
-                <div className="flex  items-center gap-2">
-                  <span>
+
+                <p className="text-[24px] font-degular flex gap-2">
+                  <span className="mt-2">
                     <svg
                       width="20"
                       height="20"
@@ -41,14 +42,12 @@ const Choose = () => {
                       />
                     </svg>
                   </span>
-                  <p className="text-[24px] font-degular">
-                    Premium Service – Expert car cleaning with attention to
-                    detail.
-                  </p>
-                </div>
+                  Premium Service – Expert car cleaning with attention to
+                  detail.
+                </p>
 
-                <div className="flex  items-center gap-2">
-                  <span>
+                <p className="text-[24px] font-degular flex gap-2">
+                  <span className="mt-2">
                     <svg
                       width="20"
                       height="20"
@@ -64,13 +63,11 @@ const Choose = () => {
                       />
                     </svg>
                   </span>
-                  <p className="text-[24px] font-degular">
-                    Advanced Equipment – High-end tools for superior results
-                  </p>
-                </div>
+                  Advanced Equipment – High-end tools for superior results
+                </p>
 
-                <div className="flex  items-center gap-2">
-                  <span>
+                <p className="text-[24px] font-degular flex gap-2">
+                  <span className="mt-2">
                     <svg
                       width="20"
                       height="20"
@@ -86,13 +83,12 @@ const Choose = () => {
                       />
                     </svg>
                   </span>
-                  <p className="text-[24px] font-degular">
-                    Affordable Pricing – Best value with competitive rates.
-                  </p>
-                </div>
+                  Affordable Pricing – Best value with competitive rates.
+                </p>
 
-                <div className="flex  items-center gap-2">
-                  <span>
+
+                <p className="text-[24px] font-degular flex gap-2">
+                  <span className="mt-2">
                     <svg
                       width="20"
                       height="20"
@@ -108,14 +104,12 @@ const Choose = () => {
                       />
                     </svg>
                   </span>
-                  <p className="text-[24px] font-degular">
-                    Eco-Friendly Approach – Water-saving and biodegradable
-                    products.
-                  </p>
-                </div>
+                  Eco-Friendly Approach – Water-saving and biodegradable
+                  products.
+                </p>
 
-                <div className="flex items-center gap-2">
-                  <span>
+                <p className="text-[24px] font-degular flex gap-2">
+                  <span className="mt-2">
                     <svg
                       width="20"
                       height="20"
@@ -131,23 +125,34 @@ const Choose = () => {
                       />
                     </svg>
                   </span>
-                  <p className="text-[24px] font-degular">
-                    Customer Satisfaction – A spotless shine, every time.
-                  </p>
-                </div>
-
-                <div className="">
-                  <p className="text-[24px] font-degular">
-                    Trust ------ for a professional and reliable car wash
-                    experience!
-                  </p>
-                </div>
-
+                  Customer Satisfaction – A spotless shine, every time.
+                </p>
+                <p className="text-[24px] font-degular flex gap-2">
+                  <span className="mt-2">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM8.823 12.14L6.058 9.373L5 10.431L8.119 13.552C8.30653 13.7395 8.56084 13.8448 8.826 13.8448C9.09116 13.8448 9.34547 13.7395 9.533 13.552L15.485 7.602L14.423 6.54L8.823 12.14Z"
+                        fill="#0063E6"
+                      />
+                    </svg>
+                  </span>
+                  Trust ------ for a professional and reliable car wash
+                  experience!
+                </p>
+          
                 <div className="pt-8 lg:pt-[137px] flex items-center gap-2">
-                  <button onClick={() => handleServiceBookPage()} className="bg-primary text-[#ffff] text-[20px] px-6 py-2 md:py-2 lg:py-4 md:px-[30px] lg:px-[57px] rounded-full">
+                  <button onClick={() => handleServiceBookPage()} className="bg-primary text-[#ffff] text-[20px] py-2 md:py-4 px-[40px] md:px-[57px] rounded-full">
                     Book Now
                   </button>
-                  <button className="bg-primary text-[#ffff] p-4 lg:p-6 rounded-full">
+                  <button className="bg-primary text-[#ffff] p-4 md:p-6 rounded-full">
                     <svg
                       width="13"
                       height="13"

@@ -222,7 +222,7 @@ const Testimonial = () => {
 
   return (
     <>
-      <section className="font-degular pb-10 md:pb-20">
+      <section className="bg-[#f6f6f6] font-degular pb-10 pt-20 lg:pt-32">
         <CustomContainer>
           <div className="">
             <div className="mt-6 md:flex md:items-center md:justify-between">

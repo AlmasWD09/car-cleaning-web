@@ -3,7 +3,7 @@ import CustomContainer from "../../shared/CustomContainer";
 
 const Service = () => {
   return (
-    <section className="bg-[#f6f6f6]">
+    <section className="bg-[#f6f6f6] pt-20 lg:pt-32">
       <CustomContainer>
         <div className="pb-[22px]">
           <CommonTitle text={"Our Services"} />

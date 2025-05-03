@@ -12,21 +12,21 @@ const Banner = () => {
     <section className="bg-[#f6f6f6] font-degular relative pt-20 lg:pt-0">
       <CustomContainer>
         <div className="pb-[200px]">
-          <div className="py-16">
+          <div className="py-8 lg:py-16">
             <div className="flex flex-col lg:flex-row justify-between ">
               <div className="max-w-[705px] text-wrap">
-                <h1 className="font-semibold md:text-[68px] ">
+                <h1 className="font-semibold text-[34px] lg:text-[68px] ">
                   Keep your car clean always
                 </h1>
-                <p className="text-[28px]">
+                <p className="text-[24px] lg:text-[28px]">
                   Car wash is a brand which is latterly going to change the
                   people think about car cleaning.
                 </p>
                 <div className="pt-[60px] flex items-center gap-2">
-                  <button onClick={()=>handleServiceBookPage()} className="bg-primary text-[#ffff] text-[20px] py-4 px-[57px] rounded-full">
+                  <button onClick={() => handleServiceBookPage()} className="bg-primary text-[#ffff] text-[20px] py-2 md:py-4 px-[40px] md:px-[57px] rounded-full">
                     Book Now
                   </button>
-                  <button className="bg-primary text-[#ffff] p-6 rounded-full">
+                  <button className="bg-primary text-[#ffff] p-4 md:p-6 rounded-full">
                     <svg
                       width="13"
                       height="13"
@@ -43,7 +43,7 @@ const Banner = () => {
                 </div>
 
                 {/* group avater component */}
-                <div className="pt-[109px]">
+                <div className="pt-[50px] lg:pt-[109px]">
                   <h2 className="font-bold text-[24px] text-[#000000]">
                     200 +
                   </h2>
@@ -56,8 +56,9 @@ const Banner = () => {
               {/* right side image */}
               <div className="relative top-16">
                 <svg
-                  width="608"
-                  height="126"
+                  className="w-[280px] md:w-[600px] mx-auto"
+                  // width="608"
+                  // height="126"
                   viewBox="0 0 758 126"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -67,14 +68,23 @@ const Banner = () => {
                     fill="white"
                   />
                 </svg>
-                <div className="absolute lg:top-[64px] z-10">
+
+                {/* medium and large device  */}
+                <div className="absolute  md:top-[55px] lg:top-[64px] z-10 hidden md:block">
                   <img src="/bannerCar1.png" alt="car" />
                 </div>
 
 
+
+                {/* small device  */}
+                <div className="absolute top-[25px] z-10 md:hidden">
+                  <img src="/bannerCar1.png" alt="car" className=" w-[300px]" />
+                </div>
+
+
                 {/* css.glass morpizom component */}
-                <div className="absolute z-10 bottom-[230px] -left-[200px]">
-                  <div className="flex gap-2 w-[296px] rounded-xl p-4" style={{
+                <div className="absolute z-10 -bottom-[90px]  md:-bottom-[220px] md:left-[10px] lg:bottom-[190px] lg:-left-[200px]">
+                  <div className="flex gap-2 lg:w-[296px] rounded-xl p-2 lg:p-4" style={{
                     background: 'rgba(255, 255, 255, 0.06)',
                     borderRadius: '16px',
                     boxShadow: '0 4px 30px rgba(0, 0, 0, 0.3)',
@@ -82,15 +92,14 @@ const Banner = () => {
                     WebkitBackdropFilter: 'blur(10px)',
                     border: '1px solid #ffffff'
                   }}>
-                    <img src="/bannerAvater/prity1.png" alt="photo" />
+                    <img src="/bannerAvater/prity1.png" alt="photo" className="object-contain " />
                     <div>
-                      <h4 className="font-medium text-[20px] text-[#000000]">
+                      <h4 className="font-medium lg:text-[20px] text-[#000000]">
                         Jenifer Lopej
                       </h4>
                       <span className="flex items-center gap-1">
                         <svg
-                          width="20"
-                          height="19"
+                          className="w-[25px] md:w-[30px] lg:w-[40px]"
                           viewBox="0 0 20 19"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -101,8 +110,7 @@ const Banner = () => {
                           />
                         </svg>
                         <svg
-                          width="20"
-                          height="19"
+                          className="w-[25px] md:w-[30px] lg:w-[40px]"
                           viewBox="0 0 20 19"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -113,8 +121,7 @@ const Banner = () => {
                           />
                         </svg>
                         <svg
-                          width="20"
-                          height="19"
+                          className="w-[25px] md:w-[30px] lg:w-[40px]"
                           viewBox="0 0 20 19"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -125,8 +132,7 @@ const Banner = () => {
                           />
                         </svg>
                         <svg
-                          width="20"
-                          height="19"
+                          className="w-[25px] md:w-[30px] lg:w-[40px]"
                           viewBox="0 0 20 19"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -137,8 +143,7 @@ const Banner = () => {
                           />
                         </svg>
                         <svg
-                          width="20"
-                          height="19"
+                          className="w-[25px] md:w-[30px] lg:w-[40px]"
                           viewBox="0 0 20 19"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -159,8 +164,8 @@ const Banner = () => {
       </CustomContainer>
 
       {/* service section */}
-      <div className="absolute w-full mx-auto -bottom-[180px]">
-        <div className="flex justify-center items-center gap-4">
+      <div className="absolute w-full mx-auto -bottom-[180px] hidden lg:block">
+        <div className="flex  justify-center items-center gap-4">
           <div className="md:h-[359px] md:w-[439px] flex flex-col justify-center items-center px-[53px] bg-[#FFFFFF] rounded-[37px]">
             <img src="/service/serviceLogo1.svg" alt="" />
             <h3 className="font-degular text-primary text-[30px]">
@@ -192,6 +197,50 @@ const Banner = () => {
               Professional car washing ensures thorough cleaning, detailing, and
               protection using advanced techniques, eco-friendly products, and
               expert care for vehicle maintenance.
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      {/* small / medium device for */}
+      <div className="w-full mx-auto -bottom-[180px] lg:hidden px-4 pt-20 pb-10  md:pt-[400px] md:pb-[40px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col  bg-[#FFFFFF] rounded-[37px] py-6 px-3">
+
+            <img src="/service/serviceLogo1.svg" alt="" className="w-[60px] mx-auto" />
+            <h3 className="font-degular text-primary text-[20px] text-center pt-4">
+              Professional Services
+            </h3>
+
+            <p className="text-[16px] font-degular text-gray-700 text-wrap text-center pt-4">
+              Professional car washing ensures thorough cleaning, detailing, and
+              protection using advanced techniques, eco-friendly products, and
+              expert care for vehicle maintenance.
+            </p>
+          </div>
+
+          <div className="flex flex-col  bg-[#FFFFFF] rounded-[37px] py-6 px-3">
+            <img src="/service/serviceLogo2.svg" alt="" className="w-[60px] mx-auto" />
+            <h3 className="font-degular text-primary text-[20px] text-center pt-4">
+              Professional Equipment
+            </h3>
+
+            <p className="text-[16px] font-degular text-gray-700 text-wrap text-center pt-4">
+              High-end car washing equipment includes advanced pressure washers, foam cannons, steam cleaners for superior cleaning and protection.
+            </p>
+          </div>
+
+          <div className="flex flex-col  bg-[#FFFFFF] rounded-[37px] py-6 px-3">
+            <img src="/service/serviceLogo3.svg" alt="" className="w-[60px] mx-auto" />
+            <h3 className="font-degular text-primary text-[20px] text-center pt-4">
+              Best Pricing
+            </h3>
+
+            <p className="text-[16px] font-degular text-gray-700 text-wrap text-center pt-4">
+              Offering the best pricing in mobile car washing with affordable rates, premium service, customized packages, and great value for top-quality vehicle care.
             </p>
           </div>
         </div>
