@@ -67,14 +67,6 @@ const ServiceBook = () => {
             title: "Interior",
             price: "60.00"
         },
-        {
-            title: "Interior",
-            price: "50.00"
-        },
-        {
-            title: "Interior",
-            price: "700.0"
-        },
     ];
 
     const showModal = () => {
@@ -161,13 +153,14 @@ const ServiceBook = () => {
                                             footer={null}
                                             width={600}
                                             className='custom-service-modal'
+                                            maskStyle={{backgroundColor: 'rgba(134, 134, 134, 0.1)'}}  
                                         >
                                             <p className='text-[24px] font-degular font-medium text-center'>Which service you wants to book ?</p>
 
                                             {
                                                 serviceBookAllData.map((item, index) => {
                                                     return (
-                                                        <div key={index}>
+                                                        <div key={index} className='p-4'>
                                                             <div className='flex justify-between items-center border border-[#ccc] rounded-xl p-4 mb-4 hover:bg-primary hover:bg-opacity-15'>
                                                                 <div>
                                                                     <p className='text-[24px] font-degular'>{item.title}</p>

@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import ErrorPage from "../pages/errorPage/ErrorPage";
 import Home from "../pages/home/Home";
-import Service from "../pages/service/Service";
 import Pricing from "../pages/pricing/Pricing";
 import CreateAccount from "../pages/authentication/createAccount/CreateAccount";
 import Login from "../pages/authentication/login/Login";
@@ -22,7 +21,6 @@ import Support from "../pages/support/Support";
 import ServiceAviablity from "../pages/serviceAviablity/ServiceAviablity";
 import Dashboard from "../layout/Dashboard";
 import Bookings from "../pages/dashboardPage/bookings/Bookings";
-import Services from "../pages/dashboardPage/services/Services";
 import ManageImages from "../pages/dashboardPage/manageImages/ManageImages";
 import ManageDates from "../pages/dashboardPage/manageDates/ManageDates";
 import Transactions from "../pages/dashboardPage/transactions/Transactions";
@@ -31,8 +29,10 @@ import ChangePassword from "../pages/dashboardPage/settings/changePassword/Chang
 import TermsAndConditions from "../pages/dashboardPage/settings/termsAndConditions/TermsAndConditions";
 import CommonDashboard from "../pages/dashboardPage/commonDashboard/CommonDashboard";
 import PrivacyAndPolicy from "../pages/dashboardPage/settings/privacyPolicy/PrivacyAndPolicy";
-import { DesignTokenContext } from "antd/es/theme/context";
-import create from "@ant-design/icons/lib/components/IconFont";
+import Service from "../pages/service/Service";
+import DashboardService from "../pages/dashboardPage/dashboardService/DashboardService";
+
+
 
 const router = createBrowserRouter([
   {
@@ -56,10 +56,10 @@ const router = createBrowserRouter([
         path: "/pricing",
         element: <Pricing />,
       },
-      // {
-      //   path: "/photo-gallery",
-      //   element: <PhotoGallery />,
-      // },
+      {
+        path: "/photo-gallery",
+        element: <PhotoGallery />,
+      },
       {
         path: "/privacy-policy",
         element: <PrivacyPolicy />,
@@ -134,7 +134,7 @@ const router = createBrowserRouter([
       },
       {
         path:"services",
-        element:<Services />
+        element:<DashboardService />
       },
       {
         path:"manage-images",

@@ -52,6 +52,9 @@ const Navbar = () => {
   const handleServiceBookPage = () => {
     navigate("/service-book");
   };
+  const handleNotification = () => {
+    navigate("/notification");
+  };
 
   return (
     <nav>
@@ -83,7 +86,7 @@ const Navbar = () => {
                   Home
                 </NavLink>
                 <NavLink
-                  to="/services"
+                  to="/service"
                   className={({ isActive, isPending }) =>
                     isPending
                       ? "pending"
@@ -128,7 +131,7 @@ const Navbar = () => {
 
               {
                 !shouldHideNavbarButton && <div className="flex justify-center items-center gap-8">
-                  <span className="bg-primary rounded-full p-4">
+                  <span onClick={handleNotification} className="bg-primary rounded-full p-4 cursor-pointer">
                     <svg
                       width="22"
                       height="22"
