@@ -178,7 +178,7 @@ const Navbar = () => {
         </div>
 
         {/* =============== small and medium device start ==========*/}
-        <div className="fixed w-full top-0 inset-0 z-40 lg:hidden">
+        <div className="fixed w-full  z-40 lg:hidden">
           <div className="bg-[#f6f6f6] py-4 md:py-2  text-center w-full flex items-center justify-between px-4">
             <div onClick={handleNavigate} className="cursor-pointer">
               {/* small device image */}

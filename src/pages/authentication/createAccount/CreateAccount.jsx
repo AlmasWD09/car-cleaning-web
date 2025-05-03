@@ -5,7 +5,6 @@ import { FcGoogle } from "react-icons/fc";
 import { MdOutlineArrowOutward } from "react-icons/md";
 import { BsFacebook } from "react-icons/bs";
 import CustomContainer from "../../../components/shared/CustomContainer";
-import { useForm } from "antd/es/form/Form";
 
 const CreateAccount = () => {
   const [createAccountForm] = Form.useForm();
