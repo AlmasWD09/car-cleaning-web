@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomContainer from '../../components/shared/CustomContainer'
 import { Link, useNavigate } from 'react-router-dom';
 import { Modal } from 'antd';
@@ -78,6 +78,19 @@ const ServiceBook = () => {
     const handleModalCancel = () => {
         setModalOpen(false)
     }
+
+
+    useEffect(() => {
+        if (modalOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        return () => {
+            document.body.style.overflow = "auto"; // Cleanup function
+        };
+    }, [modalOpen]);
     return (
         <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
             <CustomContainer>
@@ -141,19 +154,19 @@ const ServiceBook = () => {
 
                                         {/* modal component */}
                                         <Modal
-                                        centered
+                                            centered
                                             title={
                                                 <div className="text-center bg-primary text-[#ffffff] py-4 font-degular text-[18px]  font-semibold rounded-t-lg">
-                                                  Compact
+                                                    Compact
                                                 </div>
-                                              }
+                                            }
                                             open={modalOpen}
                                             onOk={handleModalOkPenOk}
                                             onCancel={handleModalCancel}
                                             footer={null}
                                             width={600}
                                             className='custom-service-modal'
-                                            maskStyle={{backgroundColor: 'rgba(134, 134, 134, 0.1)'}}  
+                                            maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.1)' }}
                                         >
                                             <p className='text-[24px] font-degular font-medium text-center'>Which service you wants to book ?</p>
 

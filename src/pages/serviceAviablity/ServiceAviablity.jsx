@@ -10,22 +10,61 @@ const ServiceAviablity = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState(new Date());
   const [selectDate, setSelectDate] = useState(false)
+  const [activeTimes, setActiveTimes] = useState([]);
+
   const [clickable, setClickable] = useState(false)
 
 
+  const timeallData = [
+    {
+      id: "1",
+      time: "03.00Pm"
+    },
+    {
+      id: "2",
+      time: "02.00Pm"
+    },
+    {
+      id: "3",
+      time: "01.00Pm"
+    },
+    {
+      id: "4",
+      time: "12.00Am"
+    },
+    {
+      id: "5",
+      time: "11.00Am"
+    },
+    {
+      id: "6",
+      time: "10.00Am"
+    },
+  ]
 
 
-
-const handleCheckoutPage = () =>{
-  navigate("/checkout")
-}
-
-
+  const handleCheckoutPage = () => {
+    if (activeTimes.length === 0) return; // Do nothing if nothing is selected
+    navigate("/checkout");
+  }
   const handleData = (dateValue) => {
     setSelectDate(true)
   }
+
+  const handleSelectTime = (timeId) => {
+    if (activeTimes.includes(timeId)) {
+      // If already active, remove it (toggle off)
+      setActiveTimes(activeTimes.filter(id => id !== timeId));
+    } else {
+      // Else add it (toggle on)
+      setActiveTimes([...activeTimes, timeId]);
+    }
+  };
+
+
+
   return (
-    <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
+    <section className=" pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
       <CustomContainer>
         <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-0 pt-10 lg:pt-0">
           <div>
@@ -66,17 +105,17 @@ const handleCheckoutPage = () =>{
                 <p className='text-[20px]  font-degular'>No availability until 27 March</p>
 
               </div>
-        <div className="">
-                  <button onClick={() => handleData(value)} className="bg-primary text-[#ffff] text-[20px] py-2 md:py-4 px-[40px] md:px-[57px] rounded-full flex items-center gap-2">
-                    Go to next date
-                    <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M6.29425e-05 6L11.5861 6L7.08606 1.5L8.50006 0.0859985L15.4141 7L8.50006 13.914L7.08606 12.5L11.5861 8L6.29425e-05 8V6Z" fill="white" />
-                    </svg>
+              <div className="">
+                <button onClick={() => handleData(value)} className="bg-primary text-[#ffff] text-[20px] py-2 md:py-4 px-[40px] md:px-[57px] rounded-full flex items-center gap-2">
+                  Go to next date
+                  <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.29425e-05 6L11.5861 6L7.08606 1.5L8.50006 0.0859985L15.4141 7L8.50006 13.914L7.08606 12.5L11.5861 8L6.29425e-05 8V6Z" fill="white" />
+                  </svg>
 
-                  </button>
+                </button>
 
-                </div>
-            
+              </div>
+
             </div>
           </div>
 
@@ -108,16 +147,21 @@ const handleCheckoutPage = () =>{
             <p className='text-[20px]  font-medium font-degular py-4'>Select Time</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center md:place-items-baseline gap-y-4">
-              <div className="bg-gray-300 w-fit px-[80px] py-2 hover:bg-primary hover:text-[#ffff] text-[20px] cursor-pointer rounded-lg">10.00Am</div>
-              <div className="bg-gray-300 w-fit px-[80px] py-2 hover:bg-primary hover:text-[#ffff] text-[20px] cursor-pointer rounded-lg">11.00Am</div>
-              <div className="bg-gray-300 w-fit px-[80px] py-2 hover:bg-primary hover:text-[#ffff] text-[20px] cursor-pointer rounded-lg">12.00Am</div>
-              <div className="bg-gray-300 w-fit px-[80px] py-2 hover:bg-primary hover:text-[#ffff] text-[20px] cursor-pointer rounded-lg">01.00Pm</div>
-              <div className="bg-gray-300 w-fit px-[80px] py-2 hover:bg-primary hover:text-[#ffff] text-[20px] cursor-pointer rounded-lg">02.00Pm</div>
-              <div className="bg-gray-300 w-fit px-[80px] py-2 hover:bg-primary hover:text-[#ffff] text-[20px] cursor-pointer rounded-lg">03.00Pm</div>
+              {
+                timeallData.map((singleTime, index) => {
+                  const isActive = activeTimes.includes(singleTime.id);
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => handleSelectTime(singleTime.id)}
+                      className={` w-fit px-[80px] py-2 hover:bg-primary hover:text-[#ffff] text-[20px] cursor-pointer rounded-lg ${isActive ? "bg-primary text-[#ffff]" : "bg-[#ffff]"}`}>{singleTime.time}</div>
+                  )
+                })
+              }
             </div>
             <div>
-              <button onClick={handleCheckoutPage} className="w-full flex justify-center items-center bg-gray-300 text-[#ffff] text-[20px] py-2 md:py-4  rounded-full gap-2 my-8">
-                next 
+              <button onClick={handleCheckoutPage} className={`w-full flex justify-center items-center  text-[20px] py-2 md:py-4  rounded-full gap-2 my-8 ${activeTimes.length > 0 ? "bg-primary text-[#ffff] cursor-pointer" : "bg-gray-300 text-[#ffff] cursor-not-allowed"}`}>
+                next
                 <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6.29425e-05 6L11.5861 6L7.08606 1.5L8.50006 0.0859985L15.4141 7L8.50006 13.914L7.08606 12.5L11.5861 8L6.29425e-05 8V6Z" fill="white" />
                 </svg>
