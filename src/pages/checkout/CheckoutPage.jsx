@@ -392,7 +392,7 @@ const CheckoutPage = () => {
                 </div>
               </div>
 
-              <button className="border border-primary px-6 py-4 rounded-lg w-[100px]">
+              <button onClick={() => navigate(-1)} className="border border-primary px-6 py-4 rounded-lg w-[100px]">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M17.7071 4.04125C18.0971 3.65125 18.0971 3.00125 17.7071 2.63125L15.3671 0.291249C14.9971 -0.0987512 14.3471 -0.0987512 13.9571 0.291249L12.1171 2.12125L15.8671 5.87125M-0.00292969 14.2512V18.0012H3.74707L14.8071 6.93125L11.0571 3.18125L-0.00292969 14.2512Z" fill="#0063E6" />
                 </svg>
