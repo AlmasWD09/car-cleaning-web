@@ -6,12 +6,14 @@ import { useEffect, useState } from "react"
 const DashboardService = () => {
   const [formOne] = Form.useForm();
   const [formTwo] = Form.useForm();
+  const [formThree] = Form.useForm();
   const [ImageFileList, setImageFileList] = useState([]);
   const [mondalOne, setModalOne] = useState(false);
   const [mondalTwo, setModalTwo] = useState(false);
   const [mondalThree, setModalThree] = useState(false);
 
 
+  // =============  modal one start ===============
   const showModalOne = () => {
     setModalOne(true)
   }
@@ -23,11 +25,44 @@ const DashboardService = () => {
   const handleCancelModalOne = () => {
     setModalOne(false)
   }
+  // =============  modal one end ===============
+
+
+
+  // =============  modal two start ===============
+  const showModalTwo = () => {
+    setModalTwo(true)
+  }
+
+  const handleModalTwoOk = () => {
+
+  }
+
+  const handleCancelModalTwo = () => {
+    setModalTwo(false)
+  }
+  // =============  modal two end ===============
+
+
+  // =============  modal three start ===============
+  const showModalThree = () => {
+    setModalThree(true)
+  }
+
+  const handleModalThreeOk = () => {
+
+  }
+
+  const handleCancelModalThree = () => {
+    setModalThree(false)
+  }
+  // =============  modal two end ===============
+
 
 
 
   useEffect(() => {
-    if (mondalOne) {
+    if (mondalOne || mondalTwo || mondalThree) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
@@ -36,7 +71,7 @@ const DashboardService = () => {
     return () => {
       document.body.style.overflow = "auto"; // Cleanup function
     };
-  }, [mondalOne]);
+  }, [mondalOne || mondalTwo || mondalThree]);
 
 
   const serviceData = [
@@ -111,6 +146,50 @@ const DashboardService = () => {
 
   }
 
+
+  const onFinishTwo = (values) => {
+    console.log(values)
+    const formData = new FormData();
+    if (ImageFileList[0]?.originFileObj) {
+      formData.append("image", ImageFileList[0].originFileObj);
+    }
+
+    //   try {
+    //     const res = ""
+
+    //     if (res?.data) {
+    //         setImageFileList([]);
+    //         formOne.resetFields()
+    //         dispatch(closeTeamModalOpenOne());
+    //     }
+    // } catch (errors) {
+    // }
+
+
+  }
+
+
+  const onFinishThree = (values) => {
+    console.log(values)
+    const formData = new FormData();
+    if (ImageFileList[0]?.originFileObj) {
+      formData.append("image", ImageFileList[0].originFileObj);
+    }
+
+    //   try {
+    //     const res = ""
+
+    //     if (res?.data) {
+    //         setImageFileList([]);
+    //         formOne.resetFields()
+    //         dispatch(closeTeamModalOpenOne());
+    //     }
+    // } catch (errors) {
+    // }
+
+
+  }
+
   return (
     <div>
       <div className="grid grid-cols-12 gap-4">
@@ -120,7 +199,7 @@ const DashboardService = () => {
               <div key={index} className="col-span-4 bg-[#ffff]  border border-[#ccc] rounded-2xl p-4">
                 <div className="flex items-center justify-between">
                   <p className="text-[30px] font-degular font-semibold text-[#000000]">{item.service_name}</p>
-                  <button className="flex items-center gap-3 py-2 px-4 border border-primary rounded-md text-primary">
+                  <button onClick={showModalTwo} className="flex items-center gap-3 py-2 px-4 border border-primary rounded-md text-primary">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M17.71 4.04125C18.1 3.65125 18.1 3.00125 17.71 2.63125L15.37 0.291249C15 -0.0987512 14.35 -0.0987512 13.96 0.291249L12.12 2.12125L15.87 5.87125M0 14.2512V18.0012H3.75L14.81 6.93125L11.06 3.18125L0 14.2512Z" fill="#0063E6" />
                     </svg>
@@ -145,7 +224,7 @@ const DashboardService = () => {
                 </div>
 
                 <div className="pt-4">
-                  <button className="flex items-center gap-2 py-2 px-4 border border-primary rounded-md text-primary">
+                  <button onClick={showModalThree} className="flex items-center gap-2 py-2 px-4 border border-primary rounded-md text-primary">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M17.71 4.04125C18.1 3.65125 18.1 3.00125 17.71 2.63125L15.37 0.291249C15 -0.0987512 14.35 -0.0987512 13.96 0.291249L12.12 2.12125L15.87 5.87125M0 14.2512V18.0012H3.75L14.81 6.93125L11.06 3.18125L0 14.2512Z" fill="#0063E6" />
                     </svg>
@@ -168,7 +247,7 @@ const DashboardService = () => {
 
 
 
-      {/* modal component */}
+      {/*================== modal component ============= */}
       {/* modal one */}
       <Modal
         centered
@@ -223,15 +302,25 @@ const DashboardService = () => {
               {/* car type */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Car Type</p>
-                <Form.Item name="car_type" className="mb-0">
-                  <Input placeholder="car name" style={{ height: "50px", borderRadius: "20px" }} style={{ height: "50px", borderRadius: "20px" }} />
+                <Form.Item name="car_type" className="mb-0"
+                  rules={[{ required: true, message: "Car type is required!" }]}
+                >
+                  <Input placeholder="car name" style={{ height: "50px", borderRadius: "20px" }} />
                 </Form.Item>
               </div>
 
               {/* Interior */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Interior</p>
-                <Form.Item name="interior_price" className="mb-0">
+                <Form.Item name="interior_price" className="mb-0"
+                  rules={[
+                    { required: true, message: "Interior price is required!" },
+                    {
+                      pattern: /^[0-9]+$/,
+                      message: "Interior price must be a number!",
+                    },
+                  ]}
+                >
                   <Input placeholder="interior price" style={{ height: "50px", borderRadius: "20px" }} />
                 </Form.Item>
               </div>
@@ -239,7 +328,15 @@ const DashboardService = () => {
               {/* Exterior */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Exterior</p>
-                <Form.Item name="exterior_price" className="mb-0">
+                <Form.Item name="exterior_price" className="mb-0"
+                  rules={[
+                    { required: true, message: "Exterior price is required!" },
+                    {
+                      pattern: /^[0-9]+$/,
+                      message: "Exterior price must be a number!",
+                    },
+                  ]}
+                >
                   <Input placeholder="exterior price" style={{ height: "50px", borderRadius: "20px" }} />
                 </Form.Item>
               </div>
@@ -247,7 +344,15 @@ const DashboardService = () => {
               {/* Both */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Both</p>
-                <Form.Item name="both_price" className="mb-0">
+                <Form.Item name="both_price" className="mb-0"
+                  rules={[
+                    { required: true, message: "Both price is required!" },
+                    {
+                      pattern: /^[0-9]+$/,
+                      message: "Both price must be a number!",
+                    },
+                  ]}
+                >
                   <Input placeholder="both price" style={{ height: "50px", borderRadius: "20px" }} />
                 </Form.Item>
               </div>
@@ -270,7 +375,271 @@ const DashboardService = () => {
               </Button>
             </div>
           </Form>
+        </div>
+      </Modal>
 
+
+
+      {/* modal two */}
+      <Modal
+        centered
+        title={
+          <div className="text-center bg-primary text-[#ffffff] py-4 font-degular text-[18px]  font-semibold rounded-t-lg">
+            Compact
+          </div>
+        }
+        open={mondalTwo}
+        onOk={handleModalTwoOk}
+        onCancel={handleCancelModalTwo}
+        footer={null}
+        width={600}
+        className='custom-service-modal'
+        maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
+      >
+
+        <div className="p-8">
+          <Form form={formTwo} onFinish={onFinishTwo}>
+            <div className="space-y-3">
+              {/* car image */}
+              <div className="w-full flex justify-center items-center border border-[#ccc] p-4 rounded-xl mb-10">
+                <Form.Item
+                  className="md:col-span-2"
+                  name="image"
+                  rules={[
+                    {
+                      required: ImageFileList.length === 0,
+                      message: "Image required!",
+                    },
+                  ]}
+                >
+                  <Upload
+
+                    accept="image/*"
+                    maxCount={1}
+                    showUploadList={{ showPreviewIcon: true }}
+                    fileList={ImageFileList}
+                    onChange={({ fileList }) => setImageFileList(fileList)}
+                    listType="picture-card"
+                    className="w-full"
+                    beforeUpload={() => false}
+                  >
+                    <div style={{ cursor: "pointer" }} className="flex justify-center items-center">
+                      <UploadCloud className="w-5 h-5 text-gray-400" />
+                      <span className="">Upload logo</span>
+                    </div>
+                  </Upload>
+                </Form.Item>
+              </div>
+
+              {/* car type */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Car Type</p>
+                <Form.Item name="car_type" className="mb-0"
+                  rules={[{ required: true, message: "Car type is required!" }]}
+                >
+                  <Input placeholder="car name" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              {/* Interior */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Interior</p>
+                <Form.Item name="interior_price" className="mb-0"
+                  rules={[
+                    { required: true, message: "Interior price is required!" },
+                    {
+                      pattern: /^[0-9]+$/,
+                      message: "Interior price must be a number!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="interior price" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              {/* Exterior */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Exterior</p>
+                <Form.Item name="exterior_price" className="mb-0"
+                  rules={[
+                    { required: true, message: "Exterior price is required!" },
+                    {
+                      pattern: /^[0-9]+$/,
+                      message: "Exterior price must be a number!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="exterior price" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              {/* Both */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Both</p>
+                <Form.Item name="both_price" className="mb-0"
+                  rules={[
+                    { required: true, message: "Both price is required!" },
+                    {
+                      pattern: /^[0-9]+$/,
+                      message: "Both price must be a number!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="both price" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              <Button
+                htmlType="submit"
+                block
+                style={{
+                  backgroundColor: "#0063E5",
+                  color: "#ffffff",
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  height: "60px",
+                  borderRadius: "20px",
+                  paddingInline: "20px",
+                  marginTop: "20px"
+                }}
+              >
+                Save changes
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </Modal>
+
+
+
+
+      {/* modal three */}
+      <Modal 
+        centered
+        title={
+          <div className="text-center bg-primary text-[#ffffff] py-4 font-degular text-[18px]  font-semibold rounded-t-lg">
+           Compact Time Settings
+          </div>
+        }
+        open={mondalThree}
+        onOk={handleModalThreeOk}
+        onCancel={handleCancelModalThree}
+        footer={null}
+        width={600}
+        className='custom-service-modal'
+        maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
+      >
+
+        <div className="p-8">
+          <Form form={formThree} onFinish={onFinishThree}>
+            <div className="space-y-3">
+              {/* car image */}
+              <div className="w-full flex justify-center items-center border border-[#ccc] p-4 rounded-xl mb-10">
+                <Form.Item
+                  className="md:col-span-2"
+                  name="image"
+                  rules={[
+                    {
+                      required: ImageFileList.length === 0,
+                      message: "Image required!",
+                    },
+                  ]}
+                >
+                  <Upload
+
+                    accept="image/*"
+                    maxCount={1}
+                    showUploadList={{ showPreviewIcon: true }}
+                    fileList={ImageFileList}
+                    onChange={({ fileList }) => setImageFileList(fileList)}
+                    listType="picture-card"
+                    className="w-full"
+                    beforeUpload={() => false}
+                  >
+                    <div style={{ cursor: "pointer" }} className="flex justify-center items-center">
+                      <UploadCloud className="w-5 h-5 text-gray-400" />
+                      <span className="">Upload logo</span>
+                    </div>
+                  </Upload>
+                </Form.Item>
+              </div>
+
+              {/* car type */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Car Type</p>
+                <Form.Item name="car_type" className="mb-0"
+                  rules={[{ required: true, message: "Car type is required!" }]}
+                >
+                  <Input placeholder="car name" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              {/* Interior */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Interior</p>
+                <Form.Item name="interior_price" className="mb-0"
+                  rules={[
+                    { required: true, message: "Interior price is required!" },
+                    {
+                      pattern: /^[0-9]+$/,
+                      message: "Interior price must be a number!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="interior price" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              {/* Exterior */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Exterior</p>
+                <Form.Item name="exterior_price" className="mb-0"
+                  rules={[
+                    { required: true, message: "Exterior price is required!" },
+                    {
+                      pattern: /^[0-9]+$/,
+                      message: "Exterior price must be a number!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="exterior price" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              {/* Both */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Both</p>
+                <Form.Item name="both_price" className="mb-0"
+                  rules={[
+                    { required: true, message: "Both price is required!" },
+                    {
+                      pattern: /^[0-9]+$/,
+                      message: "Both price must be a number!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="both price" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              <Button
+                htmlType="submit"
+                block
+                style={{
+                  backgroundColor: "#0063E5",
+                  color: "#ffffff",
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  height: "60px",
+                  borderRadius: "20px",
+                  paddingInline: "20px",
+                  marginTop: "20px"
+                }}
+              >
+                Save changes
+              </Button>
+            </div>
+          </Form>
         </div>
       </Modal>
     </div>
