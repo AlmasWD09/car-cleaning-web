@@ -108,7 +108,7 @@ const Pricing = () => {
                     key={index}
                     className="flex justify-between items-center border rounded-xl mb-4 p-4 font-degular"
                   >
-                    <div className="lg:w-[300px]  ">
+                    <div className="lg:w-[300px]">
                       <h1 className="text-[30px]">{item.name}</h1>
                     </div>
 

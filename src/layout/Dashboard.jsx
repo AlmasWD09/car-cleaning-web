@@ -507,9 +507,9 @@ const Dashboard = () => {
         }
     };
 
-    // const getMenuIcon = () => {
-    //     return isActive ? activeIcon : icon;
-    // }
+    const getMenuIcon = (icon, activeIcon, isActive) => {
+        return isActive ? activeIcon : icon;
+    }
 
     return (
         <>
@@ -540,7 +540,7 @@ const Dashboard = () => {
                                     <SubMenu
                                         key={`submenu-${index}`}
                                         title={item.title}
-                                        // icon={getMenuIcon(item.icon, item.activeIcon, isActive)}
+                                        icon={getMenuIcon(item.icon, item.activeIcon, isActive)}
                                         style={{
                                             fontWeight: isActive ? "bold" : "normal",
                                             fontSize: "16px",
@@ -554,11 +554,11 @@ const Dashboard = () => {
                                             return (
                                                 <Menu.Item
                                                     key={`child-${childIndex}`}
-                                                    // icon={getMenuIcon(
-                                                    //     child.icon,
-                                                    //     child.activeIcon,
-                                                    //     location.pathname === child.path
-                                                    // )}
+                                                    icon={getMenuIcon(
+                                                        child.icon,
+                                                        child.activeIcon,
+                                                        location.pathname === child.path
+                                                    )}
                                                     style={{
                                                         color: isSubActive ? "red" : "#fff",
                                                         fontWeight: isSubActive ? "bold" : "normal",
@@ -586,7 +586,7 @@ const Dashboard = () => {
                                 return (
                                     <Menu.Item
                                         key={`item-${index}`}
-                                        // icon={getMenuIcon(item.icon, item.activeIcon, isActive)}
+                                        icon={getMenuIcon(item.icon, item.activeIcon, isActive)}
                                         style={{
                                             color: isActive ? "red" : "#fff",
                                             fontWeight: isActive ? "bold" : "normal",

@@ -70,7 +70,7 @@ const Navbar = () => {
                 <img src="/logo1.png" alt="" />
               </div>
               <div
-                className={`flex transition-colors duration-500 ease-in-out ${shouldHideNavbarButton ? "justify-start items-center " : "justify-end items-center"} rounded-full space-x-20 font-medium text-[20px] pl-6 ${navbar ? "bg-gray-200 " : "bg-[#ffffff] "
+                className={`flex transition-colors duration-500 ease-in-out ${shouldHideNavbarButton ? "justify-start items-center " : "justify-end items-center"} rounded-full space-x-20 font-medium text-[20px] pl-6 ${navbar ? "bg-[#ffff] " : "bg-[#ffffff] "
                   }`}
               >
                 <NavLink
