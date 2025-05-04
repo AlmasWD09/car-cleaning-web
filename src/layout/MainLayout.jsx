@@ -4,7 +4,7 @@ import Footer from "../components/shared/footer/Footer";
 
 const MainLayout = () => {
   const location = useLocation()
-  const hideNavbarPaths = ["/privacy-policy","/terms-condition","/service-book","/user-profile","/edit-user-profile","/support",];
+  const hideNavbarPaths = ["/privacy-policy","/terms-condition","/service-book","/user-profile","/edit-user-profile","/support","/checkout",];
   const shouldHideNavbar = hideNavbarPaths.includes(location.pathname);
   return (
     <>

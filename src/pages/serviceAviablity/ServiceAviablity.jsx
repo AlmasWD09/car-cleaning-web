@@ -129,7 +129,7 @@ const ServiceAviablity = () => {
                 Change</button>
             </div>
             <div className="flex flex-col md:flex-row justify-between border border-[#ccc] rounded-lg p-4 font-degular mt-6">
-              <p className='text-[28px]  font-degular'>Compact</p>
+              <p className='text-[28px]  font-degular text-primary'>Compact</p>
               <div>
                 <p className='text-[20px]  font-degular'>Both</p>
                 <p className='text-[28px]  font-bold text-primary font-degular'>$180.00</p>

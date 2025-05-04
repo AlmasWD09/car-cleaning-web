@@ -3,7 +3,9 @@ import CustomContainer from '../../components/shared/CustomContainer'
 import { Link, useNavigate } from 'react-router-dom';
 import { Modal } from 'antd';
 
+
 const ServiceBook = () => {
+  
     const navigate = useNavigate();
     const [modalOpen, setModalOpen] = useState(false);
     const priceAllData = [
@@ -91,6 +93,8 @@ const ServiceBook = () => {
             document.body.style.overflow = "auto"; // Cleanup function
         };
     }, [modalOpen]);
+
+
     return (
         <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
             <CustomContainer>
