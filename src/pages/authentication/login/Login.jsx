@@ -15,18 +15,19 @@ const Login = () => {
   };
   return (
     <section className="pt-[100px] md:pt-[120px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
-      <CustomContainer>
+      {/* <CustomContainer> */}
         <div className="flex flex-col lg:flex-row justify-between items-center gap-3">
           {/* left side  */}
-          <div className="w-full  hidden lg:block">
-            <img src="/createAccountImage/photo2.png" alt="car" className="object-cover" />
+          <div className="w-full lg:w-[50%] ">
+            <img src="/createAccountImage/photo6.png" alt="car" className="object-cover w-full" />
           </div>
-          <div className="w-full lg:hidden">
+          
+          {/* <div className="w-full lg:hidden">
             <img src="/createAccountImage/photo3.png" alt="car" className="object-cover" />
-          </div>
+          </div> */}
 
           {/* right side image */}
-          <div className="w-full p-4 ">
+          <div className="w-full p-4 lg:w-[50%] lg:mr-[200px]">
             <div>
               <Form form={form} onFinish={onFinish}>
                 {/* email */}
@@ -155,7 +156,7 @@ const Login = () => {
             </div>
           </div>
         </div>
-      </CustomContainer>
+      {/* </CustomContainer> */}
     </section>
   );
 };

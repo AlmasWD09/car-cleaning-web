@@ -25,9 +25,9 @@ const CreateAccount = () => {
   };
   return (
     <section className=" md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
-      <CustomContainer>
-        <div className="flex flex-col lg:flex-row justify-between gap-3">
-          <div className="w-full p-4">
+      {/* <CustomContainer> */}
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-3 lg:gap-20">
+          <div className="w-full lg-w-[20%] p-4 lg:ml-[200px] order-2 lg:order-1">
             <div>
               <Form form={createAccountForm} onFinish={createAccountFinish}>
                 {/* email */}
@@ -349,11 +349,11 @@ const CreateAccount = () => {
           </div>
 
           {/* right side image */}
-          <div className="w-full">
-            <img src="/createAccountImage/photo1.png" alt="car" />
+          <div className="w-full lg:w-[80%] order-1 lg:order-2 pt-16 md:pt-0">
+            <img src="/createAccountImage/photo1.png" alt="car" className="w-full" />
           </div>
         </div>
-      </CustomContainer>
+      {/* </CustomContainer> */}
     </section>
   );
 };
