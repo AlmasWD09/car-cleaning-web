@@ -1,8 +1,12 @@
-import { Modal } from "antd";
+import { Button, Form, Input, Modal, Upload } from "antd";
+import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react"
 
 
 const DashboardService = () => {
+  const [formOne] = Form.useForm();
+  const [formTwo] = Form.useForm();
+  const [ImageFileList, setImageFileList] = useState([]);
   const [mondalOne, setModalOne] = useState(false);
   const [mondalTwo, setModalTwo] = useState(false);
   const [mondalThree, setModalThree] = useState(false);
@@ -84,6 +88,29 @@ const DashboardService = () => {
 
   ]
 
+
+
+  const onFinishOne = (values) => {
+    console.log(values)
+    const formData = new FormData();
+    if (ImageFileList[0]?.originFileObj) {
+      formData.append("image", ImageFileList[0].originFileObj);
+    }
+
+    //   try {
+    //     const res = ""
+
+    //     if (res?.data) {
+    //         setImageFileList([]);
+    //         formOne.resetFields()
+    //         dispatch(closeTeamModalOpenOne());
+    //     }
+    // } catch (errors) {
+    // }
+
+
+  }
+
   return (
     <div>
       <div className="grid grid-cols-12 gap-4">
@@ -158,10 +185,92 @@ const DashboardService = () => {
         className='custom-service-modal'
         maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
       >
-        <p className='text-[24px] font-degular font-medium text-center'>Which service you wants to book ?</p>
 
-        <div>
-          dddddddd
+        <div className="p-8">
+          <Form form={formOne} onFinish={onFinishOne}>
+            <div className="space-y-3">
+              {/* car image */}
+              <div className="w-full flex justify-center items-center border border-[#ccc] p-4 rounded-xl mb-10">
+                <Form.Item
+                  className="md:col-span-2"
+                  name="image"
+                  rules={[
+                    {
+                      required: ImageFileList.length === 0,
+                      message: "Image required!",
+                    },
+                  ]}
+                >
+                  <Upload
+
+                    accept="image/*"
+                    maxCount={1}
+                    showUploadList={{ showPreviewIcon: true }}
+                    fileList={ImageFileList}
+                    onChange={({ fileList }) => setImageFileList(fileList)}
+                    listType="picture-card"
+                    className="w-full"
+                    beforeUpload={() => false}
+                  >
+                    <div style={{ cursor: "pointer" }} className="flex justify-center items-center">
+                      <UploadCloud className="w-5 h-5 text-gray-400" />
+                      <span className="">Upload logo</span>
+                    </div>
+                  </Upload>
+                </Form.Item>
+              </div>
+
+              {/* car type */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Car Type</p>
+                <Form.Item name="car_type" className="mb-0">
+                  <Input placeholder="car name" style={{ height: "50px", borderRadius: "20px" }} style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              {/* Interior */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Interior</p>
+                <Form.Item name="interior_price" className="mb-0">
+                  <Input placeholder="interior price" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              {/* Exterior */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Exterior</p>
+                <Form.Item name="exterior_price" className="mb-0">
+                  <Input placeholder="exterior price" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              {/* Both */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Both</p>
+                <Form.Item name="both_price" className="mb-0">
+                  <Input placeholder="both price" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
+              <Button
+                htmlType="submit"
+                block
+                style={{
+                  backgroundColor: "#0063E5",
+                  color: "#ffffff",
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  height: "60px",
+                  borderRadius: "20px",
+                  paddingInline: "20px",
+                  marginTop: "20px"
+                }}
+              >
+                Add
+              </Button>
+            </div>
+          </Form>
+
         </div>
       </Modal>
     </div>
