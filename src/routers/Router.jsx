@@ -20,7 +20,6 @@ import Notification from "../pages/notification/Notification";
 import Support from "../pages/support/Support";
 import ServiceAviablity from "../pages/serviceAviablity/ServiceAviablity";
 import Dashboard from "../layout/Dashboard";
-import Bookings from "../pages/dashboardPage/bookings/Bookings";
 import ManageImages from "../pages/dashboardPage/manageImages/ManageImages";
 import ManageDates from "../pages/dashboardPage/manageDates/ManageDates";
 import Transactions from "../pages/dashboardPage/transactions/Transactions";
@@ -36,6 +35,7 @@ import DashboardLogin from "../pages/dashboardPage/dashboardAuthentication/Dashb
 import DashboardForgetPassword from "../pages/dashboardPage/dashboardAuthentication/DashboardForgetPassword";
 import DashboardOtpCode from "../pages/dashboardPage/dashboardAuthentication/DashboardOtpCode";
 import DashboardCreateNewPassword from "../pages/dashboardPage/dashboardAuthentication/DashboardCreateNewPassword";
+import DashboardBookings from "../pages/dashboardPage/dashboardBookings/DashboardBookings";
 
 
 
@@ -139,7 +139,7 @@ const router = createBrowserRouter([
       },
       {
         path: "bookings",
-        element: <Bookings />
+        element: <DashboardBookings />
       },
       {
         path: "services",
