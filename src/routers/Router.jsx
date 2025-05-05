@@ -36,6 +36,7 @@ import DashboardForgetPassword from "../pages/dashboardPage/dashboardAuthenticat
 import DashboardOtpCode from "../pages/dashboardPage/dashboardAuthentication/DashboardOtpCode";
 import DashboardCreateNewPassword from "../pages/dashboardPage/dashboardAuthentication/DashboardCreateNewPassword";
 import DashboardBookings from "../pages/dashboardPage/dashboardBookings/DashboardBookings";
+import DashboardNotification from "../pages/dashboardPage/dashboardNotification/DashboardNotification";
 
 
 
@@ -172,6 +173,10 @@ const router = createBrowserRouter([
       {
         path: "terms-condition",
         element: <TermsAndConditions />
+      },
+      {
+        path: "notifications",
+        element: <DashboardNotification />
       },
 
     ]

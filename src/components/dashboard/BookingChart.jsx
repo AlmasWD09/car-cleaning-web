@@ -74,7 +74,7 @@ const BookingChart = () => {
   return (
     <div className=" rounded-2xl mt-2 p-2 text-gray-300 pr-14">
       <div className="flex justify-between items-center">
-        <h3 className="mb-5 text-[24px] font-roboto font-medium  text-black">
+        <h3 className="mb-5 text-[24px] font-degular font-semibold text-black">
         Booking Statistics
         </h3>
         <SelectBox
