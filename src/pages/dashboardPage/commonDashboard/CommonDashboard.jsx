@@ -8,34 +8,45 @@ const CommonDashboard = () => {
   return (
     <div>
 
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[20px]">
-        <div className="max-w-[400px] max-h-[120px] bg-primary text-[#ffffff] p-[20px] rounded-lg">
-          <h2 className="text-white font-roboto">Volunteers</h2>
-          <h2 className="font-semibold text-[30px] text-[#ffffff]">54,973</h2>
+      <div className="grid grid-cols-12 gap-[20px]">
+        <div className="col-span-4 h-[149px] bg-[#ffff]  p-[20px]  flex justify-between items-center border rounded-[20px]">
+          <div className="w-full flex justify-between ">
+            <div>
+              <h2 className=" font-degular text-[24px]">Earnings</h2>
+              <h2 className="font-semibold font-degular text-[36px] ">$500.00</h2>
+            </div>
+            <img src="/dashboardCurdImage/photo1.svg" alt="" className="w-[50px] h-[50px]" />
+          </div>
         </div>
-        <div className="max-w-[400px] max-h-[120px] bg-primary text-[#ffffff] p-[20px] rounded-lg">
-          <h2>Survivors</h2>
-          <h2 className="font-semibold text-[30px] text-[#ffffff]">8,846</h2>
+
+        <div className="col-span-4 h-[149px] bg-[#ffff]  p-[20px]  flex justify-between items-center border rounded-[20px]">
+        <div className="w-full flex justify-between ">
+          <div>
+            <h2 className=" font-degular text-[24px]">Appointments</h2>
+            <h2 className="font-semibold font-degular text-[36px] ">16</h2>
+          </div>
+          <img src="/dashboardCurdImage/photo2.svg" alt="" className="w-[50px] h-[50px]" />
         </div>
-        <div className="max-w-[400px] max-h-[120px] bg-primary text-[#ffffff] p-[20px] rounded-lg">
-          <h2>Donation received</h2>
-          <h2 className="font-semibold text-[30px] text-[#ffffff]">
-            $4,500.00{" "}
-          </h2>
         </div>
-        <div className="max-w-[400px] max-h-[120px] bg-primary text-[#ffffff] p-[20px] rounded-lg">
-          <h2>Spent on survivors</h2>
-          <h2 className="font-semibold text-[30px] text-[#ffffff]">
-            $5,999.00
-          </h2>
+
+        <div className="col-span-4 h-[149px] bg-[#ffff]  p-[20px]  flex justify-between items-center border rounded-[20px]">
+        <div className="w-full flex justify-between ">
+          <div>
+            <h2 className=" font-degular text-[24px]">Users</h2>
+            <h2 className="font-semibold font-degular text-[36px] ">1200</h2>
+          </div>
+          <img src="/dashboardCurdImage/photo3.svg" alt="" className="w-[50px] h-[50px]" />
         </div>
+        </div>
+
+
       </div>
 
       {/* chart one/two components */}
       <div className="flex flex-col lg:flex-row justify-between gap-[20px] py-[20px]">
 
 
-        
+
         <div className="bg-[#fff] w-[60%] md:h-[650px] rounded-lg">
           <BookingChart />
         </div>
