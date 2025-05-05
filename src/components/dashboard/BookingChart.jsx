@@ -1,136 +1,119 @@
 import React, { useState } from "react";
-import ReactApexChart from "react-apexcharts";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import SelectBox from "../shared/SelectBox";
+
 
 
 const BookingChart = () => {
-    const seriesColors = ["#1E90FF", "#00C49F"];
-    const [state, setState] = useState({
-      series: [
-        {
-          name: "This year",
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-        },
-        {
-          name: "Last year",
-          data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-        },
-      ],
-      options: {
-        colors: seriesColors,
-        chart: {
-          type: "bar",
-          height: 280,
-          toolbar: {
-            show: false,
-          },
-          zoom: {
-            enabled: false,
-          },
-        },
-        legend: {
-          show: false,
-        },
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: "85%",
-            borderRadius: 2,
-            borderRadiusApplication: "end",
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: "smooth", // Smooth line
-          width: 3,
-        },
-        markers: {
-          size: 2,
-          hover: {
-            sizeOffset: 3,
-          },
-        },
-        xaxis: {
-          categories: [
-            "Jun",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-          ],
-          axisBorder: {
-            show: false, // Hide the border of the X-axis
-          },
-          axisTicks: {
-            show: false, // Hide ticks on the X-axis
-          },
-          labels: { style: { colors: "#ccc" } },
-        },
-        yaxis: {
-          axisBorder: {
-            show: false, // Hide the border of the Y-axis
-          },
-          axisTicks: {
-            show: false, // Hide ticks on the Y-axis
-          },
-          labels: { style: { colors: "#ccc" } },
-        },
-        grid: {
-          show: false, // Remove grid lines from the chart
-        },
-        fill: {
-          opacity: 1,
-        },
-        tooltip: {
-          y: {
-            formatter: function (val) {
-              return "$ " + val;
-            },
-          },
-        },
-      },
-    });
+  const [selectedValue, setSelectedValue] = useState("weekly");
+  const formatYAxis = (tickItem) => {
+    return `${tickItem}`;
+  };
+
+
+  const weeklyData = [
+    { name: "Sat", amt: 20 },
+    { name: "Sun", amt: 50 },
+    { name: "Mon", amt: 70 },
+    { name: "Tue", amt: 60 },
+    { name: "Wed", amt: 80 },
+    { name: "Thu", amt: 40 },
+    { name: "Fri", amt: 90 },
+  ];
+  
+  const monthlyData = [
+    { name: "Week 1", amt: 200 },
+    { name: "Week 2", amt: 300 },
+    { name: "Week 3", amt: 400 },
+    { name: "Week 4", amt: 500 },
+  ];
+  
+  const yearlyData = [
+    { name: "Jan", amt: 7000 },
+    { name: "Feb", amt: 5000 },
+    { name: "Mar", amt: 9000 },
+    { name: "Apr", amt: 9500 },
+    { name: "May", amt: 8010 },
+    { name: "Jun", amt: 10000 },
+    { name: "Jul", amt: 9000 },
+    { name: "Aug", amt: 8500 },
+    { name: "Sep", amt: 9000 },
+    { name: "Oct", amt: 12000 },
+    { name: "Nov", amt: 13000 },
+    { name: "Dec", amt: 14000 },
+  ];
+
+  const handleSelectChange = (value) => {
+    setSelectedValue(value);
+    console.log("Selected", value);
+  };
+  const selectOptions = [
+    { value: "weekly", label: "Weekly" },
+    { value: "monthly", label: "Monthly" },
+    { value: "yearly", label: "Yearly" },
+  ];
+
+  const getChartData = () => {
+    switch (selectedValue) {
+      case "monthly":
+        return monthlyData;
+      case "yearly":
+        return weeklyData;
+      default:
+        return  yearlyData;
+    }
+  };
   return (
-    <div className="p-2 md:p-[20px]">
-    <div className="flex flex-col md:flex-row justify-between items-center md:mb-4">
-      {/* Left */}
-      <div>
-        <h1 className="font-semibold font-roboto text-[30px]">
-          Donation
-        </h1>
-        <h1 className="font-semibold font-roboto text-[20px]">
-          $126,560
-        </h1>
+    <div className=" rounded-2xl mt-2 p-2 text-gray-300 pr-14">
+      <div className="flex justify-between items-center">
+        <h3 className="mb-5 text-[24px] font-roboto font-medium  text-black">
+        Booking Statistics
+        </h3>
+        <SelectBox
+          options={selectOptions}
+          value={selectedValue}
+          onChange={(value) => setSelectedValue(value)}
+        />
       </div>
+      <div className="bg-white py-8 px-4">
+        <ResponsiveContainer className=" " width="100%" height={400}>
+          <AreaChart data={getChartData()} syncId="anyId">
+            <defs>
+              <linearGradient id="colorAmt" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#00D6FF" stopOpacity={0} />
+              </linearGradient>
+            </defs>
 
-      {/* Right (Dynamic Legend) */}
-      <div className="flex flex-col md:flex-row gap-4">
-        {state.series.map((item, index) => (
-          <div key={index} className="flex items-center gap-2">
-            <span
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: seriesColors[index] }}
-            ></span>
-            <span className="text-white font-medium">{item.name}</span>
-          </div>
-        ))}
+            <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
+
+            <XAxis axisLine={false} dataKey="name" />
+            <YAxis
+              axisLine={false}
+              tickFormatter={(value) => value}
+              ticks={[
+                0, 20, 40, 60, 80, 100, 200, 500, 1000, 5000, 10000, 15000,
+              ]}
+            />
+            <Tooltip />
+            <Area
+              type="monotone"
+              dataKey="amt"
+              stroke="url(#colorAmt)"
+              fill="url(#colorAmt)"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     </div>
-
-    <div id="chart">
-      <ReactApexChart
-        options={state.options}
-        series={state.series}
-        type="area"
-        height={400}
-      />
-    </div>
-  </div>
   )
 }
 
