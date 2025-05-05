@@ -153,4 +153,4 @@ const DashboardUsers = () => {
         </div>
     );
 };
-export default DashboardUsers;
+export default DashboardUsers
