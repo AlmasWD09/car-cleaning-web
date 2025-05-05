@@ -5,47 +5,56 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import AuthWrapper from "./AuthWrapper";
 
 
-const DashboardLogin = () => {
 
-    
-    const onFinish = () => {
-        console.log('click')
-    }
+const DashboardLogin = () => {
+    const navigate = useNavigate();
+
+    const onFinish = (values) => {
+        console.log(values);
+        navigate("/");
+    };
     return (
-        <AuthWrapper className=" py-28 px-24">
-            <div className="text-center mb-12">
+        <AuthWrapper>
+            <div className="text-center mb-12 font-degular">
+                {/* <Title>Login</Title> */}
                 <div className="flex py-6 justify-center">
                     <h3 className="font-semibold text-2xl text-[#333333]">
                         Log in to your account
                     </h3>
                 </div>
-                <p className="text-sm font-normal mb-6 text-[#5C5C5C] ">
+                <p className="text-[16px] font-normal mb-6 text-[#5C5C5C] ">
                     Please enter your email and password to continue
                 </p>
             </div>
             <Form layout="vertical" onFinish={onFinish}>
-                <Form.Item
-                    label="Email"
-                    name="email"
-                    rules={[{ required: true, message: "Please enter your email" }]}
-                >
-                    <Input
-                        placeholder="abidhasan@gmail.com"
-                        style={{ height: "50px", width: "481px", backgroundColor: "#fefefe" }}
-                        className="bg-[#fefefe]"
-                    />
-                </Form.Item>
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[{ required: true, message: "Please enter your password" }]}
-                >
-                    <Input.Password
-                        iconRender={(visible) => (visible ? <FaEye /> : <FaEyeSlash />)}
-                        placeholder="**********"
-                        style={{ height: "50px", width: "481px" }}
-                    />
-                </Form.Item>
+                <div>
+                    <p className="text-[24px] font-degular">Email</p>
+                    <Form.Item
+                        name="email"
+                        rules={[{ required: true, message: "Please enter your email" }]}
+                    >
+                        <Input
+                            placeholder="abidhasan@gmail.com"
+                            style={{ height: "50px", width: "481px", backgroundColor: "#fefefe" }}
+                            className="bg-[#fefefe]"
+                        />
+                    </Form.Item>
+                </div>
+                <div>
+                <p className="text-[24px] font-degular">Password</p>
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: "Please enter your password" }]}
+                    >
+                        <Input.Password
+                            iconRender={(visible) => (visible ? <FaEye /> : <FaEyeSlash />)}
+                            placeholder="**********"
+                            style={{ height: "50px", width: "481px", cursor: "pointer", }}
+                        />
+                    </Form.Item>
+                </div>
+
+
                 <Form.Item>
                     <div className="flex justify-between items-center">
                         <Form.Item name="remember" valuePropName="checked" noStyle>
@@ -54,7 +63,7 @@ const DashboardLogin = () => {
 
                         <Link
                             className="login-form-forgot text-[#4B5320]"
-                            to="/auth/forget-password"
+                            to="/admin/dashboard/forget-password"
                         >
                             Forgot password
                         </Link>
@@ -63,7 +72,7 @@ const DashboardLogin = () => {
                 <Form.Item>
                     <div className="flex justify-center">
                         <Button
-                            className="bg-[#4B5320] h-12 text-sm text-white font-bold  mt-6"
+                            className="bg-primary h-12 text-sm text-white font-bold  mt-6"
                             htmlType="submit"
                         >
                             Sign in

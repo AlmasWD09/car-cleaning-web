@@ -34,6 +34,8 @@ import DashboardService from "../pages/dashboardPage/dashboardService/DashboardS
 import CheckoutPage from "../pages/checkout/CheckoutPage";
 import DashboardLogin from "../pages/dashboardPage/dashboardAuthentication/DashboardLogin";
 import DashboardForgetPassword from "../pages/dashboardPage/dashboardAuthentication/DashboardForgetPassword";
+import DashboardOtpCode from "../pages/dashboardPage/dashboardAuthentication/DashboardOtpCode";
+import DashboardCreateNewPassword from "../pages/dashboardPage/dashboardAuthentication/DashboardCreateNewPassword";
 
 
 
@@ -183,6 +185,14 @@ const router = createBrowserRouter([
   {
     path:"/admin/dashboard/forget-password",
     element:<DashboardForgetPassword />
+  },
+  {
+    path:"/admin/dashboard/otp-code",
+    element:<DashboardOtpCode />
+  },
+  {
+    path:"/admin/dashboard/create-new-password",
+    element:<DashboardCreateNewPassword />
   },
 ]);
 
