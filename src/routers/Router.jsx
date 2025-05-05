@@ -37,6 +37,7 @@ import DashboardOtpCode from "../pages/dashboardPage/dashboardAuthentication/Das
 import DashboardCreateNewPassword from "../pages/dashboardPage/dashboardAuthentication/DashboardCreateNewPassword";
 import DashboardBookings from "../pages/dashboardPage/dashboardBookings/DashboardBookings";
 import DashboardNotification from "../pages/dashboardPage/dashboardNotification/DashboardNotification";
+import DashboardUsers from "../pages/dashboardPage/dashboardUsers/DashboardUsers";
 
 
 
@@ -137,6 +138,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/dashboard",
         element: <CommonDashboard />
+      },
+      {
+        path: "users",
+        element: <DashboardUsers />
       },
       {
         path: "bookings",
