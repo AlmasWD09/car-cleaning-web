@@ -106,35 +106,35 @@ const Pricing = () => {
                 return (
                   <div
                     key={index}
-                    className="flex justify-between items-center border rounded-xl mb-4 p-4 font-degular"
+                    className="flex justify-between items-center border rounded-xl mb-4 p-2 lg:p-4 font-degular"
                   >
                     <div className="lg:w-[300px]">
-                      <h1 className="text-[30px]">{item.name}</h1>
+                      <h1 className="text-[28px] lg:text-[30px]">{item.name}</h1>
                     </div>
 
                     <div className="flex items-center gap-4">
                       <div className=" lg:w-[300px]">
-                        <p className="text-[24px]">{item.price_one_name}</p>
-                        <p className="text-[48px] font-semibold text-primary">
+                        <p className="text-[20px] lg:text-[24px]">{item.price_one_name}</p>
+                        <p className="text-[28px] lg:text-[48px] font-semibold text-primary">
                           ${item.price_one}
                         </p>
                       </div>
                       <div className=" lg:w-[300px]">
-                        <p className="text-[24px] ">{item.price_two_name}</p>
-                        <p className="text-[48px] font-semibold text-primary ">
+                        <p className="lg:text-[24px] ">{item.price_two_name}</p>
+                        <p className="text-[28px] lg:text-[48px] font-semibold text-primary ">
                           ${item.price_two}
                         </p>
                       </div>
                       <div className=" lg:w-[300px]">
-                        <p className="text-[24px]">{item.bothPrice_name}</p>
-                        <p className="text-[48px] font-semibold text-primary">
+                        <p className="lg:text-[24px]">{item.bothPrice_name}</p>
+                        <p className="text-[28px] lg:text-[48px] font-semibold text-primary">
                           ${item.bothPrice}
                         </p>
                       </div>
                     </div>
 
                     <div className="lg:w-[200px] flex justify-end ">
-                      <button onClick={showModal} className="bg-primary text-[#ffffff] px-[74px] py-[14px] text-[24px] rounded-full my-2">
+                      <button onClick={showModal} className="bg-primary text-[#ffffff] px-[74px] py-2 lg:py-[14px] text-[24px] rounded-full my-2">
                         Select
                       </button>
                     </div>
