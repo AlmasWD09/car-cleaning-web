@@ -32,6 +32,8 @@ import PrivacyAndPolicy from "../pages/dashboardPage/settings/privacyPolicy/Priv
 import Service from "../pages/service/Service";
 import DashboardService from "../pages/dashboardPage/dashboardService/DashboardService";
 import CheckoutPage from "../pages/checkout/CheckoutPage";
+import DashboardLogin from "../pages/dashboardPage/dashboardAuthentication/DashboardLogin";
+import DashboardForgetPassword from "../pages/dashboardPage/dashboardAuthentication/DashboardForgetPassword";
 
 
 
@@ -171,7 +173,17 @@ const router = createBrowserRouter([
       },
 
     ]
-  }
+  },
+
+  // dashboard authentication routes =====================
+  {
+    path:"/admin/dashboard/login",
+    element:<DashboardLogin />
+  },
+  {
+    path:"/admin/dashboard/forget-password",
+    element:<DashboardForgetPassword />
+  },
 ]);
 
 export default router;
