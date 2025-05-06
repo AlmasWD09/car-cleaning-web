@@ -96,3 +96,8 @@
   color: white;              /* Text color */
   font-weight: bold;         /* Optional */
 }
+
+
+.ant-menu-title-content {
+  color: white;
+}
