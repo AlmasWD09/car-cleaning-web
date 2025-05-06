@@ -1,14 +1,25 @@
 
 import React, { useState } from 'react';
-import { Input, Table } from 'antd';
-import { icons, Search } from 'lucide-react';
-
+import { Input, Space, Table } from 'antd';
+import { AudioOutlined } from '@ant-design/icons';
+const { Search } = Input;
 
 
 
 const DashboardUsers = () => {
     const [selectionType, setSelectionType] = useState('checkbox');
     const [searchText, setSearchText] = useState('')
+
+    const suffix = (
+        <AudioOutlined
+            style={{
+                fontSize: 16,
+                color: '#1677ff',
+            }}
+        />
+    );
+    const onSearch = (value, _e, info) =>
+        console.log(info === null || info === void 0 ? void 0 : info.source, value);
 
     const handleDelete = () => {
         console.log('click')
@@ -43,7 +54,7 @@ const DashboardUsers = () => {
                 <div className="flex items-center justify-end gap-3">
                     <button
                         onClick={() => handleUpdate(record.action)}
-                        className="hover:bg-primary p-1 rounded bg-blue"
+                        className=" p-1 rounded bg-blue"
                     >
                         <svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="37" height="37" rx="5" fill="#FFF3EB" />
@@ -53,7 +64,7 @@ const DashboardUsers = () => {
                     </button>
                     <button
                         onClick={() => handleDelete(record.action)}
-                        className="bg-secondary px-3 py-1 rounded hover:bg-primary"
+                        className="bg-secondary px-3 py-1 rounded "
                     >
                         <svg width="34" height="38" viewBox="0 0 34 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="34" height="38" rx="6" fill="#FFE8E8" />
@@ -139,12 +150,16 @@ const DashboardUsers = () => {
 
     return (
         <div>
-            <Input.Search
-                placeholder="Search user"
-                onChange={(e) => setSearchText(e.target.value)}
-                style={{ marginBottom: 16, width: "30%" }}
-                size="large"
-            />
+            <Space direction="vertical" style={{marginBottom:"20px",}}>
+                <Search placeholder="enter search email or name" onSearch={onSearch} enterButton  
+                className="custom-search-height"
+                />
+            </Space>
+
+
+
+
+
             <Table
 
                 columns={columns}
