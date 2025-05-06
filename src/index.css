@@ -88,3 +88,11 @@
   display: flex;
   align-items: center;
 }
+
+
+/* Target the header row */
+.custom-table-header .ant-table-thead > tr > th {
+  background-color: #1890ff; /* Your custom background color */
+  color: white;              /* Text color */
+  font-weight: bold;         /* Optional */
+}
