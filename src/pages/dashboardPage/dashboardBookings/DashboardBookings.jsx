@@ -8,13 +8,14 @@ import { Dropdown } from 'antd';
 const DashboardBookings = () => {
   const [open, setOpen] = useState(false);
 
-const handleClick = () =>{
-  setOpen(!open)
-}
-const handleMenuItemClick = (item) => {
 
-  setOpen(false); 
-};
+  const handleClick = () => {
+    setOpen(!open)
+  }
+  const handleMenuItemClick = (item) => {
+
+    setOpen(false);
+  };
 
 
   const handleDelete = () => {
@@ -26,15 +27,34 @@ const handleMenuItemClick = (item) => {
 
 
   const columns = [
-    { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Age', dataIndex: 'age', key: 'age' },
-    { title: 'Address', dataIndex: 'address', key: 'address' },
+    {
+      title: 'User', dataIndex: 'user', key: 'user',
+      dataIndex: 'image',
+      render: (_, record) => (
+        <div className="flex items-center gap-3">
+          <img src={record.image} alt="User" className="w-10 h-10 rounded-full" />
+          <span>{record.user}</span>
+        </div>
+      ),
+    },
+    { title: 'Email', dataIndex: 'email', key: 'email' },
+    {
+      title: 'Time', dataIndex: 'time', key: 'time',
+      render: (_, record) => (
+        <div>
+          <div>{record.date}</div>
+          <div className='text-[#888888]'>{record.time}</div>
+        </div>
+      ),
+    },
+    { title: 'Service', dataIndex: 'Service', key: 'Service' },
+
     {
       title: 'Action',
       dataIndex: '',
       key: 'x',
       render: (_, record) => (
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center  gap-3">
           <button
             onClick={() => handleUpdate(record.action)}
             className=" p-1 rounded bg-blue"
@@ -43,7 +63,6 @@ const handleMenuItemClick = (item) => {
               <rect width="37" height="37" rx="5" fill="#FFF3EB" />
               <path d="M18.5 15.3C17.632 15.3 16.7996 15.6371 16.1858 16.2373C15.5721 16.8374 15.2273 17.6513 15.2273 18.5C15.2273 19.3487 15.5721 20.1626 16.1858 20.7627C16.7996 21.3629 17.632 21.7 18.5 21.7C19.368 21.7 20.2004 21.3629 20.8142 20.7627C21.4279 20.1626 21.7727 19.3487 21.7727 18.5C21.7727 17.6513 21.4279 16.8374 20.8142 16.2373C20.2004 15.6371 19.368 15.3 18.5 15.3ZM18.5 23.8333C17.0534 23.8333 15.666 23.2714 14.6431 22.2712C13.6201 21.271 13.0455 19.9145 13.0455 18.5C13.0455 17.0855 13.6201 15.729 14.6431 14.7288C15.666 13.7286 17.0534 13.1667 18.5 13.1667C19.9466 13.1667 21.334 13.7286 22.3569 14.7288C23.3799 15.729 23.9545 17.0855 23.9545 18.5C23.9545 19.9145 23.3799 21.271 22.3569 22.2712C21.334 23.2714 19.9466 23.8333 18.5 23.8333ZM18.5 10.5C13.0455 10.5 8.38727 13.8173 6.5 18.5C8.38727 23.1827 13.0455 26.5 18.5 26.5C23.9545 26.5 28.6127 23.1827 30.5 18.5C28.6127 13.8173 23.9545 10.5 18.5 10.5Z" fill="#F96D10" />
             </svg>
-
           </button>
           <button
             onClick={() => handleDelete(record.action)}
@@ -55,6 +74,17 @@ const handleMenuItemClick = (item) => {
             </svg>
 
           </button>
+          <button>
+            {record.verify === "Ongoing" ? (
+              <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="5.5" cy="6" r="5.5" fill="#8C63DA" />
+              </svg>
+            ) : (
+              <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="5.5" cy="6" r="5.5" fill="#009138" />
+              </svg>
+            )}
+          </button>
         </div>
       ),
     },
@@ -62,33 +92,88 @@ const handleMenuItemClick = (item) => {
   const data = [
     {
       key: 1,
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
+      user: 'John Doe',
+      email: 'john@example.com',
+      date: 'Thursday, March 27, 2025',
+      time: '10:00PM',
+      Service: 'Consultation',
+      image: 'https://randomuser.me/api/portraits/men/1.jpg',
+      verify: "Ongoing",
     },
     {
       key: 2,
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.',
+      user: 'Jane Smith',
+      email: 'jane@example.com',
+      date: 'Thursday, March 27, 2025',
+      time: '10:00PM',
+      Service: 'Therapy',
+      image: 'https://randomuser.me/api/portraits/women/2.jpg',
+      verify: "Ongoing",
     },
     {
       key: 3,
-      name: 'Not Expandable',
-      age: 29,
-      address: 'Jiangsu No. 1 Lake Park',
-      description: 'This not expandable',
+      user: 'Robert Johnson',
+      email: 'robert@example.com',
+      date: 'Thursday, March 27, 2025',
+      time: '10:00PM',
+      Service: 'Coaching',
+      image: 'https://randomuser.me/api/portraits/men/3.jpg',
+      verify: "Ongoing",
     },
     {
       key: 4,
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      description: 'My name is Joe Black, I am 32 years old, living in Sydney No. 1 Lake Park.',
+      user: 'Emily Brown',
+      email: 'emily@example.com',
+      date: 'Thursday, March 27, 2025',
+      time: '10:00PM',
+      Service: 'Yoga Session',
+      image: 'https://randomuser.me/api/portraits/women/4.jpg',
+      verify: "Ongoing",
+    },
+    {
+      key: 5,
+      user: 'Michael Davis',
+      email: 'michael@example.com',
+      date: 'Thursday, March 27, 2025',
+      time: '10:00PM',
+      Service: 'Mentorship',
+      image: 'https://randomuser.me/api/portraits/men/5.jpg',
+      verify: "Complete_order",
+    },
+    {
+      key: 6,
+      user: 'Sarah Wilson',
+      email: 'sarah@example.com',
+      date: 'Thursday, March 27, 2025',
+      time: '10:00PM',
+      Service: 'Nutrition Plan',
+      image: 'https://randomuser.me/api/portraits/women/6.jpg',
+      verify: "Complete_order",
+    },
+    {
+      key: 7,
+      user: 'David Lee',
+      email: 'david@example.com',
+      date: 'Thursday, March 27, 2025',
+      time: '10:00PM',
+      Service: 'Fitness Training',
+      image: 'https://randomuser.me/api/portraits/men/7.jpg',
+      verify: "Complete_order",
+    },
+    {
+      key: 8,
+      user: 'Olivia Martin',
+      email: 'olivia@example.com',
+      date: 'Thursday, March 27, 2025',
+      time: '10:00PM',
+      Service: 'Career Advice',
+      image: 'https://randomuser.me/api/portraits/women/8.jpg',
+      verify: "Complete_order",
     },
   ];
+
+
+
   const items = [
     {
       label: 'Compact',
@@ -145,10 +230,6 @@ const handleMenuItemClick = (item) => {
 
         <Table
           columns={columns}
-          expandable={{
-            expandedRowRender: record => <p style={{ margin: 0 }}>{record.description}</p>,
-            rowExpandable: record => record.name !== 'Not Expandable',
-          }}
           dataSource={data}
         />
       </div>
