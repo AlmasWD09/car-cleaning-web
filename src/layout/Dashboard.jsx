@@ -537,7 +537,7 @@ const Dashboard = () => {
                                     </svg>
 
                                     <img src="/privacyPolicy/photo1.png" className="w-[40px] h-[40px] rounded-full object-cover" />
-                                    <h2 className="font-degular font-semibold text-[28]">
+                                    <h2 className="font-degular font-semibold text-[24px]">
                                         John Doe
                                     </h2>
                                 </div>

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import CustomContainer from "../../components/shared/CustomContainer"
 
 
@@ -44,6 +45,12 @@ const Notification = () => {
         },
 
     ];
+
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <section className=" md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
             <CustomContainer>

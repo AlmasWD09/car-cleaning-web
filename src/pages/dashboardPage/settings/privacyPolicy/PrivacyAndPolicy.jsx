@@ -30,7 +30,7 @@ const PrivacyAndPolicy = () => {
       <div className="flex justify-end ">
         <Button
           htmlType="submit"
-          style={{ backgroundColor: "#1E73BE", color: "white", fontFamily: "degularDisplay", padding: "24px 40px", fontSize: "16px", fontWeight: "bold", margin: "10px 0px" }}
+          style={{ backgroundColor: "#0063E5", color: "white", fontFamily: "degularDisplay", padding: "24px 80px", fontSize: "16px", fontWeight: "bold", margin: "10px 0px" }}
           onClick={handleUpdate}
         >
           Save

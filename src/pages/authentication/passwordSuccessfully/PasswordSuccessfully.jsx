@@ -1,9 +1,15 @@
 import { Button } from "antd"
 import CustomContainer from "../../../components/shared/CustomContainer"
 import { Link } from "react-router-dom"
+import { useEffect } from "react";
 
 
 const PasswordSuccessfully = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[60px] bg-[#f6f6f6]">
       <CustomContainer>

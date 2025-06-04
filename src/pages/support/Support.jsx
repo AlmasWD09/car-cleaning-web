@@ -1,13 +1,17 @@
 import { useNavigate } from "react-router-dom"
 import CustomContainer from "../../components/shared/CustomContainer"
 import { Button, Form, Input } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextArea from "antd/es/input/TextArea";
 import { ArrowRightOutlined } from "@ant-design/icons";
 
 const Support = () => {
   const navigate = useNavigate();
   const [isFocused, setIsFocused] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
@@ -107,7 +111,7 @@ const Support = () => {
                 <div className="flex justify-end">
                   <Button
                     style={{
-                      width:"200px",
+                      width: "200px",
                       backgroundColor: "#0063E5",
                       color: "#ffffff",
                       fontSize: "20px",
@@ -118,7 +122,7 @@ const Support = () => {
                       alignItems: "center",
                       justifyContent: "center",
                       gap: "10px",
-                      
+
                     }}
                   >Send <ArrowRightOutlined /></Button>
                 </div>

@@ -1,7 +1,7 @@
 
 import CustomContainer from "../../../components/shared/CustomContainer"
 import { Button, Form, Input } from "antd"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 
@@ -13,6 +13,11 @@ const ForgetPassword = () => {
     const forgetPasswordFinish = (values) => {
         console.log(values);
     };
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
             <CustomContainer>
@@ -82,21 +87,21 @@ const ForgetPassword = () => {
 
                                 {/* submit button component */}
                                 <Link to='/otp-code'>
-                                <Button
-                                    htmlType="submit"
-                                    block
-                                    style={{
-                                        backgroundColor: "#0063E5",
-                                        color: "#ffffff",
-                                        fontSize: "20px",
-                                        fontWeight: "600",
-                                        height: "60px",
-                                        borderRadius: "20px",
-                                        paddingInline: "20px",
-                                    }}
-                                >
-                                    Send Code
-                                </Button>
+                                    <Button
+                                        htmlType="submit"
+                                        block
+                                        style={{
+                                            backgroundColor: "#0063E5",
+                                            color: "#ffffff",
+                                            fontSize: "20px",
+                                            fontWeight: "600",
+                                            height: "60px",
+                                            borderRadius: "20px",
+                                            paddingInline: "20px",
+                                        }}
+                                    >
+                                        Send Code
+                                    </Button>
                                 </Link>
                             </Form>
                         </div>

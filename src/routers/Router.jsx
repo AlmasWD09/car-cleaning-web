@@ -209,7 +209,3 @@ const router = createBrowserRouter([
 export default router;
 
 
-// ======= dashboard layout design for =======
-// 1. Dashboard name a layout Design ----> sidebar/navbar/outlet ai page a hova
-// 2. route create
-// 3. 

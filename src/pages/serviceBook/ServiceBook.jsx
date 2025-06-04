@@ -5,7 +5,7 @@ import { Modal } from 'antd';
 
 
 const ServiceBook = () => {
-  
+
     const navigate = useNavigate();
     const [modalOpen, setModalOpen] = useState(false);
     const priceAllData = [
@@ -94,6 +94,10 @@ const ServiceBook = () => {
         };
     }, [modalOpen]);
 
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">

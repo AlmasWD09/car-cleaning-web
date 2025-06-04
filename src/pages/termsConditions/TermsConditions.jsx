@@ -1,8 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import CustomContainer from "../../components/shared/CustomContainer"
+import { useEffect } from "react";
 
 const TermsConditions = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
       <CustomContainer>
@@ -45,7 +51,7 @@ const TermsConditions = () => {
 
               <div className="lg:w-[527px] border border-transparent">
                 <h1 className="mt-4 text-[18px] font-degular font-semibold">
-                1.Service Agreement
+                  1.Service Agreement
                 </h1>
                 <ul className="list-disc ml-6 pl-2 pr-8">
                   <li className="text-[18px] font-degular">Our services include exterior washing, interior cleaning, detailing, and additional treatments as per the selected package.</li>
@@ -55,19 +61,19 @@ const TermsConditions = () => {
 
               <div className="lg:w-[527px] border border-transparent">
                 <h1 className="mt-4 text-[18px] font-degular font-semibold">
-                2.Pricing & Payments
+                  2.Pricing & Payments
                 </h1>
                 <ul className="list-disc ml-6 pl-2 pr-8">
                   <li className="text-[18px] font-degular">All prices are subject to change without prior notice.</li>
                   <li className="text-[18px] font-degular">Payments must be made before or immediately after service completion.</li>
                   <li className="text-[18px] font-degular">We accept cash, credit/debit cards, and digital payments.</li>
-           
+
                 </ul>
               </div>
 
               <div className="lg:w-[527px] border border-transparent">
                 <h1 className="mt-4 text-[18px] font-degular font-semibold">
-                3.Cancellations & Refunds
+                  3.Cancellations & Refunds
                 </h1>
                 <ul className="list-disc ml-6 pl-2 pr-8">
                   <li className="text-[16px] font-degular">Appointments can be rescheduled or canceled with prior notice.</li>
@@ -78,7 +84,7 @@ const TermsConditions = () => {
 
               <div className="lg:w-[527px] border border-transparent">
                 <h1 className="mt-4 text-[18px] font-degular font-semibold">
-                4.Liability Disclaimer
+                  4.Liability Disclaimer
                 </h1>
                 <ul className="list-disc ml-6 pl-2 pr-8">
                   <li className="text-[16px] font-degular">We take utmost care, but we are not liable for damage due to loose parts, pre-existing conditions, or personal belongings left inside vehicles.</li>
@@ -88,21 +94,21 @@ const TermsConditions = () => {
 
               <div className="lg:w-[527px] border border-transparent">
                 <h1 className="mt-4 text-[18px] font-degular font-semibold">
-                5.Customer Conduct
+                  5.Customer Conduct
                 </h1>
                 <ul className="list-disc ml-6 pl-2 pr-8">
                   <li className="text-[16px] font-degular">Any misconduct, abuse, or violation of policies may result in service denial.</li>
-                  
+
                 </ul>
               </div>
 
               <div className="lg:w-[527px] border border-transparent">
                 <h1 className="mt-4 text-[18px] font-degular font-semibold">
-                6.Changes to Terms
+                  6.Changes to Terms
                 </h1>
                 <ul className="list-disc ml-6 pl-2 pr-8">
                   <li className="text-[16px] font-degular">We reserve the right to update these terms at any time.</li>
-                  
+
                 </ul>
               </div>
 

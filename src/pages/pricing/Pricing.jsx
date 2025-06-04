@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import CommonTitle from "../../components/shared/CommonTitle";
 import CustomContainer from "../../components/shared/CustomContainer";
 
@@ -50,6 +51,11 @@ const Pricing = () => {
       bothPrice: " 84654",
     },
   ];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <section className="bg-[#f6f6f6] py-10 pt-20 md:pt-28 lg:pt-10">
       <CustomContainer>

@@ -58,9 +58,9 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className="font-degular bg-[#f6f6f6]">
+      <div className="font-degular bg-[#f6f6f6] ">
         <div
-          className={`hidden lg:flex py-2 transition-all duration-700 ease-in-out ${navbar ? "fixed top-0 left-0 right-0 z-50 bg-[#f6f6f6] shadow-md" : "relative"
+          className={`hidden lg:flex py-3  ${navbar ? "fixed top-0 left-0 right-0 z-[999] bg-[#f6f6f6] shadow-md" : "fixed bg-transparent w-full "
             }`}
         >
           <CustomContainer>
@@ -188,7 +188,7 @@ const Navbar = () => {
         </div>
 
         {/* =============== small and medium device start ==========*/}
-        <div className="fixed w-full  z-40 lg:hidden">
+        <div className="fixed w-full shadow-md z-40 lg:hidden">
           <div className="bg-[#f6f6f6] py-4 md:py-2  text-center w-full flex items-center justify-between px-4">
             <div onClick={handleNavigate} className="cursor-pointer">
               {/* small device image */}

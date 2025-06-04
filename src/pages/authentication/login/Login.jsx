@@ -1,6 +1,6 @@
 import CustomContainer from "../../../components/shared/CustomContainer";
 import { Button, Checkbox, Divider, Form, Input } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineArrowOutward } from "react-icons/md";
@@ -13,6 +13,11 @@ const Login = () => {
   const onFinish = (values) => {
     console.log(values);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <section className="pt-[100px] md:pt-[120px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
       {/* <CustomContainer> */}
