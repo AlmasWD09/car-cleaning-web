@@ -19,7 +19,7 @@ const ForgetPassword = () => {
     }, []);
 
     return (
-        <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
+        <section className="pt-20 lg:pt-[120px] pb-[52px] bg-[#f6f6f6]">
             <CustomContainer>
                 <div className="flex flex-col lg:flex-row justify-between items-end gap-3">
                     <div className="w-full p-4">

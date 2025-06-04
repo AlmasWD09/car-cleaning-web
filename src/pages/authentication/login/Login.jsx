@@ -19,7 +19,7 @@ const Login = () => {
   }, []);
 
   return (
-    <section className="pt-[100px] md:pt-[120px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
+    <section className="pt-20 lg:pt-[120px] pb-[52px] bg-[#f6f6f6]">
       {/* <CustomContainer> */}
         <div className="flex flex-col lg:flex-row justify-between items-center gap-3">
           {/* left side  */}

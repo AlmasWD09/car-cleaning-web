@@ -100,7 +100,7 @@ const ServiceBook = () => {
     }, []);
 
     return (
-        <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
+        <section className="pt-20 lg:pt-[120px] pb-[52px] bg-[#f6f6f6]">
             <CustomContainer>
                 <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-0 pt-10 lg:pt-0">
                     <div>

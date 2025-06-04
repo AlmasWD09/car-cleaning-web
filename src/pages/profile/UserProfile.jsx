@@ -26,7 +26,7 @@ const UserProfile = () => {
     }, []);
 
     return (
-        <section className="lg:pt-20 bg-[#f6f6f6]">
+        <section className="pt-20 lg:pt-[120px] bg-[#f6f6f6]">
             <CustomContainer>
                 <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-0 pt-10 lg:pt-0 pb-[24px]">
                     <div>

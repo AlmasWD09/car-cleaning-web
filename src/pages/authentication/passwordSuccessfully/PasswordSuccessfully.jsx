@@ -11,7 +11,7 @@ const PasswordSuccessfully = () => {
   }, []);
 
   return (
-    <section className="pt-[70px] md:pt-[100px] lg:pt-[57px] pb-[60px] bg-[#f6f6f6]">
+    <section className="pt-20 lg:pt-[120px] pb-[60px] bg-[#f6f6f6]">
       <CustomContainer>
         <div className="flex justify-center items-center">
           <div>

@@ -10,7 +10,7 @@ const PhotoGallery = () => {
   }, []);
 
   return (
-    <section className="bg-[#f6f6f6] py-10 pt-20 md:pt-28 lg:pt-10">
+    <section className="bg-[#f6f6f6] py-10 pt-20 lg:pt-[120px]">
       <CustomContainer>
         <div className=" pb-[22px]">
           <CommonTitle text={"Photo gallery"} />

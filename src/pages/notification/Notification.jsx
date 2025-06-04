@@ -52,7 +52,7 @@ const Notification = () => {
     }, []);
 
     return (
-        <section className=" md:pt-[100px] lg:pt-[57px] pb-[52px] bg-[#f6f6f6]">
+        <section className=" pb-[52px] bg-[#f6f6f6] pt-20 lg:pt-[120px]">
             <CustomContainer>
                 <p className="text-[36px] font-degular font-medium text-[#000000] pb-[32px]">Notifications</p>
 
