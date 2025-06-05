@@ -3,8 +3,8 @@
 import { Modal } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/style.css";
 
 
 const ManageDates = () => {
@@ -12,6 +12,9 @@ const ManageDates = () => {
   const [formOne] = useForm()
   const [formTwo] = useForm()
   const [mondalOne, setModalOne] = useState(false);
+  const [selected, setSelected] = useState([]);
+
+
 
   // =============  modal one start ===============
   const onFinishOne = () => {
@@ -32,13 +35,41 @@ const ManageDates = () => {
   // =============  modal one end ===============
 
 
+
   return (
     <div>
       <div className='flex justify-evenly'>
 
         <div className='w-[40%]'>
           <h2 className='text-[28px] font-degular font-medium'>Date Blocked</h2>
-          <Calendar onChange={onChange} value={value} />
+          <div className="bg-gray-100 shadow-md p-4">
+            <DayPicker
+              mode="multiple"
+              selected={selected}
+              onSelect={setSelected}
+              modifiersClassNames={{
+                selected: 'my-selected'
+              }}
+              modifiersStyles={{
+                selected: {
+                  color: 'red',
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  fontWeight: 'bold'
+                }
+              }}
+            />
+            <div className="mt-2">
+              {selected?.length > 0 ? (
+                <p>
+                  Selected dates:{" "}
+                  {selected.map((date) => date.toLocaleDateString()).join(", ")}
+                </p>
+              ) : (
+                <p>Pick one or more days.</p>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className='w-[30%]'>
@@ -77,7 +108,7 @@ const ManageDates = () => {
       </div>
 
 
-      <div className='my-4 flex justify-center'>
+      <div className='my-4  hidden'>
         <button onClick={() => showModalOne()} className='bg-primary text-[#fff] py-2 px-6 rounded-lg'>Click Here</button>
       </div>
 
@@ -110,9 +141,9 @@ const ManageDates = () => {
           </span>
 
           <div>
-            <p className='font-degular text-center font-semibold text-[28px]'>Are you sure to <span className='text-[#FF3F3F] font-bold'>Block</span> 
-            <br />
-            this date ?</p>
+            <p className='font-degular text-center font-semibold text-[28px]'>Are you sure to <span className='text-[#FF3F3F] font-bold'>Block</span>
+              <br />
+              this date ?</p>
           </div>
 
           <div className='flex justify-center mt-2'>

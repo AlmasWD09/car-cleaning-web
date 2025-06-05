@@ -370,6 +370,11 @@ const Dashboard = () => {
     const handleNotification = () => {
         navigate('/admin/dashboard/notifications')
     }
+    const handleNavigate = () => {
+        navigate('/admin/dashboard/change-password')
+    }
+
+
     return (
         <>
             <Layout>
@@ -536,7 +541,9 @@ const Dashboard = () => {
                                         <path d="M21.645 33.4437C21.861 34.1824 22.3042 34.8302 22.9086 35.2907C23.513 35.7513 24.2464 36 25 36C25.7536 36 26.487 35.7513 27.0914 35.2907C27.6958 34.8302 28.139 34.1824 28.355 33.4437H21.645ZM16 32.4203H34V29.3503L32 26.2802V21.1635C32 20.2227 31.8189 19.2912 31.4672 18.4221C31.1154 17.553 30.5998 16.7633 29.9497 16.0981C29.2997 15.4329 28.5281 14.9053 27.6788 14.5453C26.8295 14.1853 25.9193 14 25 14C24.0807 14 23.1705 14.1853 22.3212 14.5453C21.4719 14.9053 20.7003 15.4329 20.0503 16.0981C19.4002 16.7633 18.8846 17.553 18.5328 18.4221C18.1811 19.2912 18 20.2227 18 21.1635V26.2802L16 29.3503V32.4203Z" fill="white" />
                                     </svg>
 
-                                    <img src="/privacyPolicy/photo1.png" className="w-[40px] h-[40px] rounded-full object-cover" />
+                                    <img src="/privacyPolicy/photo1.png"
+                                    onClick={handleNavigate}
+                                    className="w-[40px] h-[40px] rounded-full object-cover" />
                                     <h2 className="font-degular font-semibold text-[24px]">
                                         John Doe
                                     </h2>

@@ -9,6 +9,18 @@ const Support = () => {
   const navigate = useNavigate();
   const [isFocused, setIsFocused] = useState(false);
 
+
+
+
+
+
+  const handleNavigate = () => {
+    navigate('/service-book')
+  }
+
+
+
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -28,7 +40,9 @@ const Support = () => {
             </span>
           </div>
           <div className="">
-            <button className="text-[#ffffff] text-[20px] font-semibold bg-primary rounded-full py-[7px] md:py-2 lg:py-4 px-[57px] flex justify-center items-center gap-3 lg:w-[400px] ">
+            <button
+              onClick={handleNavigate}
+              className="text-[#ffffff] text-[20px] font-semibold bg-primary rounded-full py-[7px] md:py-2 lg:py-4 px-[57px] flex justify-center items-center gap-3 lg:w-[400px] ">
               Book Now
               <svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0.343277 10.7426L8.53582 2.55003L2.17186 2.55003L2.17185 0.550328H11.9497L11.9497 10.3282L9.95003 10.3282L9.95003 3.96424L1.75749 12.1568L0.343277 10.7426Z" fill="white" />
