@@ -2,6 +2,7 @@ import { Button } from "antd"
 import CustomContainer from "../../../components/shared/CustomContainer"
 import { Link } from "react-router-dom"
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 
 
 const PasswordSuccessfully = () => {
@@ -11,12 +12,21 @@ const PasswordSuccessfully = () => {
   }, []);
 
   return (
-    <section className="pt-20 lg:pt-[120px] pb-[60px] bg-[#f6f6f6]">
+    <section className="pt-20 lg:pt-[140px] pb-[60px] bg-[#f6f6f6]">
       <CustomContainer>
         <div className="flex justify-center items-center">
           <div>
             <div className="w-full flex justify-center">
-              <img src="/createAccountImage/successCar1.png" alt="car" />
+              {/* <img src="/createAccountImage/successCar1.png" alt="car" /> */}
+
+              <motion.img
+                src="/createAccountImage/successCar1.png"
+                alt="car"
+                initial={{ x: 400, y: 50, opacity: 0 }} // Start from right and bottom
+                animate={{ x: 0, y: 0, opacity: 1 }}     // Animate to center
+                transition={{ duration: 1 }}     // Smooth 1 second animation
+                className="w-[200px] md:w-[250px]" // Adjust image width if needed
+              />
             </div>
             <h1 className="text-[28px] md:text-[36px] font-degular font-semibold text-[#04AC20] py-4">Password Changed Successfully</h1>
             <Link to='/login'>

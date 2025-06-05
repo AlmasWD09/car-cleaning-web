@@ -5,6 +5,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineArrowOutward } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [form] = Form.useForm();
@@ -24,7 +25,13 @@ const Login = () => {
         <div className="flex flex-col lg:flex-row justify-between items-center gap-3">
           {/* left side  */}
           <div className="w-full lg:w-[50%] ">
-            <img src="/createAccountImage/photo6.png" alt="car" className="object-cover w-full" />
+            {/* <img src="/createAccountImage/photo6.png" alt="car" className="object-cover w-full" /> */}
+            <motion.img
+            src="/createAccountImage/photo6.png" alt="car" className="w-full"
+            initial={{ x: -300, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1 }}
+          />
           </div>
           
           {/* <div className="w-full lg:hidden">

@@ -5,6 +5,8 @@ import { FcGoogle } from "react-icons/fc";
 import { MdOutlineArrowOutward } from "react-icons/md";
 import { BsFacebook } from "react-icons/bs";
 import CustomContainer from "../../../components/shared/CustomContainer";
+import { motion } from "framer-motion";
+
 
 const CreateAccount = () => {
   const [createAccountForm] = Form.useForm();
@@ -356,7 +358,12 @@ const CreateAccount = () => {
 
         {/* right side image */}
         <div className="w-full lg:w-[80%] order-1 lg:order-2 pt-16 md:pt-0">
-          <img src="/createAccountImage/photo1.png" alt="car" className="w-full" />
+          <motion.img
+            src="/createAccountImage/photo1.png" alt="car" className="w-full"
+            initial={{ x: 300, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1 }}
+          />
         </div>
       </div>
       {/* </CustomContainer> */}
