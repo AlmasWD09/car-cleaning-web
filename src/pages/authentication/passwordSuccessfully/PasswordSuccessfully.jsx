@@ -17,8 +17,6 @@ const PasswordSuccessfully = () => {
         <div className="flex justify-center items-center">
           <div>
             <div className="w-full flex justify-center">
-              {/* <img src="/createAccountImage/successCar1.png" alt="car" /> */}
-
               <motion.img
                 src="/createAccountImage/successCar1.png"
                 alt="car"
