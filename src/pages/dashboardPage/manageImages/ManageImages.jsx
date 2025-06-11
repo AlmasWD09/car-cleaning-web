@@ -2,6 +2,7 @@ import { Button, Card, Form, Modal, Upload } from "antd";
 import { UploadCloud } from "lucide-react";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { useAddPhotoMutation, useDeletePhotoMutation, useGetPhotoApiQuery, useUpdatePhotoMutation } from "../../../redux/dashboardFeatures/manageImages/dashboardManageImagesApi";
 
 
 const ManageImages = () => {
@@ -10,6 +11,14 @@ const ManageImages = () => {
   const [imageMadel, setImageMadel] = useState(false);
   const [imageID, setimageID] = useState(null);
   const [mondalOne, setModalOne] = useState(false);
+
+
+const [addPhoto] = useAddPhotoMutation() // post
+const {data:getPhoto} = useGetPhotoApiQuery() // get
+const [updatePhoto] = useUpdatePhotoMutation() // update
+const [deletePhoto] = useDeletePhotoMutation() // delete
+
+
 
 
   // =============  modal one start ===============

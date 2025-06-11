@@ -4,11 +4,16 @@ import React, { useState } from 'react';
 import { Input, Space, Table } from 'antd';
 const { Search } = Input;
 
-import { DownOutlined } from '@ant-design/icons';
 import { Dropdown } from 'antd';
+import { useGetTransitionApiQuery } from '../../../redux/dashboardFeatures/transition/dashboardTransitionApi';
 
 const Transactions = () => {
   const [open, setOpen] = useState(false);
+
+
+  const { data: transitionData } = useGetTransitionApiQuery()
+
+
 
 
   const handleClick = () => {

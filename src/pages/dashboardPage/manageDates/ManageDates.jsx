@@ -5,6 +5,7 @@ import { useForm } from 'antd/es/form/Form';
 import { useState } from 'react';
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
+import { useAddBlockDateApiMutation, useDeleteUnBlockDateApiMutation, useGetBlockedDateApiQuery } from '../../../redux/dashboardFeatures/manageDate/dashboardManageDateApi';
 
 
 const ManageDates = () => {
@@ -13,6 +14,12 @@ const ManageDates = () => {
   const [formTwo] = useForm()
   const [mondalOne, setModalOne] = useState(false);
   const [selected, setSelected] = useState([]);
+
+  const { data: manageDateData } = useGetBlockedDateApiQuery() // get
+  const [addBlockDateApi] = useAddBlockDateApiMutation() // post
+  const [deleteUnBlockDateApi] = useDeleteUnBlockDateApiMutation() // delete
+
+
 
 
 

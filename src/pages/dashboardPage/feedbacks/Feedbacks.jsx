@@ -1,11 +1,17 @@
 import { Button, Form, Input, Modal } from "antd";
 import { useEffect, useState } from "react";
+import { useDeleteFeedbackMutation, useGetFeedbackApiQuery, useGetHighestFeedbackApiQuery } from "../../../redux/dashboardFeatures/feedback/dashboardFeedbackApi";
 
 
 const Feedbacks = () => {
   const [formOne] = Form.useForm();
   const [mondalOne, setModalOne] = useState(false);
   const [hightColor, setHightColor] = useState(false)
+
+const {data:feebackData} = useGetFeedbackApiQuery() // get
+const {data:hightedFeedbackData} = useGetHighestFeedbackApiQuery() // get highest feedback
+const [deleteFeedback] = useDeleteFeedbackMutation()
+
 
 
   // =============  modal one start ===============
@@ -455,7 +461,7 @@ const Feedbacks = () => {
             hightColor ? <div className="flex items-center gap-3 bg-primary bg-opacity-10 p-4 cursor-pointer">
               <span>
                 <svg width="35" height="35" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM8.823 12.14L6.058 9.373L5 10.431L8.119 13.552C8.30653 13.7395 8.56084 13.8448 8.826 13.8448C9.09116 13.8448 9.34547 13.7395 9.533 13.552L15.485 7.602L14.423 6.54L8.823 12.14Z" fill="#0063E5" />
+                  <path fill-rule="evenodd" clipRule="evenodd" d="M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM8.823 12.14L6.058 9.373L5 10.431L8.119 13.552C8.30653 13.7395 8.56084 13.8448 8.826 13.8448C9.09116 13.8448 9.34547 13.7395 9.533 13.552L15.485 7.602L14.423 6.54L8.823 12.14Z" fill="#0063E5" />
                 </svg>
               </span>
               <p className="text-4xl font-degular font-bold text-primary">Highlighted</p>

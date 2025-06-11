@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, Form, Input, Modal, Space, Table } from 'antd';
 const { Search } = Input;
 
-import { DownOutlined } from '@ant-design/icons';
 import { Dropdown } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { useDeleteBookingApiMutation, useGetBookingApiQuery,useGetMarkComplateBookingApiQuery} from '../../../redux/dashboardFeatures/bookings/dashboardBookingApi';
 
 const DashboardBookings = () => {
   const [formOne] = useForm()
@@ -12,6 +12,13 @@ const DashboardBookings = () => {
   const [open, setOpen] = useState(false);
   const [mondalOne, setModalOne] = useState(false);
   const [mondalTwo, setModalTwo] = useState(false);
+
+
+
+  const { data: booking } = useGetBookingApiQuery()
+  const [deleteBookingApi] = useDeleteBookingApiMutation()
+  const { data: markBooking } = useGetMarkComplateBookingApiQuery()
+  
 
 
 
@@ -390,7 +397,7 @@ const DashboardBookings = () => {
                   {/* Header */}
                   <div className="flex items-center gap-2 text-gray-600 mb-4">
                     <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M21.6 3.6H24.3C25.0161 3.6 25.7028 3.88446 26.2092 4.39081C26.7155 4.89716 27 5.58392 27 6.3V24.3C27 25.0161 26.7155 25.7028 26.2092 26.2092C25.7028 26.7155 25.0161 27 24.3 27H2.7C1.98392 27 1.29716 26.7155 0.790812 26.2092C0.284463 25.7028 0 25.0161 0 24.3L0 6.3C0 5.58392 0.284463 4.89716 0.790812 4.39081C1.29716 3.88446 1.98392 3.6 2.7 3.6H5.4V0H7.2V3.6H19.8V0H21.6V3.6ZM10.8 14.4H5.4V12.6H10.8V14.4ZM21.6 12.6H16.2V14.4H21.6V12.6ZM10.8 19.8H5.4V18H10.8V19.8ZM16.2 19.8H21.6V18H16.2V19.8Z" fill="#888888" />
+                      <path fill-rule="evenodd" clipRule="evenodd" d="M21.6 3.6H24.3C25.0161 3.6 25.7028 3.88446 26.2092 4.39081C26.7155 4.89716 27 5.58392 27 6.3V24.3C27 25.0161 26.7155 25.7028 26.2092 26.2092C25.7028 26.7155 25.0161 27 24.3 27H2.7C1.98392 27 1.29716 26.7155 0.790812 26.2092C0.284463 25.7028 0 25.0161 0 24.3L0 6.3C0 5.58392 0.284463 4.89716 0.790812 4.39081C1.29716 3.88446 1.98392 3.6 2.7 3.6H5.4V0H7.2V3.6H19.8V0H21.6V3.6ZM10.8 14.4H5.4V12.6H10.8V14.4ZM21.6 12.6H16.2V14.4H21.6V12.6ZM10.8 19.8H5.4V18H10.8V19.8ZM16.2 19.8H21.6V18H16.2V19.8Z" fill="#888888" />
                     </svg>
 
                     <span className="font-medium">Booking details</span>

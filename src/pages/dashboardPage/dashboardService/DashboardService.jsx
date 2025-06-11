@@ -1,4 +1,5 @@
 import { Button, Form, Input, Modal, Upload } from "antd";
+import { key } from "localforage";
 import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react"
 
@@ -13,13 +14,35 @@ const DashboardService = () => {
   const [mondalThree, setModalThree] = useState(false);
 
 
+
   // =============  modal one start ===============
+  const onFinishOne = (values) => {
+    console.log(values)
+    const formData = new FormData();
+    if (ImageFileList) {
+      formData.append("image", ImageFileList[0]?.originFileObj);
+    }
+console.log(formData.forEach(key,values=>console.log(key,values)))
+
+    //   try {
+    //     const res = ""
+
+    //     if (res?.data) {
+    //         setImageFileList([]);
+    //         formOne.resetFields()
+    //         dispatch(closeTeamModalOpenOne());
+    //     }
+    // } catch (errors) {
+    // }
+
+
+  }
   const showModalOne = () => {
     setModalOne(true)
   }
 
   const handleModalOneOk = () => {
-
+    formOne.submit()
   }
 
   const handleCancelModalOne = () => {
@@ -125,26 +148,7 @@ const DashboardService = () => {
 
 
 
-  const onFinishOne = (values) => {
-    console.log(values)
-    const formData = new FormData();
-    if (ImageFileList[0]?.originFileObj) {
-      formData.append("image", ImageFileList[0].originFileObj);
-    }
 
-    //   try {
-    //     const res = ""
-
-    //     if (res?.data) {
-    //         setImageFileList([]);
-    //         formOne.resetFields()
-    //         dispatch(closeTeamModalOpenOne());
-    //     }
-    // } catch (errors) {
-    // }
-
-
-  }
 
 
   const onFinishTwo = (values) => {
