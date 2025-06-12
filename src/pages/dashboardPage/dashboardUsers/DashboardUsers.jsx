@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Input, Modal, Pagination, Popconfirm, Space, Table } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
 import { useForm } from 'antd/es/form/Form';
-import { useDeleteUserApiMutation, useGetUserApiQuery } from '../../../redux/dashboardFeatures/manageUsers/dashboardManageUsersApi';
+import { useDeleteUserApiMutation, useDetailsUserApiQuery, useGetUserApiQuery } from '../../../redux/dashboardFeatures/manageUsers/dashboardManageUsersApi';
 import toast from 'react-hot-toast';
 const { Search } = Input;
 import "./DashboardUser.css";
@@ -19,10 +19,13 @@ const DashboardUsers = () => {
     const [mondalTwo, setModalTwo] = useState(false);
 
     const { data: userData, refetch } = useGetUserApiQuery({ per_page: perPage, page: currentPage, search: searchText })
+
+    const { data: singleData } = useDetailsUserApiQuery(selectId)
     const [deleteUserApi] = useDeleteUserApiMutation()
+
+
     const userAllData = userData?.data?.data
-
-
+    const SingleUser = singleData?.data
 
 
 
@@ -33,6 +36,7 @@ const DashboardUsers = () => {
 
     const showModalOne = (record) => {
         setModalOne(true)
+        setSelectId(record?.id)
     }
 
     const handleModalOneOk = () => {
@@ -306,12 +310,12 @@ const DashboardUsers = () => {
                                 <div className="text-center mb-6">
                                     <div className="w-20 h-20 mx-auto mb-4">
                                         <img
-                                            src="/profileCar/photo3.png"
+                                            src={SingleUser?.photo}
                                             alt="Profile"
                                             className="w-full h-full rounded-full object-cover"
                                         />
                                     </div>
-                                    <h3 className="text-lg font-semibold text-gray-800">Md. Abid Hasan</h3>
+                                    <h3 className="text-lg font-semibold text-gray-800">{SingleUser?.name}</h3>
                                 </div>
 
                                 <div className="space-y-4">
@@ -322,7 +326,7 @@ const DashboardUsers = () => {
                                             </svg>
 
                                         </span>
-                                        <span className="text-gray-700">example@gmail.com</span>
+                                        <span className="text-gray-700">{SingleUser?.email}</span>
                                     </div>
 
                                     <div className="flex items-center space-x-3 p-3 border border-gray-200 bg-gray-50 rounded-lg">
@@ -333,7 +337,7 @@ const DashboardUsers = () => {
 
 
                                         </span>
-                                        <span className="text-gray-700">+98562325645</span>
+                                        <span className="text-gray-700">{SingleUser?.phone}</span>
                                     </div>
 
                                     <div className="bg-blue-50 p-3 rounded-lg">
@@ -351,11 +355,11 @@ const DashboardUsers = () => {
                                     <div className="grid grid-cols-2 gap-4 mb-6">
                                         <div>
                                             <h4 className="text-sm font-medium text-gray-600 mb-1">Brand Name</h4>
-                                            <p className="text-2xl font-bold text-gray-800">BMW</p>
+                                            <p className="text-2xl font-bold text-gray-800">{SingleUser?.car_brand}</p>
                                         </div>
                                         <div>
                                             <h4 className="text-sm font-medium text-gray-600 mb-1">Car Model</h4>
-                                            <p className="text-2xl font-bold text-gray-800">M5 CS</p>
+                                            <p className="text-2xl font-bold text-gray-800">{SingleUser?.car_model}</p>
                                         </div>
                                     </div>
 

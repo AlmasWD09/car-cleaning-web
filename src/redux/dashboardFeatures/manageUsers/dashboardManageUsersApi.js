@@ -9,6 +9,13 @@ const dashboardUsersApi = baseApi.injectEndpoints({
             }),
             providesTags: ['manage_user'],
         }),
+        detailsUserApi: builder.query({
+            query: (detailsId) => ({
+                url: `/admin/users/${detailsId}`,
+                method: "GET"
+            }),
+            providesTags: ['manage_user'],
+        }),
         deleteUserApi: builder.mutation({
             query: (id) => ({
                 url: `/admin/users/${id}`,
@@ -20,4 +27,4 @@ const dashboardUsersApi = baseApi.injectEndpoints({
 })
 
 
-export const { useGetUserApiQuery, useDeleteUserApiMutation } = dashboardUsersApi;
+export const { useGetUserApiQuery, useDetailsUserApiQuery ,useDeleteUserApiMutation } = dashboardUsersApi;
