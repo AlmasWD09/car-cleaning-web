@@ -32,18 +32,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", changeBackground);
   }, []);
 
-  // Prevent scrolling when sidebar is open
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [menuOpen]);
-
-  const handleCreateAccount = () => {
-    navigate("/create-account");
-  };
 
   const handleNavigate = () => {
     navigate("/");
@@ -55,6 +43,16 @@ const Navbar = () => {
   const handleNotification = () => {
     navigate("/notification");
   };
+
+
+  // Prevent scrolling when sidebar is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [menuOpen]);
 
   return (
     <nav>
@@ -145,42 +143,42 @@ const Navbar = () => {
                       />
                     </svg>
                   </span>
-                  <button
-                    className={`${isCreateAccountRoute
-                      ? "border border-gray-600 py-4 px-8 rounded-full"
-                      : "flex items-center rounded-full gap-2 p-4 bg-primary"
-                      }`}
-                  >
-                    {isCreateAccountRoute ? (
-                      <p className="text-[20px] font-semibold tracking-wider flex items-center gap-2">
-                        Have an account?
-                        <Link to="/login">Login</Link>
-                      </p>
-                    ) : (
+                  {
+                    isCreateAccountRoute ? <Link to="/login">
+                      <button className="border border-gray-600 py-4 px-8 rounded-full">
+                        <p className="text-[20px] font-semibold tracking-wider flex items-center gap-2">
+                          Have an account?
+                          Login
+                        </p>
+                      </button>
+                    </Link>
+                      :
                       <>
-                        <span
-                          onClick={() => handleCreateAccount()}
-                          className="flex items-center bg-primary rounded-full gap-2"
-                        >
-                          <svg
-                            width="17"
-                            height="16"
-                            viewBox="0 0 17 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M8.5 0C9.56087 0 10.5783 0.421427 11.3284 1.17157C12.0786 1.92172 12.5 2.93913 12.5 4C12.5 5.06087 12.0786 6.07828 11.3284 6.82843C10.5783 7.57857 9.56087 8 8.5 8C7.43913 8 6.42172 7.57857 5.67157 6.82843C4.92143 6.07828 4.5 5.06087 4.5 4C4.5 2.93913 4.92143 1.92172 5.67157 1.17157C6.42172 0.421427 7.43913 0 8.5 0ZM8.5 10C12.92 10 16.5 11.79 16.5 14V16H0.5V14C0.5 11.79 4.08 10 8.5 10Z"
-                              fill="white"
-                            />
-                          </svg>
-                          <p className="text-[#ffffff] text-[20px] font-semibold tracking-wider">
-                            Create your account
-                          </p>
-                        </span>
+                        <Link to='/create-account'>
+                          <button className="flex items-center rounded-full gap-2 p-4 bg-primary">
+                            <span
+                              className="flex items-center bg-primary rounded-full gap-2"
+                            >
+                              <svg
+                                width="17"
+                                height="16"
+                                viewBox="0 0 17 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M8.5 0C9.56087 0 10.5783 0.421427 11.3284 1.17157C12.0786 1.92172 12.5 2.93913 12.5 4C12.5 5.06087 12.0786 6.07828 11.3284 6.82843C10.5783 7.57857 9.56087 8 8.5 8C7.43913 8 6.42172 7.57857 5.67157 6.82843C4.92143 6.07828 4.5 5.06087 4.5 4C4.5 2.93913 4.92143 1.92172 5.67157 1.17157C6.42172 0.421427 7.43913 0 8.5 0ZM8.5 10C12.92 10 16.5 11.79 16.5 14V16H0.5V14C0.5 11.79 4.08 10 8.5 10Z"
+                                  fill="white"
+                                />
+                              </svg>
+                              <p className="text-[#ffffff] text-[20px] font-semibold tracking-wider">
+                                Create your account
+                              </p>
+                            </span>
+                          </button>
+                        </Link>
                       </>
-                    )}
-                  </button>
+                  }
                 </div>
               }
             </div>
@@ -204,8 +202,8 @@ const Navbar = () => {
                 alt=""
                 className="w-full h-full object-cover hidden md:block"
               />
-              {/* dfsofks;kfspkf */}
             </div>
+
             <div>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -306,6 +304,10 @@ const Navbar = () => {
                         </svg>
                         Notification
                       </span>
+
+
+
+                      {/* 
                       <button
                         className={`${isCreateAccountRoute
                           ? " py-3 rounded"
@@ -341,7 +343,42 @@ const Navbar = () => {
                             </span>
                           </>
                         )}
-                      </button>
+                      </button> */}
+
+                      {
+                        isCreateAccountRoute ? <Link to="/login">
+                          <button className="py-3 rounded">
+                            <p className=" flex flex-col md:flex-row md:gap-2 text-start border border-primary rounded px-2 py-2 cursor-pointer text-[20px] font-semibold text-primary">
+                              Have an account?Login
+                            </p>
+                          </button>
+                        </Link>
+                          :
+                          <Link to='/create-account'>
+                            <button className="flex items-center rounded bg-primary px-2 py-3">
+                              <span
+                                onClick={() => handleCreateAccount()}
+                                className="flex items-center gap-1 md:text-[20px] md:font-semibold bg-primary rounded-full "
+                              >
+                                <svg
+                                  width="17"
+                                  height="16"
+                                  viewBox="0 0 17 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M8.5 0C9.56087 0 10.5783 0.421427 11.3284 1.17157C12.0786 1.92172 12.5 2.93913 12.5 4C12.5 5.06087 12.0786 6.07828 11.3284 6.82843C10.5783 7.57857 9.56087 8 8.5 8C7.43913 8 6.42172 7.57857 5.67157 6.82843C4.92143 6.07828 4.5 5.06087 4.5 4C4.5 2.93913 4.92143 1.92172 5.67157 1.17157C6.42172 0.421427 7.43913 0 8.5 0ZM8.5 10C12.92 10 16.5 11.79 16.5 14V16H0.5V14C0.5 11.79 4.08 10 8.5 10Z"
+                                    fill="white"
+                                  />
+                                </svg>
+                                <p className="text-[#ffffff] ">
+                                  Create your account
+                                </p>
+                              </span>
+                            </button>
+                          </Link>
+                      }
                     </div>
                   }
                 </div>
