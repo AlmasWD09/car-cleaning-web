@@ -3,16 +3,41 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import AuthWrapper from "./AuthWrapper";
+import { usePostAuthApiMutation } from "../../../redux/authontication/authApi";
 
 
 
 const DashboardLogin = () => {
     const navigate = useNavigate();
+    const [postAuthApi] = usePostAuthApiMutation()
 
-    const onFinish = (values) => {
-        console.log(values);
-        navigate("/");
+
+    const onFinish = async (values) => {
+        const authInfo = {
+            email: values?.email,
+            password: values?.password
+        }
+
+        try {
+            const res = await postAuthApi(authInfo).unwrap()
+            const token = res.data?.access_token;
+            if (res.status === true) {
+                console.log(res.message)
+                localStorage.setItem("admin_token", token);
+                navigate('/admin/dashboard')
+            }
+
+        } catch (error) {
+            console.log(error)
+            if (error && email) {
+                console.log(error?.data?.message?.email)
+            }
+            else if (error && password) {
+                console.log(error?.data?.message?.password)
+            }
+        }
     };
+
     return (
         <AuthWrapper>
             <div className="text-center mb-12 font-degular">
@@ -41,10 +66,10 @@ const DashboardLogin = () => {
                     </Form.Item>
                 </div>
                 <div>
-                <p className="text-[24px] font-degular">Password</p>
+                    <p className="text-[24px] font-degular">Password</p>
                     <Form.Item
                         name="password"
-                        rules={[{ required: true, message: "Please enter your password" }]}
+                    // rules={[{ required: true, message: "Please enter your password" }]}
                     >
                         <Input.Password
                             iconRender={(visible) => (visible ? <FaEye /> : <FaEyeSlash />)}

@@ -286,7 +286,7 @@ const DashboardBookings = () => {
         <div className='flex justify-between items-center mb-4'>
           <div>
             <Space direction="vertical" >
-              <Search placeholder="enter search email or name" onSearch={onSearch} enterButton
+              <Search placeholder="Enter search email or name" onSearch={onSearch} enterButton
                 className="custom-search-height"
               />
             </Space>

@@ -1,20 +1,29 @@
 
-import React, { useState } from 'react';
-import { Input, Modal, Space, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Input, Modal, Pagination, Popconfirm, Space, Table } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
 import { useForm } from 'antd/es/form/Form';
+import { useDeleteUserApiMutation, useGetUserApiQuery } from '../../../redux/dashboardFeatures/manageUsers/dashboardManageUsersApi';
+import toast from 'react-hot-toast';
 const { Search } = Input;
-
+import "./DashboardUser.css";
 
 
 const DashboardUsers = () => {
-    const [selectionType, setSelectionType] = useState('checkbox');
     const [searchText, setSearchText] = useState('')
+    const [selectId, setSelectId] = useState('')
     const [formOne] = useForm()
-    const [formTwo] = useForm()
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const [perPage, setPerPage] = useState(8);
     const [mondalOne, setModalOne] = useState(false);
     const [mondalTwo, setModalTwo] = useState(false);
+
+    const { data: userData, refetch } = useGetUserApiQuery({ per_page: perPage, page: currentPage, search: searchText })
+    const [deleteUserApi] = useDeleteUserApiMutation()
+    const userAllData = userData?.data?.data
+
+
+
 
 
     // =============  modal one start ===============
@@ -35,28 +44,22 @@ const DashboardUsers = () => {
     }
     // =============  modal one end ===============
 
+    const handleDelete = async (record) => {
+        setSelectId(record?.id)
 
+        try {
+            const res = await deleteUserApi(selectId).unwrap()
+            if (res?.status === true) {
+                toast.success(res?.message)
+                refetch()
+            }
 
-    // =============  modal two start ===============
-    const onFinishTwo = () => {
-        console.log('click two modal')
+        } catch (error) {
+            if (error) {
+                toast.error(error?.data?.message)
+            }
+        }
     }
-    const showModalTwo = () => {
-        setModalTwo(true)
-    }
-
-    const handleModalTwoOk = () => {
-
-    }
-
-    const handleCancelModalTwo = () => {
-        setModalTwo(false)
-    }
-    // =============  modal two end ===============
-
-
-
-
 
     const suffix = (
         <AudioOutlined
@@ -66,20 +69,19 @@ const DashboardUsers = () => {
             }}
         />
     );
-    const onSearch = (value, _e, info) =>
-        console.log(info === null || info === void 0 ? void 0 : info.source, value);
 
-    const handleDelete = () => {
-        console.log('click')
+    const handleChange = (e) => {
+        setSearchText(e.target.value);
     }
-    const handleUpdate = () => {
-        console.log('click')
-    }
+
+
 
     const columns = [
         {
             title: 'Sl.No',
-            dataIndex: 'sl_no'
+            dataIndex: 'index',
+            key: 'index',
+            render: (_text, _record, index) => (currentPage - 1) * perPage + index + 1,
         },
         {
             title: 'Name',
@@ -92,7 +94,7 @@ const DashboardUsers = () => {
         },
         {
             title: 'Card brand',
-            dataIndex: 'card_band',
+            dataIndex: 'car_brand',
         },
         {
             title: <div className="text-right">Action</div>,
@@ -110,16 +112,29 @@ const DashboardUsers = () => {
                         </svg>
 
                     </button>
-                    <button
-                        onClick={() => showModalTwo(record)}
-                        className="bg-secondary px-3 py-1 rounded "
-                    >
-                        <svg width="34" height="38" viewBox="0 0 34 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="34" height="38" rx="6" fill="#FFE8E8" />
-                            <path d="M24 11H20.5L19.5 10H14.5L13.5 11H10V13H24M11 26C11 26.5304 11.2107 27.0391 11.5858 27.4142C11.9609 27.7893 12.4696 28 13 28H21C21.5304 28 22.0391 27.7893 22.4142 27.4142C22.7893 27.0391 23 26.5304 23 26V14H11V26Z" fill="#FF5353" />
-                        </svg>
+                    <Popconfirm
+                        title={
+                            <span className="flex items-center gap-2">
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 0.946045C3.61758 0.946045 0.875 3.68862 0.875 7.07104C0.875 10.4535 3.61758 13.196 7 13.196C10.3824 13.196 13.125 10.4535 13.125 7.07104C13.125 3.68862 10.3824 0.946045 7 0.946045ZM6.5625 4.11792C6.5625 4.05776 6.61172 4.00854 6.67188 4.00854H7.32812C7.38828 4.00854 7.4375 4.05776 7.4375 4.11792V7.83667C7.4375 7.89683 7.38828 7.94604 7.32812 7.94604H6.67188C6.61172 7.94604 6.5625 7.89683 6.5625 7.83667V4.11792ZM7 10.1335C6.82827 10.13 6.66476 10.0594 6.54455 9.93667C6.42434 9.81398 6.35701 9.64906 6.35701 9.47729C6.35701 9.30553 6.42434 9.14061 6.54455 9.01792C6.66476 8.89523 6.82827 8.82455 7 8.82104C7.17173 8.82455 7.33524 8.89523 7.45545 9.01792C7.57566 9.14061 7.64299 9.30553 7.64299 9.47729C7.64299 9.64906 7.57566 9.81398 7.45545 9.93667C7.33524 10.0594 7.17173 10.13 7 10.1335Z" fill="#FAAD14" />
+                                </svg>
 
-                    </button>
+                                <span>Are you sure to delete this appointment ?</span>
+                            </span>
+                        }
+                        onConfirm={() => handleDelete(record)}
+                        okText="Yes"
+                        cancelText="No"
+                        placement='bottomRight'
+                        overlayClassName="custom-popconfirm"
+                    >
+                        <button className="bg-secondary px-3 py-1 rounded">
+                            <svg width="34" height="38" viewBox="0 0 34 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="34" height="38" rx="6" fill="#FFE8E8" />
+                                <path d="M24 11H20.5L19.5 10H14.5L13.5 11H10V13H24M11 26C11 26.5304 11.2107 27.0391 11.5858 27.4142C11.9609 27.7893 12.4696 28 13 28H21C21.5304 28 22.0391 27.7893 22.4142 27.4142C22.7893 27.0391 23 26.5304 23 26V14H11V26Z" fill="#FF5353" />
+                            </svg>
+                        </button>
+                    </Popconfirm>
                 </div>
             ),
         },
@@ -223,23 +238,26 @@ const DashboardUsers = () => {
     ];
 
 
+    useEffect(() => {
+        refetch();
+    }, [searchText, currentPage, perPage, refetch]);
 
     return (
         <div>
             <Space direction="vertical" style={{ marginBottom: "20px", }}>
-                <Search placeholder="enter search email or name" onSearch={onSearch} enterButton
+                <Search placeholder="Enter search email or name"
+                    enterButton
                     className="custom-search-height"
+                    value={searchText}
+                    onChange={handleChange}
                 />
             </Space>
 
             <Table
                 columns={columns}
-                dataSource={data}
+                dataSource={userAllData}
+                pagination={false}
             />
-
-
-
-
 
             {/* modal component */}
             {/* modal one */}
@@ -309,12 +327,13 @@ const DashboardUsers = () => {
 
                                     <div className="flex items-center space-x-3 p-3 border border-gray-200 bg-gray-50 rounded-lg">
                                         <span>
-                                            <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clipRule="evenodd" d="M7.262 19.7281C7.262 19.7281 0 13.7354 0 7.83872C0 5.75976 0.842855 3.76595 2.34315 2.29591C3.84344 0.825863 5.87827 0 8 0C10.1217 0 12.1566 0.825863 13.6569 2.29591C15.1571 3.76595 16 5.75976 16 7.83872C16 13.7354 8.738 19.7281 8.738 19.7281C8.334 20.0926 7.669 20.0887 7.262 19.7281ZM8 11.2682C8.45963 11.2682 8.91475 11.1795 9.33939 11.0071C9.76403 10.8348 10.1499 10.5821 10.4749 10.2637C10.7999 9.94524 11.0577 9.56719 11.2336 9.15111C11.4095 8.73503 11.5 8.28908 11.5 7.83872C11.5 7.38836 11.4095 6.94241 11.2336 6.52633C11.0577 6.11025 10.7999 5.73219 10.4749 5.41374C10.1499 5.09529 9.76403 4.84267 9.33939 4.67033C8.91475 4.49798 8.45963 4.40928 8 4.40928C7.07174 4.40928 6.1815 4.77059 5.52513 5.41374C4.86875 6.05688 4.5 6.92917 4.5 7.83872C4.5 8.74826 4.86875 9.62055 5.52513 10.2637C6.1815 10.9068 7.07174 11.2682 8 11.2682Z" fill="#535353" />
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M4.02222 8.65556C5.62222 11.8 8.2 14.3667 11.3444 15.9778L13.7889 13.5333C14.0889 13.2333 14.5333 13.1333 14.9222 13.2667C16.1667 13.6778 17.5111 13.9 18.8889 13.9C19.5 13.9 20 14.4 20 15.0111V18.8889C20 19.5 19.5 20 18.8889 20C8.45556 20 0 11.5444 0 1.11111C0 0.5 0.5 0 1.11111 0H5C5.61111 0 6.11111 0.5 6.11111 1.11111C6.11111 2.5 6.33333 3.83333 6.74444 5.07778C6.86667 5.46667 6.77778 5.9 6.46667 6.21111L4.02222 8.65556Z" fill="#535353" />
                                             </svg>
 
+
                                         </span>
-                                        <span className="text-gray-700">Dhaka, Bangladesh</span>
+                                        <span className="text-gray-700">+98562325645</span>
                                     </div>
 
                                     <div className="bg-blue-50 p-3 rounded-lg">
@@ -362,46 +381,17 @@ const DashboardUsers = () => {
             </Modal>
 
 
-            {/* modal two */}
-            <Modal
-                centered
-                open={mondalTwo}
-                onOk={handleModalTwoOk}
-                onCancel={handleCancelModalTwo}
-                footer={null}
-                width={500}
-
-            >
-
-                <div className="p-8">
-                    <div className='flex items-center gap-2'>
-                        <span>
-                            <svg width="20" height="25" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_1712_1263)">
-                                    <rect width="14" height="14" transform="translate(0 0.0710449)" fill="white" fill-opacity="0.01" />
-                                    <g clip-path="url(#clip1_1712_1263)">
-                                        <path d="M7 0.946045C3.61758 0.946045 0.875 3.68862 0.875 7.07104C0.875 10.4535 3.61758 13.196 7 13.196C10.3824 13.196 13.125 10.4535 13.125 7.07104C13.125 3.68862 10.3824 0.946045 7 0.946045ZM6.5625 4.11792C6.5625 4.05776 6.61172 4.00854 6.67188 4.00854H7.32812C7.38828 4.00854 7.4375 4.05776 7.4375 4.11792V7.83667C7.4375 7.89683 7.38828 7.94604 7.32812 7.94604H6.67188C6.61172 7.94604 6.5625 7.89683 6.5625 7.83667V4.11792ZM7 10.1335C6.82827 10.13 6.66476 10.0594 6.54455 9.93667C6.42434 9.81398 6.35701 9.64906 6.35701 9.47729C6.35701 9.30553 6.42434 9.14061 6.54455 9.01792C6.66476 8.89523 6.82827 8.82455 7 8.82104C7.17173 8.82455 7.33524 8.89523 7.45545 9.01792C7.57566 9.14061 7.64299 9.30553 7.64299 9.47729C7.64299 9.64906 7.57566 9.81398 7.45545 9.93667C7.33524 10.0594 7.17173 10.13 7 10.1335Z" fill="#FAAD14" />
-                                    </g>
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_1712_1263">
-                                        <rect width="14" height="14" fill="white" transform="translate(0 0.0710449)" />
-                                    </clipPath>
-                                    <clipPath id="clip1_1712_1263">
-                                        <rect width="14" height="14" fill="white" transform="translate(0 0.0710449)" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-
-                        </span>
-                        <h2 className='font-semibold'>Are you sure to delete this appointment ?</h2>
-                    </div>
-                    <div className='flex justify-end gap-3'>
-                        <button onClick={() => handleCancelModalTwo()} className='border px-4 py-1 font-semibold'>No</button>
-                        <button onClick={() => handleModalTwoOk()} className='border px-4 py-1 font-semibold bg-[#FF1818] text-[#fff]'>Yes</button>
-                    </div>
-                </div>
-            </Modal>
+            <div className="flex justify-end pt-4">
+                <Pagination
+                    current={currentPage}
+                    pageSize={perPage}
+                    total={userData?.data?.total || 0}
+                    onChange={(page, pageSize) => {
+                        setCurrentPage(page)
+                        setPerPage(pageSize)
+                    }}
+                />
+            </div>
         </div>
     );
 };
