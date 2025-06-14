@@ -3,8 +3,8 @@ import { baseApi } from "../../api/baseApi";
 const dashboardManageImagesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getPhotoApi: builder.query({
-            query: ({ per_page, page }) => ({
-                url: `/admin/photo-gallery?per_page=${per_page}&page=${page}`,
+            query: () => ({
+                url: `/admin/photo-gallery`,
                 method: "GET"
             }),
             providesTags: ['manage_image'],

@@ -27,8 +27,6 @@ const DashboardUsers = () => {
     const userAllData = userData?.data?.data
     const SingleUser = singleData?.data
 
-    console.log(SingleUser)
-
     // =============  modal one start ===============
     const onFinishOne = () => {
         console.log('click')
