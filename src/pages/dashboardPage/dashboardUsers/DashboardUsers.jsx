@@ -27,7 +27,7 @@ const DashboardUsers = () => {
     const userAllData = userData?.data?.data
     const SingleUser = singleData?.data
 
-
+    console.log(SingleUser)
 
     // =============  modal one start ===============
     const onFinishOne = () => {
@@ -329,28 +329,29 @@ const DashboardUsers = () => {
                                         <span className="text-gray-700">{SingleUser?.email}</span>
                                     </div>
 
-                                    <div className="flex items-center space-x-3 p-3 border border-gray-200 bg-gray-50 rounded-lg">
-                                        <span>
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.02222 8.65556C5.62222 11.8 8.2 14.3667 11.3444 15.9778L13.7889 13.5333C14.0889 13.2333 14.5333 13.1333 14.9222 13.2667C16.1667 13.6778 17.5111 13.9 18.8889 13.9C19.5 13.9 20 14.4 20 15.0111V18.8889C20 19.5 19.5 20 18.8889 20C8.45556 20 0 11.5444 0 1.11111C0 0.5 0.5 0 1.11111 0H5C5.61111 0 6.11111 0.5 6.11111 1.11111C6.11111 2.5 6.33333 3.83333 6.74444 5.07778C6.86667 5.46667 6.77778 5.9 6.46667 6.21111L4.02222 8.65556Z" fill="#535353" />
-                                            </svg>
+                                    {
+                                        SingleUser?.phone && <div className="flex items-center space-x-3 p-3 border border-gray-200 bg-gray-50 rounded-lg">
+                                            <span>
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M4.02222 8.65556C5.62222 11.8 8.2 14.3667 11.3444 15.9778L13.7889 13.5333C14.0889 13.2333 14.5333 13.1333 14.9222 13.2667C16.1667 13.6778 17.5111 13.9 18.8889 13.9C19.5 13.9 20 14.4 20 15.0111V18.8889C20 19.5 19.5 20 18.8889 20C8.45556 20 0 11.5444 0 1.11111C0 0.5 0.5 0 1.11111 0H5C5.61111 0 6.11111 0.5 6.11111 1.11111C6.11111 2.5 6.33333 3.83333 6.74444 5.07778C6.86667 5.46667 6.77778 5.9 6.46667 6.21111L4.02222 8.65556Z" fill="#535353" />
+                                                </svg>
 
-
-                                        </span>
-                                        <span className="text-gray-700">{SingleUser?.phone}</span>
-                                    </div>
+                                            </span>
+                                            <span className="text-gray-700">{SingleUser?.phone}</span>
+                                        </div>
+                                    }
 
                                     <div className="bg-blue-50 p-3 rounded-lg">
                                         <div className="flex justify-between items-center">
                                             <span className="text-gray-700 font-medium">Service ordered:</span>
-                                            <span className="text-xl font-bold text-gray-800">10 Times</span>
+                                            <span className="text-xl font-bold text-gray-800">{SingleUser?.bookings_count} Times</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Car Details Section */}
-                            <div className="bg-white rounded-lg p-6 shadow-sm">
+                            <div className="bg-white rounded-lg p-6 ">
                                 <div className="mb-6">
                                     <div className="grid grid-cols-2 gap-4 mb-6">
                                         <div>
@@ -366,10 +367,10 @@ const DashboardUsers = () => {
                                     <div>
                                         <h4 className="text-lg font-semibold text-gray-800 mb-4">Pictures</h4>
                                         <div className="grid grid-cols-2 gap-3">
-                                            {carImages.map((item, index) => (
+                                            {SingleUser?.car_photos?.slice(-6)?.reverse()?.map((item, index) => (
                                                 <div key={index} className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
                                                     <img
-                                                        src={item.image}
+                                                        src={item.photo}
                                                         alt={`BMW `}
                                                         className="w-full h-full object-cover "
                                                     />
