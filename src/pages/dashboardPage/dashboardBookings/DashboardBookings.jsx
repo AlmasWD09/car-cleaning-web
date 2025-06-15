@@ -1,25 +1,36 @@
-import React, { useState } from 'react';
-import { Button, Form, Input, Modal, Space, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, Modal, Pagination, Popconfirm, Space, Table } from 'antd';
 const { Search } = Input;
 
 import { Dropdown } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { useDeleteBookingApiMutation, useGetBookingApiQuery,useGetMarkComplateBookingApiQuery} from '../../../redux/dashboardFeatures/bookings/dashboardBookingApi';
+import { useDeleteBookingApiMutation, useFilterBookingApiQuery, useGetBookingApiQuery, useGetDetailsBookingApiQuery, useGetMarkComplateBookingApiQuery } from '../../../redux/dashboardFeatures/bookings/dashboardBookingApi';
+import toast from 'react-hot-toast';
 
 const DashboardBookings = () => {
   const [formOne] = useForm()
   const [formTwo] = useForm()
   const [open, setOpen] = useState(false);
+  const [filterId, setFilterId] = useState('')
+  const [selectId, setSelectId] = useState('')
+  const [detailsId, setDetailsId] = useState('')
+  const [searchText, setSearchText] = useState('')
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(6);
   const [mondalOne, setModalOne] = useState(false);
   const [mondalTwo, setModalTwo] = useState(false);
 
 
 
-  const { data: booking } = useGetBookingApiQuery()
+  const { data: bookingData, isLoading, refetch } = useGetBookingApiQuery({ per_page: perPage, page: currentPage, search: searchText, filter: filterId }) // get booking
+  const { data: filterBookingData, } = useFilterBookingApiQuery() // filter booking
   const [deleteBookingApi] = useDeleteBookingApiMutation()
-  const { data: markBooking } = useGetMarkComplateBookingApiQuery()
-  
-
+  const {data: markBooking} = useGetMarkComplateBookingApiQuery()
+  const { data: detailsBookingData } = useGetDetailsBookingApiQuery(detailsId)
+  const allBookingData = bookingData?.data?.data
+  const allFilterBookingData = filterBookingData?.data
+  const totalPaginationData = bookingData?.data?.total
+  const detailsBooking = detailsBookingData?.data
 
 
 
@@ -30,6 +41,7 @@ const DashboardBookings = () => {
   }
 
   const showModalOne = (record) => {
+    setDetailsId(record.id)
     setModalOne(true)
   }
 
@@ -45,19 +57,23 @@ const DashboardBookings = () => {
 
 
   // =============  modal two start ===============
-  const onFinishTwo = () => {
-    console.log('click two modal')
-  }
-  const showModalTwo = () => {
-    setModalTwo(true)
-  }
+  const handleDelete = async (record) => {
+    setSelectId(record?.id)
 
-  const handleModalTwoOk = () => {
+    try {
+      const res = await deleteBookingApi(record.id).unwrap()
+      console.log('response--------> ', res)
+      if (res?.status === true) {
+        toast.success(res?.message)
+        refetch()
+      }
 
-  }
-
-  const handleCancelModalTwo = () => {
-    setModalTwo(false)
+    } catch (error) {
+      console.log(error)
+      if (error) {
+        toast.error(error?.data?.message)
+      }
+    }
   }
   // =============  modal two end ===============
 
@@ -67,11 +83,21 @@ const DashboardBookings = () => {
   const handleClick = () => {
     setOpen(!open)
   }
-  const handleMenuItemClick = (item) => {
 
-    setOpen(false);
-  };
+  const handleFilterValue = (id) => {
+    setFilterId(id)
+    setOpen(!open)
+  }
 
+  const handleChange = (e) => {
+    setSearchText(e.target.value);
+  }
+
+
+  const handleStatusChange = async () => {
+
+  
+  }
 
   const columns = [
     {
@@ -79,29 +105,44 @@ const DashboardBookings = () => {
       dataIndex: 'image',
       render: (_, record) => (
         <div className="flex items-center gap-3">
-          <img src={record.image} alt="User" className="w-10 h-10 rounded-full" />
-          <span>{record.user}</span>
+          <img src={record?.user?.photo} alt="User" className="w-10 h-10 rounded-full" />
+          <span>{record?.user?.name}</span>
         </div>
       ),
     },
-    { title: 'Email', dataIndex: 'email', key: 'email' },
+
+    {
+      title: 'Email', dataIndex: 'email',
+      render: (_, record) => (
+        <span>{record?.user?.email}</span>
+      )
+    },
+
     {
       title: 'Time', dataIndex: 'time', key: 'time',
       render: (_, record) => (
         <div>
-          <div>{record.date}</div>
-          <div className='text-[#888888]'>{record.time}</div>
+          <div>{record.booking_date}</div>
+          <div className='text-[#888888]'>{record?.booking_time}</div>
         </div>
       ),
     },
-    { title: 'Service', dataIndex: 'Service', key: 'Service' },
+    {
+      title: 'Service', dataIndex: 'Service',
+      render: (_, record) => (
+        <div className='flex flex-col'>
+          <span className='font-semibold text-[28px] font-degular'>{record?.service_name}</span>
+          <span className='font-medium text-[20px] font-degular'>{record?.service_type}</span>
+        </div>
+      )
+    },
 
     {
-      title: 'Action',
+      title: <div className="text-right">Action</div>,
       dataIndex: '',
       key: 'x',
       render: (_, record) => (
-        <div className="flex items-center  gap-3">
+        <div className="flex items-center justify-end  gap-3">
           <button
             onClick={() => showModalOne(record)}
             className=" p-1 rounded bg-blue"
@@ -111,19 +152,35 @@ const DashboardBookings = () => {
               <path d="M18.5 15.3C17.632 15.3 16.7996 15.6371 16.1858 16.2373C15.5721 16.8374 15.2273 17.6513 15.2273 18.5C15.2273 19.3487 15.5721 20.1626 16.1858 20.7627C16.7996 21.3629 17.632 21.7 18.5 21.7C19.368 21.7 20.2004 21.3629 20.8142 20.7627C21.4279 20.1626 21.7727 19.3487 21.7727 18.5C21.7727 17.6513 21.4279 16.8374 20.8142 16.2373C20.2004 15.6371 19.368 15.3 18.5 15.3ZM18.5 23.8333C17.0534 23.8333 15.666 23.2714 14.6431 22.2712C13.6201 21.271 13.0455 19.9145 13.0455 18.5C13.0455 17.0855 13.6201 15.729 14.6431 14.7288C15.666 13.7286 17.0534 13.1667 18.5 13.1667C19.9466 13.1667 21.334 13.7286 22.3569 14.7288C23.3799 15.729 23.9545 17.0855 23.9545 18.5C23.9545 19.9145 23.3799 21.271 22.3569 22.2712C21.334 23.2714 19.9466 23.8333 18.5 23.8333ZM18.5 10.5C13.0455 10.5 8.38727 13.8173 6.5 18.5C8.38727 23.1827 13.0455 26.5 18.5 26.5C23.9545 26.5 28.6127 23.1827 30.5 18.5C28.6127 13.8173 23.9545 10.5 18.5 10.5Z" fill="#F96D10" />
             </svg>
           </button>
+          <Popconfirm
+            title={
+              <span className="flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 0.946045C3.61758 0.946045 0.875 3.68862 0.875 7.07104C0.875 10.4535 3.61758 13.196 7 13.196C10.3824 13.196 13.125 10.4535 13.125 7.07104C13.125 3.68862 10.3824 0.946045 7 0.946045ZM6.5625 4.11792C6.5625 4.05776 6.61172 4.00854 6.67188 4.00854H7.32812C7.38828 4.00854 7.4375 4.05776 7.4375 4.11792V7.83667C7.4375 7.89683 7.38828 7.94604 7.32812 7.94604H6.67188C6.61172 7.94604 6.5625 7.89683 6.5625 7.83667V4.11792ZM7 10.1335C6.82827 10.13 6.66476 10.0594 6.54455 9.93667C6.42434 9.81398 6.35701 9.64906 6.35701 9.47729C6.35701 9.30553 6.42434 9.14061 6.54455 9.01792C6.66476 8.89523 6.82827 8.82455 7 8.82104C7.17173 8.82455 7.33524 8.89523 7.45545 9.01792C7.57566 9.14061 7.64299 9.30553 7.64299 9.47729C7.64299 9.64906 7.57566 9.81398 7.45545 9.93667C7.33524 10.0594 7.17173 10.13 7 10.1335Z" fill="#FAAD14" />
+                </svg>
 
-          <button
-            onClick={() => showModalTwo(record)}
-            className="bg-secondary px-3 py-1 rounded "
+                <span>Are you sure to delete this appointment ?</span>
+              </span>
+            }
+            onConfirm={() => handleDelete(record)}
+            okText="Yes"
+            cancelText="No"
+            placement='bottomRight'
+            overlayClassName="custom-popconfirm"
           >
-            <svg width="34" height="38" viewBox="0 0 34 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="34" height="38" rx="6" fill="#FFE8E8" />
-              <path d="M24 11H20.5L19.5 10H14.5L13.5 11H10V13H24M11 26C11 26.5304 11.2107 27.0391 11.5858 27.4142C11.9609 27.7893 12.4696 28 13 28H21C21.5304 28 22.0391 27.7893 22.4142 27.4142C22.7893 27.0391 23 26.5304 23 26V14H11V26Z" fill="#FF5353" />
-            </svg>
+            <button className="bg-secondary px-3 py-1 rounded">
+              <svg width="34" height="38" viewBox="0 0 34 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="34" height="38" rx="6" fill="#FFE8E8" />
+                <path d="M24 11H20.5L19.5 10H14.5L13.5 11H10V13H24M11 26C11 26.5304 11.2107 27.0391 11.5858 27.4142C11.9609 27.7893 12.4696 28 13 28H21C21.5304 28 22.0391 27.7893 22.4142 27.4142C22.7893 27.0391 23 26.5304 23 26V14H11V26Z" fill="#FF5353" />
+              </svg>
+            </button>
+          </Popconfirm>
 
-          </button>
+
+
+
           <button>
-            {record.verify === "Ongoing" ? (
+            {record.status === "Ongoing" ? (
               <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="5.5" cy="6" r="5.5" fill="#8C63DA" />
               </svg>
@@ -138,88 +195,6 @@ const DashboardBookings = () => {
     },
   ];
 
-  const data = [
-    {
-      key: 1,
-      user: 'John Doe',
-      email: 'john@example.com',
-      date: 'Thursday, March 27, 2025',
-      time: '10:00PM',
-      Service: 'Consultation',
-      image: 'https://randomuser.me/api/portraits/men/1.jpg',
-      verify: "Ongoing",
-    },
-    {
-      key: 2,
-      user: 'Jane Smith',
-      email: 'jane@example.com',
-      date: 'Thursday, March 27, 2025',
-      time: '10:00PM',
-      Service: 'Therapy',
-      image: 'https://randomuser.me/api/portraits/women/2.jpg',
-      verify: "Ongoing",
-    },
-    {
-      key: 3,
-      user: 'Robert Johnson',
-      email: 'robert@example.com',
-      date: 'Thursday, March 27, 2025',
-      time: '10:00PM',
-      Service: 'Coaching',
-      image: 'https://randomuser.me/api/portraits/men/3.jpg',
-      verify: "Ongoing",
-    },
-    {
-      key: 4,
-      user: 'Emily Brown',
-      email: 'emily@example.com',
-      date: 'Thursday, March 27, 2025',
-      time: '10:00PM',
-      Service: 'Yoga Session',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      verify: "Ongoing",
-    },
-    {
-      key: 5,
-      user: 'Michael Davis',
-      email: 'michael@example.com',
-      date: 'Thursday, March 27, 2025',
-      time: '10:00PM',
-      Service: 'Mentorship',
-      image: 'https://randomuser.me/api/portraits/men/5.jpg',
-      verify: "Complete_order",
-    },
-    {
-      key: 6,
-      user: 'Sarah Wilson',
-      email: 'sarah@example.com',
-      date: 'Thursday, March 27, 2025',
-      time: '10:00PM',
-      Service: 'Nutrition Plan',
-      image: 'https://randomuser.me/api/portraits/women/6.jpg',
-      verify: "Complete_order",
-    },
-    {
-      key: 7,
-      user: 'David Lee',
-      email: 'david@example.com',
-      date: 'Thursday, March 27, 2025',
-      time: '10:00PM',
-      Service: 'Fitness Training',
-      image: 'https://randomuser.me/api/portraits/men/7.jpg',
-      verify: "Complete_order",
-    },
-    {
-      key: 8,
-      user: 'Olivia Martin',
-      email: 'olivia@example.com',
-      date: 'Thursday, March 27, 2025',
-      time: '10:00PM',
-      Service: 'Career Advice',
-      image: 'https://randomuser.me/api/portraits/women/8.jpg',
-      verify: "Complete_order",
-    },
-  ];
 
 
 
@@ -252,79 +227,65 @@ const DashboardBookings = () => {
   ];
 
 
-  const items = [
-    {
-      label: 'Compact',
-      key: '1',
-    },
-    {
-      label: 'Extra Large',
-      key: '2',
-    },
-    {
-      label: 'Truck',
-      key: '3',
-    },
-    {
-      label: 'Sports Car',
-      key: '4',
-    },
-  ];
+  useEffect(() => {
+    refetch();
+  }, [searchText, currentPage, perPage, filterId, refetch]);
 
-  const onSearch = (value, _e, info) =>
-    console.log(info === null || info === void 0 ? void 0 : info.source, value);
 
-  const menuProps = {
-    items,
-    onClick: handleMenuItemClick,
-  };
 
+  if (isLoading) {
+    return <p>Loading.......</p>
+  }
 
   return (
     <>
       <div>
-        <div className='flex justify-between items-center mb-4'>
+        <div className='flex justify-between items-center mb-2'>
           <div>
-            <Space direction="vertical" >
-              <Search placeholder="Enter search email or name" onSearch={onSearch} enterButton
+            <Space direction="vertical" style={{ marginBottom: "20px", }}>
+              <Search placeholder="Enter search email or name"
+                enterButton
                 className="custom-search-height"
+                value={searchText}
+                onChange={handleChange}
               />
             </Space>
           </div>
 
+          <div className='relative z-50'>
+            <div onClick={handleClick} className='relative cursor-pointer bg-primary px-4 py-3 text-[#fff] flex justify-center items-center gap-3 rounded'>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.5929 1H2.00086C1.80861 0.999836 1.6204 1.05509 1.45875 1.15914C1.2971 1.26319 1.16886 1.41164 1.08941 1.58669C1.00995 1.76175 0.98264 1.956 1.01074 2.14618C1.03884 2.33636 1.12117 2.51441 1.24786 2.659L6.54986 8.717C6.70932 8.89948 6.7971 9.13366 6.79686 9.376V14.25C6.79686 14.3276 6.81493 14.4042 6.84964 14.4736C6.88436 14.543 6.93476 14.6034 6.99686 14.65L9.99686 16.9C10.0711 16.9557 10.1595 16.9896 10.252 16.998C10.3444 17.0063 10.4374 16.9887 10.5205 16.9472C10.6035 16.9057 10.6734 16.8419 10.7222 16.7629C10.771 16.6839 10.7969 16.5929 10.7969 16.5V9.376C10.7966 9.13366 10.8844 8.89948 11.0439 8.717L16.3459 2.658C16.9119 2.012 16.4519 1 15.5929 1Z" stroke="white" stroke-width="2" stroke-linecap="round" />
+              </svg>
 
-          <div onClick={handleClick} className='relative cursor-pointer bg-primary px-4 py-3 text-[#fff] flex justify-center items-center gap-3 rounded-lg'>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15.5929 1H2.00086C1.80861 0.999836 1.6204 1.05509 1.45875 1.15914C1.2971 1.26319 1.16886 1.41164 1.08941 1.58669C1.00995 1.76175 0.98264 1.956 1.01074 2.14618C1.03884 2.33636 1.12117 2.51441 1.24786 2.659L6.54986 8.717C6.70932 8.89948 6.7971 9.13366 6.79686 9.376V14.25C6.79686 14.3276 6.81493 14.4042 6.84964 14.4736C6.88436 14.543 6.93476 14.6034 6.99686 14.65L9.99686 16.9C10.0711 16.9557 10.1595 16.9896 10.252 16.998C10.3444 17.0063 10.4374 16.9887 10.5205 16.9472C10.6035 16.9057 10.6734 16.8419 10.7222 16.7629C10.771 16.6839 10.7969 16.5929 10.7969 16.5V9.376C10.7966 9.13366 10.8844 8.89948 11.0439 8.717L16.3459 2.658C16.9119 2.012 16.4519 1 15.5929 1Z" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
+              <p className='font-semibold text-2xl'>Filter</p>
+            </div>
 
-            <p className='font-semibold text-2xl'>Filter</p>
-
-            <Dropdown
-              menu={menuProps}
-              open={open}
-              getPopupContainer={(triggerNode) => triggerNode.parentNode}
-              overlayStyle={{ width: "120px", right: "5px", top: "60px" }}
-            >
-            </Dropdown>
+            {
+              open && <div className='absolute text-center py-2 space-y-2 bg-[#FFFFFF] w-[116px] hover:border transition-all duration-300'>
+                {
+                  allFilterBookingData?.map((item, index) => {
+                    return (
+                      <p
+                        key={index}
+                        onClick={() => handleFilterValue(item.id)}
+                        className='font-semibold hover:cursor-pointer hover:bg-primary bg-opacity-30 hover:text-[#ffff]'>{item?.car_type}</p>
+                    )
+                  })
+                }
+              </div>
+            }
           </div>
+
         </div>
 
-        <Table
-          columns={columns}
-          dataSource={data}
-        />
-
-
-
-
-
-
-
-
-
-
-
+        <div className='z-20'>
+          <Table
+            columns={columns}
+            dataSource={allBookingData}
+            pagination={false}
+          />
+        </div>
 
 
 
@@ -365,28 +326,30 @@ const DashboardBookings = () => {
                   <div className="grid grid-cols-2 gap-8">
                     <div>
                       <p className="text-gray-600 text-sm mb-1">Brand Name</p>
-                      <h2 className="text-2xl font-bold text-gray-900">BMW</h2>
+                      <h2 className="text-2xl font-bold text-gray-900">{detailsBooking?.user?.car_brand}</h2>
                     </div>
                     <div>
                       <p className="text-gray-600 text-sm mb-1">Car Model</p>
-                      <h2 className="text-2xl font-bold text-gray-900">M5 CS</h2>
+                      <h2 className="text-2xl font-bold text-gray-900">{detailsBooking?.user?.car_model}</h2>
                     </div>
                   </div>
 
                   {/* Pictures */}
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Pictures</h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      {carImages.map((item, index) => (
-                        <div key={index} className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                          <img
-                            src={item.image}
-                            alt={`BMW M5 CS view ${index + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ))}
-                    </div>
+                    {
+                      detailsBooking?.user?.car_photos && <div className="grid grid-cols-2 gap-3">
+                        {detailsBooking?.user?.car_photos?.slice(-6)?.reverse()?.map((item, index) => (
+                          <div key={index} className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                            <img
+                              src={item.photo}
+                              alt={`BMW M5 CS view ${index + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    }
                   </div>
 
 
@@ -413,7 +376,7 @@ const DashboardBookings = () => {
                           </svg>
 
                         </div>
-                        <span className="text-[20px] font-bold text-gray-900">Md. Abid Hasan</span>
+                        <span className="text-[20px] font-bold text-gray-900">{detailsBooking?.user?.name}</span>
                       </div>
 
                       <div className="flex items-center gap-3">
@@ -423,18 +386,20 @@ const DashboardBookings = () => {
                           </svg>
 
                         </div>
-                        <span className="text-gray-700 text-[20px]">example@gmail.com</span>
+                        <span className="text-gray-700 text-[20px]">{detailsBooking?.user?.email}</span>
                       </div>
 
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8  rounded-full flex items-center justify-center">
-                          <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4.02222 9.15556C5.62222 12.3 8.2 14.8667 11.3444 16.4778L13.7889 14.0333C14.0889 13.7333 14.5333 13.6333 14.9222 13.7667C16.1667 14.1778 17.5111 14.4 18.8889 14.4C19.5 14.4 20 14.9 20 15.5111V19.3889C20 20 19.5 20.5 18.8889 20.5C8.45556 20.5 0 12.0444 0 1.61111C0 1 0.5 0.5 1.11111 0.5H5C5.61111 0.5 6.11111 1 6.11111 1.61111C6.11111 3 6.33333 4.33333 6.74444 5.57778C6.86667 5.96667 6.77778 6.4 6.46667 6.71111L4.02222 9.15556Z" fill="#0063E5" />
-                          </svg>
+                      {
+                        detailsBooking?.user?.phone && <div className="flex items-center gap-3">
+                          <div className="w-8 h-8  rounded-full flex items-center justify-center">
+                            <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M4.02222 9.15556C5.62222 12.3 8.2 14.8667 11.3444 16.4778L13.7889 14.0333C14.0889 13.7333 14.5333 13.6333 14.9222 13.7667C16.1667 14.1778 17.5111 14.4 18.8889 14.4C19.5 14.4 20 14.9 20 15.5111V19.3889C20 20 19.5 20.5 18.8889 20.5C8.45556 20.5 0 12.0444 0 1.61111C0 1 0.5 0.5 1.11111 0.5H5C5.61111 0.5 6.11111 1 6.11111 1.61111C6.11111 3 6.33333 4.33333 6.74444 5.57778C6.86667 5.96667 6.77778 6.4 6.46667 6.71111L4.02222 9.15556Z" fill="#0063E5" />
+                            </svg>
 
+                          </div>
+                          <span className="text-gray-700 text-[20px]">{detailsBooking?.user?.phone}</span>
                         </div>
-                        <span className="text-gray-700 text-[20px]">+1256354789</span>
-                      </div>
+                      }
                     </div>
 
                     <div className='space-y-4'>
@@ -449,8 +414,8 @@ const DashboardBookings = () => {
 
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-900 text-[20px]">Thursday, March 27, 2025</p>
-                            <p className="text-gray-600 text-[20px]">10:00 PM</p>
+                            <p className="font-semibold text-gray-900 text-[20px]">{detailsBooking?.booking_date}</p>
+                            <p className="text-gray-600 text-[20px]">{detailsBooking?.booking_time}</p>
                           </div>
                         </div>
                       </div>
@@ -465,8 +430,8 @@ const DashboardBookings = () => {
 
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-900 text-[20px]">SUV</p>
-                            <p className="text-gray-600 text-[20px]">Exterior</p>
+                            <p className="font-semibold text-gray-900 text-[20px]">{detailsBooking?.service_name}</p>
+                            <p className="text-gray-600 text-[20px]">{detailsBooking?.service_type}</p>
                           </div>
                         </div>
                       </div>
@@ -475,10 +440,10 @@ const DashboardBookings = () => {
 
                   {/* Action Buttons */}
                   <div className="flex gap-3 pt-4">
-                    <button className="flex-1 bg-[#8C63DA] hover:bg-purple-600 text-white font-medium py-3 px-6 rounded-full transition-colors">
+                    <button className="cursor-not-allowed flex-1 bg-[#8C63DA]  text-white font-medium py-3 px-6 rounded-full transition-colors">
                       Ongoing
                     </button>
-                    <button className="flex-1 bg-[#009138] hover:bg-green-600 text-white font-medium py-3 px-6 rounded-full transition-colors">
+                    <button onClick={handleStatusChange} className="flex-1 bg-[#009138] hover:bg-green-600 text-white font-medium py-3 px-6 rounded-full transition-colors">
                       Complete order
                     </button>
                   </div>
@@ -491,9 +456,7 @@ const DashboardBookings = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Note</h3>
               <div className="w-full bg-[#F6F6F6] p-4 rounded-xl">
                 <p className="text-gray-700 text-sm leading-relaxed">
-                  Lorem ipsum dolor sit amet consectetur. Varius arcu lacus lorem malesuada est in nulla sed. In
-                  consectetur magna vulputate a auctor turpis. Pharetra ut duis vitae enim arcu. Ultrices sed turpis
-                  malesuada sed porta sit.
+                  {detailsBooking?.booking_note}
                 </p>
               </div>
             </div>
@@ -501,46 +464,18 @@ const DashboardBookings = () => {
         </Modal>
 
 
-        {/* modal two */}
-        <Modal
-          centered
-          open={mondalTwo}
-          onOk={handleModalTwoOk}
-          onCancel={handleCancelModalTwo}
-          footer={null}
-          width={500}
 
-        >
-
-          <div className="p-8">
-            <div className='flex items-center gap-2'>
-              <span>
-                <svg width="20" height="25" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_1712_1263)">
-                    <rect width="14" height="14" transform="translate(0 0.0710449)" fill="white" fill-opacity="0.01" />
-                    <g clip-path="url(#clip1_1712_1263)">
-                      <path d="M7 0.946045C3.61758 0.946045 0.875 3.68862 0.875 7.07104C0.875 10.4535 3.61758 13.196 7 13.196C10.3824 13.196 13.125 10.4535 13.125 7.07104C13.125 3.68862 10.3824 0.946045 7 0.946045ZM6.5625 4.11792C6.5625 4.05776 6.61172 4.00854 6.67188 4.00854H7.32812C7.38828 4.00854 7.4375 4.05776 7.4375 4.11792V7.83667C7.4375 7.89683 7.38828 7.94604 7.32812 7.94604H6.67188C6.61172 7.94604 6.5625 7.89683 6.5625 7.83667V4.11792ZM7 10.1335C6.82827 10.13 6.66476 10.0594 6.54455 9.93667C6.42434 9.81398 6.35701 9.64906 6.35701 9.47729C6.35701 9.30553 6.42434 9.14061 6.54455 9.01792C6.66476 8.89523 6.82827 8.82455 7 8.82104C7.17173 8.82455 7.33524 8.89523 7.45545 9.01792C7.57566 9.14061 7.64299 9.30553 7.64299 9.47729C7.64299 9.64906 7.57566 9.81398 7.45545 9.93667C7.33524 10.0594 7.17173 10.13 7 10.1335Z" fill="#FAAD14" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_1712_1263">
-                      <rect width="14" height="14" fill="white" transform="translate(0 0.0710449)" />
-                    </clipPath>
-                    <clipPath id="clip1_1712_1263">
-                      <rect width="14" height="14" fill="white" transform="translate(0 0.0710449)" />
-                    </clipPath>
-                  </defs>
-                </svg>
-
-              </span>
-              <h2 className='font-semibold'>Are you sure to delete this appointment ?</h2>
-            </div>
-            <div className='flex justify-end gap-3'>
-              <button onClick={() => handleCancelModalTwo()} className='border px-4 py-1 font-semibold'>No</button>
-              <button onClick={() => handleModalTwoOk()} className='border px-4 py-1 font-semibold bg-[#FF1818] text-[#fff]'>Yes</button>
-            </div>
-          </div>
-        </Modal>
+        <div className="flex justify-end pt-2">
+          <Pagination
+            current={currentPage}
+            pageSize={perPage}
+            total={totalPaginationData || 0}
+            onChange={(page, pageSize) => {
+              setCurrentPage(page)
+              setPerPage(pageSize)
+            }}
+          />
+        </div>
       </div>
     </>
   )
