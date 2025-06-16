@@ -12,18 +12,26 @@ const dashboardServiceApi = baseApi.injectEndpoints({
             }),
             providesTags: ['service'],
         }),
+        getDetailsServiceApi: builder.query({
+            query: (detailsId) => ({
+                url: `/admin/services/${detailsId}`,
+                method: "GET"
+            }),
+            providesTags: ['service'],
+        }),
         addService: builder.mutation({
             query: (serviceInfo) => ({
                 url: `/admin/services`,
                 method: "POST",
-                body:serviceInfo
+                body: serviceInfo
             }),
             invalidatesTags: ['service'],
         }),
         updateService: builder.mutation({
-            query: ({id}) => ({
+            query: ({id, updateInfo}) => ({
                 url: `/admin/services/${id}`,
-                method: "POST"
+                method: "PUT",
+                body:updateInfo
             }),
             invalidatesTags: ['service'],
         }),
@@ -32,4 +40,4 @@ const dashboardServiceApi = baseApi.injectEndpoints({
 })
 
 
-export const { useGetServiceApiQuery,useAddServiceMutation,useUpdateServiceMutation} = dashboardServiceApi;
+export const { useGetServiceApiQuery,useGetDetailsServiceApiQuery, useAddServiceMutation, useUpdateServiceMutation } = dashboardServiceApi;

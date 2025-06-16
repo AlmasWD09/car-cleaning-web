@@ -414,6 +414,7 @@ const Dashboard = () => {
                                         }}
 
                                     >
+                                        {/* setting menu */}
                                         {item.children.map((child, childIndex) => {
                                             const isSubActive = location.pathname === child.path;
                                             return (
@@ -427,9 +428,11 @@ const Dashboard = () => {
                                                     style={{
                                                         color: isSubActive ? "red" : "#fff",
                                                         fontWeight: isSubActive ? "bold" : "normal",
+                                                        height: "50px",
                                                         fontSize: "16px",
                                                         marginBottom: "10px",
                                                         borderLeft: isSubActive ? "5px solid #FF9E02" : "",
+                                                        borderRadius: "6px",
                                                         backgroundColor: isSubActive ? "#fff"
                                                             : "transparent", // custom bg color add
                                                     }}
@@ -458,9 +461,11 @@ const Dashboard = () => {
                                         icon={getMenuIcon(item.icon, item.activeIcon, isActive)}
                                         style={{
                                             fontWeight: isActive ? "bold" : "normal",
+                                            height: "50px",
                                             fontSize: "16px",
-                                            marginBottom: "10px",
+                                            marginBottom: "15px",
                                             borderLeft: isActive ? "5px solid #FF9E02" : "",
+                                            borderRadius: "6px",
                                             backgroundColor: isActive ? "#ffff" : "transparent", // active bg color
                                         }}
                                     // active background color add 
@@ -542,8 +547,8 @@ const Dashboard = () => {
                                     </svg>
 
                                     <img src="/privacyPolicy/photo1.png"
-                                    onClick={handleNavigate}
-                                    className="w-[40px] h-[40px] rounded-full object-cover" />
+                                        onClick={handleNavigate}
+                                        className="w-[40px] h-[40px] rounded-full object-cover" />
                                     <h2 className="font-degular font-semibold text-[24px]">
                                         John Doe
                                     </h2>

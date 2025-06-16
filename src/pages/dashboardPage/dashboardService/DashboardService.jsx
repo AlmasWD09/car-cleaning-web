@@ -1,7 +1,8 @@
 import { Button, Form, Input, Modal, Upload } from "antd";
-import { key } from "localforage";
 import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react"
+import { useAddServiceMutation, useGetDetailsServiceApiQuery, useGetServiceApiQuery, useUpdateServiceMutation } from "../../../redux/dashboardFeatures/services/dashboardServiceApi";
+import toast from "react-hot-toast";
 
 
 const DashboardService = () => {
@@ -12,31 +13,99 @@ const DashboardService = () => {
   const [mondalOne, setModalOne] = useState(false);
   const [mondalTwo, setModalTwo] = useState(false);
   const [mondalThree, setModalThree] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const [detailsId, setDetailsId] = useState('')
+  const [slotData, setSlotData] = useState([])
+
+
+
+  const { data: servicesData, isLoading, refetch } = useGetServiceApiQuery() // get service
+  const allServiceData = servicesData?.data
+
+  const { data: detaislData } = useGetDetailsServiceApiQuery(detailsId); // details service
+  const singleServiceDetails = detaislData?.data
+  const timeSlots = singleServiceDetails?.time
+
+
+  const [addService] = useAddServiceMutation() // post 
+  const [updateService] = useUpdateServiceMutation() // update
+
+
+
+
+
+
+  useEffect(() => {
+    if (timeSlots) {
+      setSlotData(timeSlots)
+    }
+  }, [timeSlots])
+
+
+  // defaut service
+  useEffect(() => {
+    if (singleServiceDetails) {
+      formTwo.setFieldsValue({
+        ...singleServiceDetails,
+        interior: singleServiceDetails?.interior,
+        exterior: singleServiceDetails?.exterior,
+        both: singleServiceDetails?.both,
+        icon: singleServiceDetails?.icon,
+
+      });
+      if (singleServiceDetails.icon) {
+        setImageFileList([
+          {
+            uid: "-1",
+            name: "Existing Image",
+            status: "done",
+            url: singleServiceDetails.icon,
+          },
+        ]);
+      }
+    }
+  }, [singleServiceDetails, formTwo]);
+
+
+
 
 
 
   // =============  modal one start ===============
-  const onFinishOne = (values) => {
-    console.log(values)
+  const onFinishOne = async (values) => {
+    setLoading(true)
     const formData = new FormData();
     if (ImageFileList) {
-      formData.append("image", ImageFileList[0]?.originFileObj);
+      formData.append("icon", ImageFileList[0]?.originFileObj);
     }
-console.log(formData.forEach(key,values=>console.log(key,values)))
+    formData.append("car_type", values?.car_type);
+    formData.append("interior", values?.interior);
+    formData.append("exterior", values?.exterior);
+    formData.append("both", values?.both);
 
-    //   try {
-    //     const res = ""
+    // console.log(formData.forEach(key, values => console.log(key, values)))
 
-    //     if (res?.data) {
-    //         setImageFileList([]);
-    //         formOne.resetFields()
-    //         dispatch(closeTeamModalOpenOne());
-    //     }
-    // } catch (errors) {
-    // }
+    try {
+      const res = await addService(formData).unwrap()
+      console.log(res)
 
+      if (res?.status === true) {
+        toast.success(res?.message)
+        setLoading(false)
+        setImageFileList([])
+        formOne.resetFields()
+        setModalOne(false)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
 
   }
+
+
+
   const showModalOne = () => {
     setModalOne(true)
   }
@@ -53,12 +122,50 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
 
 
   // =============  modal two start ===============
-  const showModalTwo = () => {
+  const showModalTwo = (id) => {
+    setDetailsId(id)
     setModalTwo(true)
   }
 
-  const handleModalTwoOk = () => {
+  const onFinishTwo = async (values) => {
 
+    setLoading(true)
+    const formData = new FormData();
+    if (ImageFileList) {
+      formData.append("icon", ImageFileList[0]?.originFileObj);
+    }
+    formData.append("interior", values?.interior);
+    formData.append("exterior", values?.exterior);
+    formData.append("both", values?.both);
+    formData.append("_method", "PUT");
+
+    // formData.forEach((value, key) => {
+    //   console.log('key------>', key, 'value------>', value);
+    // });
+
+    try {
+      const res = await updateService({ id: detailsId, updateInfo: formData }).unwrap()
+      console.log(res)
+
+      if (res?.status === true) {
+        toast.success(res?.message)
+        setLoading(false)
+        refetch()
+        setModalTwo(false)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+
+
+
+  }
+
+
+  const handleModalTwoOk = () => {
+    formTwo.submit()
   }
 
   const handleCancelModalTwo = () => {
@@ -68,110 +175,10 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
 
 
   // =============  modal three start ===============
-  const showModalThree = () => {
+  const showModalThree = (id) => {
+    setDetailsId(id)
     setModalThree(true)
   }
-
-  const handleModalThreeOk = () => {
-
-  }
-
-  const handleCancelModalThree = () => {
-    setModalThree(false)
-  }
-  // =============  modal two end ===============
-
-
-
-
-  useEffect(() => {
-    if (mondalOne || mondalTwo || mondalThree) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
-    return () => {
-      document.body.style.overflow = "auto"; // Cleanup function
-    };
-  }, [mondalOne || mondalTwo || mondalThree]);
-
-
-  const serviceData = [
-    {
-      service_name: "Compact",
-      title1: "Interior",
-      title2: "Exterior",
-      title3: "Both",
-      price1: "$70.00",
-      price2: "$80.00",
-      price3: "$130.00",
-    },
-    {
-      service_name: "SUV",
-      title1: "Interior",
-      title2: "Exterior",
-      title3: "Both",
-      price1: "$70.00",
-      price2: "$80.00",
-      price3: "$130.00",
-    },
-    {
-      service_name: "Extra Large",
-      title1: "Interior",
-      title2: "Exterior",
-      title3: "Both",
-      price1: "$70.00",
-      price2: "$80.00",
-      price3: "$130.00",
-    },
-    {
-      service_name: "Truck",
-      title1: "Interior",
-      title2: "Exterior",
-      title3: "Both",
-      price1: "$70.00",
-      price2: "$80.00",
-      price3: "$130.00",
-    },
-    {
-      service_name: "Sports Car",
-      title1: "Interior",
-      title2: "Exterior",
-      title3: "Both",
-      price1: "$70.00",
-      price2: "$80.00",
-      price3: "$130.00",
-    },
-
-  ]
-
-
-
-
-
-
-  const onFinishTwo = (values) => {
-    console.log(values)
-    const formData = new FormData();
-    if (ImageFileList[0]?.originFileObj) {
-      formData.append("image", ImageFileList[0].originFileObj);
-    }
-
-    //   try {
-    //     const res = ""
-
-    //     if (res?.data) {
-    //         setImageFileList([]);
-    //         formOne.resetFields()
-    //         dispatch(closeTeamModalOpenOne());
-    //     }
-    // } catch (errors) {
-    // }
-
-
-  }
-
 
   const onFinishThree = (values) => {
     console.log(values)
@@ -194,24 +201,74 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
 
   }
 
-  const timeSlots = [
-    { id: 1, time: "10:00 AM" },
-    { id: 2, time: "10:00 AM" },
-    { id: 3, time: "10:00 AM" },
-    { id: 4, time: "10:00 AM" },
-    { id: 5, time: "10:00 AM" },
-  ]
+  const handleModalThreeOk = () => {
 
+  }
+
+  const handleCancelModalThree = () => {
+    setModalThree(false)
+  }
+  // =============  modal two end ===============
+
+  const handleAddTime = () => {
+    const now = new Date();
+
+    let hours = now.getHours(); // 0 - 23
+    let minutes = now.getMinutes(); // 0 - 59
+
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 => 12
+
+    const formattedHours = hours.toString().padStart(2, "0");
+    const formattedMinutes = minutes.toString().padStart(2, "0");
+
+    const formattedTime = `${formattedHours}:${formattedMinutes}${ampm}`;
+
+    setSlotData((prev) => [...prev, formattedTime]);
+
+  }
+
+
+  const handleDelete = (indexToDelete) => {
+    const newSlots = slotData.filter((_, index) => index !== indexToDelete);
+    setSlotData(newSlots);
+  }
+
+  console.log(slotData)
+
+
+
+
+
+  useEffect(() => {
+    if (mondalOne || mondalTwo || mondalThree) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto"; // Cleanup function
+    };
+  }, [mondalOne || mondalTwo || mondalThree]);
+
+
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
   return (
     <div>
       <div className="grid grid-cols-12 gap-4">
         {
-          serviceData.map((item, index) => {
+          allServiceData?.slice(-5)?.reverse()?.map((item, index) => {
             return (
               <div key={index} className="col-span-4 bg-[#ffff]  border border-[#ccc] rounded-2xl p-4">
                 <div className="flex items-center justify-between">
-                  <p className="text-[30px] font-degular font-semibold text-[#000000]">{item.service_name}</p>
-                  <button onClick={showModalTwo} className="flex items-center gap-3 py-2 px-4 border border-primary rounded-md text-primary">
+                  <p className="text-[30px] font-degular font-semibold text-[#000000]">{item.car_type}</p>
+
+                  <button onClick={() => showModalTwo(item?.id)} className="flex items-center gap-3 py-2 px-4 border border-primary rounded-md text-primary">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M17.71 4.04125C18.1 3.65125 18.1 3.00125 17.71 2.63125L15.37 0.291249C15 -0.0987512 14.35 -0.0987512 13.96 0.291249L12.12 2.12125L15.87 5.87125M0 14.2512V18.0012H3.75L14.81 6.93125L11.06 3.18125L0 14.2512Z" fill="#0063E6" />
                     </svg>
@@ -222,21 +279,21 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
 
                 <div className="flex flex-col items-center justify-between pt-6 space-y-2">
                   <div className="w-full flex justify-between items-center gap-3 py-2 px-4 border border-[#ccc] rounded-[20px] ">
-                    <p className="text-[20px] font-degular font-medium">{item.title1}</p>
-                    <h2 className="text-[28px] font-degular font-semibold">{item.price1}</h2>
+                    <p className="text-[20px] font-degular font-medium">Interior</p>
+                    <h2 className="text-[28px] font-degular font-semibold">${item.interior}</h2>
                   </div>
                   <div className="w-full flex justify-between items-center gap-3 py-2 px-4 border border-[#ccc] rounded-[20px] ">
-                    <p className="text-[20px] font-degular font-medium">{item.title2}</p>
-                    <h2 className="text-[28px] font-degular font-semibold">{item.price2}</h2>
+                    <p className="text-[20px] font-degular font-medium">Exterior</p>
+                    <h2 className="text-[28px] font-degular font-semibold">${item.exterior}</h2>
                   </div>
                   <div className="w-full flex justify-between items-center gap-3 py-2 px-4 border border-[#ccc] rounded-[20px] ">
-                    <p className="text-[20px] font-degular font-medium">{item.title3}</p>
-                    <h2 className="text-[28px] font-degular font-semibold">{item.price3}</h2>
+                    <p className="text-[20px] font-degular font-medium">Both</p>
+                    <h2 className="text-[28px] font-degular font-semibold">${item.both}</h2>
                   </div>
                 </div>
 
                 <div className="pt-4">
-                  <button onClick={showModalThree} className="flex items-center gap-2 py-2 px-4 border border-primary rounded-md text-primary">
+                  <button onClick={() => showModalThree(item?.id)} className="flex items-center gap-2 py-2 px-4 border border-primary rounded-md text-primary">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M17.71 4.04125C18.1 3.65125 18.1 3.00125 17.71 2.63125L15.37 0.291249C15 -0.0987512 14.35 -0.0987512 13.96 0.291249L12.12 2.12125L15.87 5.87125M0 14.2512V18.0012H3.75L14.81 6.93125L11.06 3.18125L0 14.2512Z" fill="#0063E6" />
                     </svg>
@@ -250,7 +307,7 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
         }
       </div>
 
-      <div className="py-8">
+      <div className="pt-4">
         <button
           onClick={showModalOne}
           type="button" className="w-[274px] h-[64px] bg-primary text-[#ffff] px-8 py-2 rounded-[20px] text-xl">+ Add more</button>
@@ -284,7 +341,7 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
               <div className="w-full flex justify-center items-center border border-[#ccc] p-4 rounded-xl mb-10">
                 <Form.Item
                   className="md:col-span-2"
-                  name="image"
+                  name="icon"
                   rules={[
                     {
                       required: ImageFileList.length === 0,
@@ -324,7 +381,7 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
               {/* Interior */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Interior</p>
-                <Form.Item name="interior_price" className="mb-0"
+                <Form.Item name="interior" className="mb-0"
                   rules={[
                     { required: true, message: "Interior price is required!" },
                     {
@@ -340,7 +397,7 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
               {/* Exterior */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Exterior</p>
-                <Form.Item name="exterior_price" className="mb-0"
+                <Form.Item name="exterior" className="mb-0"
                   rules={[
                     { required: true, message: "Exterior price is required!" },
                     {
@@ -356,7 +413,7 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
               {/* Both */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Both</p>
-                <Form.Item name="both_price" className="mb-0"
+                <Form.Item name="both" className="mb-0"
                   rules={[
                     { required: true, message: "Both price is required!" },
                     {
@@ -383,7 +440,9 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
                   marginTop: "20px"
                 }}
               >
-                Add
+                {
+                  loading ? 'Loading' : "Add"
+                }
               </Button>
             </div>
           </Form>
@@ -416,7 +475,7 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
               <div className="w-full flex justify-center items-center border border-[#ccc] p-4 rounded-xl mb-10">
                 <Form.Item
                   className="md:col-span-2"
-                  name="image"
+                  name="icon"
                   rules={[
                     {
                       required: ImageFileList.length === 0,
@@ -443,20 +502,11 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
                 </Form.Item>
               </div>
 
-              {/* car type */}
-              <div className="grid grid-cols-2 items-center gap-4">
-                <p className="text-[20px] font-medium font-degular">Car Type</p>
-                <Form.Item name="car_type" className="mb-0"
-                  rules={[{ required: true, message: "Car type is required!" }]}
-                >
-                  <Input placeholder="car name" style={{ height: "50px", borderRadius: "20px" }} />
-                </Form.Item>
-              </div>
 
               {/* Interior */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Interior</p>
-                <Form.Item name="interior_price" className="mb-0"
+                <Form.Item name="interior" className="mb-0"
                   rules={[
                     { required: true, message: "Interior price is required!" },
                     {
@@ -472,7 +522,7 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
               {/* Exterior */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Exterior</p>
-                <Form.Item name="exterior_price" className="mb-0"
+                <Form.Item name="exterior" className="mb-0"
                   rules={[
                     { required: true, message: "Exterior price is required!" },
                     {
@@ -488,7 +538,7 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
               {/* Both */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Both</p>
-                <Form.Item name="both_price" className="mb-0"
+                <Form.Item name="both" className="mb-0"
                   rules={[
                     { required: true, message: "Both price is required!" },
                     {
@@ -515,7 +565,9 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
                   marginTop: "20px"
                 }}
               >
-                Save changes
+                {
+                  loading ? 'Loading' : "Save changes"
+                }
               </Button>
             </div>
           </Form>
@@ -546,13 +598,13 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
           <Form form={formThree} onFinish={onFinishThree}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Existing Time Slots */}
-              {timeSlots.map((slot) => (
+              {slotData?.map((slot, index) => (
                 <div
-                  key={slot.id}
+                  key={index}
                   className="bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex-1">
-                    <span className="text-lg font-semibold text-gray-900">{slot.time}</span>
+                    <span className="text-lg font-semibold text-gray-900">{slot}</span>
                   </div>
 
                   <div className="flex items-center gap-3">
@@ -566,7 +618,7 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
                     </button>
 
                     {/* Red Delete Icon */}
-                    <button>
+                    <button onClick={() => handleDelete(index)}>
                       <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="50" height="50" rx="15" fill="#FFE2E2" />
                         <path d="M34.5 14.3333H29.75L28.3929 13H21.6071L20.25 14.3333H15.5V17H34.5M16.8571 34.3333C16.8571 35.0406 17.1431 35.7189 17.6521 36.219C18.1612 36.719 18.8516 37 19.5714 37H30.4286C31.1484 37 31.8388 36.719 32.3479 36.219C32.8569 35.7189 33.1429 35.0406 33.1429 34.3333V18.3333H16.8571V34.3333Z" fill="#FF3F3F" />
@@ -579,16 +631,14 @@ console.log(formData.forEach(key,values=>console.log(key,values)))
 
               {/* Add New Slot Button */}
               <button
-                className="bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-center shadow-sm hover:shadow-md hover:bg-gray-50 transition-all group"
+                onClick={handleAddTime}
+                className="h-[90px] bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-center shadow-sm hover:shadow-md hover:bg-gray-50 transition-all group"
               >
                 <svg width="241" height="24" viewBox="0 0 241 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M118.786 13.7143H108.5V10.2857H118.786V0H122.214V10.2857H132.5V13.7143H122.214V24H118.786V13.7143Z" fill="black" />
                 </svg>
 
               </button>
-
-
-
             </div>
 
             <div className="flex justify-center">

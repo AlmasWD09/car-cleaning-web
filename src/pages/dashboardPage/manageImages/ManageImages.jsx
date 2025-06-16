@@ -59,16 +59,12 @@ const ManageImages = () => {
 
   }
 
-
-
-
-
-
   const hendelClick = (id) => {
     setImageMadel(!imageMadel);
     setimageID(id);
   };
 
+  
   const hendelDelete = async () => {
     Swal.fire({
       title: "Are you sure?",
