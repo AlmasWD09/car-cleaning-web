@@ -35,9 +35,16 @@ const dashboardServiceApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['service'],
         }),
+        deleteService: builder.mutation({
+            query: (id) => ({
+                url: `/admin/services/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ['service'],
+        }),
 
     })
 })
 
 
-export const { useGetServiceApiQuery,useGetDetailsServiceApiQuery, useAddServiceMutation, useUpdateServiceMutation } = dashboardServiceApi;
+export const { useGetServiceApiQuery,useGetDetailsServiceApiQuery, useAddServiceMutation, useUpdateServiceMutation,useDeleteServiceMutation } = dashboardServiceApi;
