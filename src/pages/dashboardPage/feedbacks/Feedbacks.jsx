@@ -1,16 +1,23 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { useDeleteFeedbackMutation, useGetFeedbackApiQuery, useGetHighestFeedbackApiQuery } from "../../../redux/dashboardFeatures/feedback/dashboardFeedbackApi";
+
+
 
 
 const Feedbacks = () => {
   const [formOne] = Form.useForm();
   const [mondalOne, setModalOne] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(5);
+
   const [hightColor, setHightColor] = useState(false)
 
-const {data:feebackData} = useGetFeedbackApiQuery() // get
-const {data:hightedFeedbackData} = useGetHighestFeedbackApiQuery() // get highest feedback
-const [deleteFeedback] = useDeleteFeedbackMutation()
+  const { data: feebackData, refetch } = useGetFeedbackApiQuery({ per_page: perPage, page: currentPage }) // get
+  const { data: hightedFeedbackData } = useGetHighestFeedbackApiQuery() // get highest feedback
+  const [deleteFeedback] = useDeleteFeedbackMutation()
+  const allFeedbackData = feebackData?.data?.data
+  const totalPaginationData = feebackData?.data?.total
 
 
 
@@ -58,332 +65,10 @@ const [deleteFeedback] = useDeleteFeedbackMutation()
   }
 
 
+  useEffect(() => {
+    refetch();
+  }, [currentPage, perPage, refetch]);
 
-
-
-
-
-
-
-
-
-
-  const allTestimonial = [
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80",
-      name: "Md. Abid Hasan",
-      complated: true,
-      icon: [
-        <svg
-          key={1}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={2}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={3}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={4}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={5}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-      ],
-      description: `“Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Tempore quibusdam ducimus libero ad tempora doloribus expedita
-        laborum saepe voluptas perferendis delectus assumenda rerum,
-        culpa aperiam dolorum, obcaecati corrupti aspernatur a.”`,
-    },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80",
-      name: "Md. Abid Hasan",
-      complated: true,
-      icon: [
-        <svg
-          key={1}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={2}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={3}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={4}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-      ],
-      description: `“Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Tempore quibusdam ducimus libero ad tempora doloribus expedita
-        laborum saepe voluptas perferendis delectus assumenda rerum,
-        culpa aperiam dolorum, obcaecati corrupti aspernatur a.”`,
-    },
-    {
-      id: 3,
-      image:
-        "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80",
-      name: "Md. Abid Hasan",
-      complated: true,
-      icon: [
-        <svg
-          key={1}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={2}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={3}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={4}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={5}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-      ],
-      description: `“Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Tempore quibusdam ducimus libero ad tempora doloribus expedita
-        laborum saepe voluptas perferendis delectus assumenda rerum,
-        culpa aperiam dolorum, obcaecati corrupti aspernatur a.”`,
-    },
-    {
-      id: 4,
-      image:
-        "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80",
-      name: "Md. Abid Hasan",
-      inComplated: true,
-      icon: [
-        <svg
-          key={1}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={2}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-
-      ],
-      description: `“Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Tempore quibusdam ducimus libero ad tempora doloribus expedita
-        laborum saepe voluptas perferendis delectus assumenda rerum,
-        culpa aperiam dolorum, obcaecati corrupti aspernatur a.”`,
-    },
-    {
-      id: 5,
-      image:
-        "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80",
-      name: "Md. Abid Hasan",
-      inComplated: true,
-      icon: [
-        <svg
-          key={1}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={2}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-        <svg
-          key={3}
-          width="28"
-          height="26"
-          viewBox="0 0 28 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-            fill="#FF9E02"
-          />
-        </svg>,
-
-      ],
-      description: `“Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Tempore quibusdam ducimus libero ad tempora doloribus expedita
-        laborum saepe voluptas perferendis delectus assumenda rerum,
-        culpa aperiam dolorum, obcaecati corrupti aspernatur a.”`,
-    },
-  ];
 
   useEffect(() => {
     if (mondalOne) {
@@ -396,19 +81,38 @@ const [deleteFeedback] = useDeleteFeedbackMutation()
       document.body.style.overflow = "auto"; // Cleanup function
     };
   }, [mondalOne]);
+
   return (
     <div>
       <div className="space-y-4">
         {
-          allTestimonial.map((item, index) => {
+          allFeedbackData?.map((item, index) => {
             return (
               <div key={index} className={`border ${item.complated ? "border-primary bg-primary bg-opacity-5" : "border-[#ccc]"} rounded-2xl p-4 space-y-2`}>
                 <div className="flex justify-between items-center ">
                   <div className="flex items-center gap-2">
-                    <img src={item.image} alt="photo" className="w-[50px] h-[50px] rounded-full" />
+                    <img src={item?.user?.photo} alt="photo" className="w-[50px] h-[50px] rounded-full" />
                     <div>
-                      <h3>{item.name}</h3>
-                      <p className="flex items-center">{item.icon}</p>
+                      <h3 className="text-[24px] font-semibold font-degular">{item?.user?.name}</h3>
+                      <p className="flex">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <span key={i}>
+                            <svg
+                              width="20"
+                              height="26"
+                              viewBox="0 0 28 26"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
+                                fill="#FF9E02"
+                              />
+                            </svg>
+                          </span>
+                        ))}
+                      </p>
+
                     </div>
                   </div>
                   <span onClick={() => showModalOne(item.complated, item.inComplated)} className="cursor-pointer">
@@ -421,7 +125,12 @@ const [deleteFeedback] = useDeleteFeedbackMutation()
 
                   </span>
                 </div>
-                <p>{item.description}</p>
+                {/* <p>
+                  {item.description.length > 50
+                    ? item.description.slice(0, 300) + '...'
+                    : item.description}
+                </p> */}
+                <p>{item.comment}</p>
               </div>
             )
           })
@@ -479,6 +188,19 @@ const [deleteFeedback] = useDeleteFeedbackMutation()
           }
         </div>
       </Modal>
+
+
+      <div className="flex justify-end pt-4">
+        <Pagination
+          current={currentPage}
+          pageSize={perPage}
+          total={totalPaginationData|| 0}
+          onChange={(page, pageSize) => {
+            setCurrentPage(page)
+            setPerPage(pageSize)
+          }}
+        />
+      </div>
     </div>
   )
 }
