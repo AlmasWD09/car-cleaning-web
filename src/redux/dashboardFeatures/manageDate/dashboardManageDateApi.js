@@ -18,7 +18,7 @@ const dashboardManageDateApi = baseApi.injectEndpoints({
             invalidatesTags: ['manage_date'],
         }),
         deleteUnBlockDateApi: builder.mutation({
-            query: ({ id }) => ({
+            query: (id) => ({
                 url: `/admin/manage-dates/${id}`,
                 method: "DELETE"
             }),
