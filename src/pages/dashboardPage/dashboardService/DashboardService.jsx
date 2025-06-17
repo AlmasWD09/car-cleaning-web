@@ -86,7 +86,10 @@ const DashboardService = () => {
     formData.append("exterior", values?.exterior);
     formData.append("both", values?.both);
 
-    // console.log(formData.forEach(key, values => console.log(key, values)))
+    // formData.forEach((value, key) => {
+    //   console.log(key, value);
+    // });
+
 
     try {
       const res = await addService(formData).unwrap()

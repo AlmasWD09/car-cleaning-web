@@ -38,23 +38,45 @@ const ManageImages = () => {
   }
   // =============  modal one end ===============
 
-  const onFinishOne = (values) => {
+  const onFinishOne = async (values) => {
+
     console.log(values)
     const formData = new FormData();
-    if (ImageFileList[0]?.originFileObj) {
-      formData.append("image", ImageFileList[0].originFileObj);
+    if (ImageFileList) {
+      formData.append("photo", ImageFileList[0]?.originFileObj);
     }
 
-    //   try {
-    //     const res = ""
+    // formData.forEach((value, key) => {
+    //   console.log(key, value);
+    // });
 
-    //     if (res?.data) {
-    //         setImageFileList([]);
-    //         formOne.resetFields()
-    //         dispatch(closeTeamModalOpenOne());
-    //     }
-    // } catch (errors) {
-    // }
+
+try {
+  const res = await addPhoto(formData).unwrap();
+  console.log(res);
+
+  if (res?.status === true) {
+    toast.success(res?.message);
+    setImageFileList([]);
+    formOne.resetFields();
+    setModalOne(false);
+  }
+} catch (error) {
+  const errorMessage = error?.data?.message;
+
+  if (typeof errorMessage === 'object') {
+    Object.entries(errorMessage).forEach(([field, messages]) => {
+      if (Array.isArray(messages)) {
+        messages.forEach(msg => toast.error(msg));
+      } else {
+        toast.error(messages);
+      }
+    });
+  } else {
+
+    toast.error(errorMessage);
+  }
+}
 
 
   }
@@ -64,7 +86,7 @@ const ManageImages = () => {
     setimageID(id);
   };
 
-  
+
   const hendelDelete = async () => {
     Swal.fire({
       title: "Are you sure?",
@@ -94,7 +116,7 @@ const ManageImages = () => {
   return (
     <div>
       <div className="grid grid-cols-4 gap-5">
-        {allPhoto?.slice(-8)?.reverse()?.map((item, index) => {
+        {allPhoto?.slice(0, 8).map((item, index) => {
           return (
             <div key={index}>
               <div className="relative">
@@ -191,13 +213,7 @@ const ManageImages = () => {
               <div className="w-full flex justify-center items-center border border-[#ccc] p-4 rounded-xl mb-10">
                 <Form.Item
                   className="md:col-span-2"
-                  name="image"
-                  rules={[
-                    {
-                      required: ImageFileList.length === 0,
-                      message: "Image required!",
-                    },
-                  ]}
+                  name="photo"
                 >
                   <Upload
 
