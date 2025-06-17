@@ -18,15 +18,16 @@ const dashboardManageImagesApi = baseApi.injectEndpoints({
             invalidatesTags: ['manage_image'],
         }),
         updatePhoto: builder.mutation({
-            query: ({ id }) => ({
+            query: ({ id,photo }) => ({
                 url: `/admin/photo-gallery/${id}`,
-                method: "POST"
+                method: "POST",
+                body:photo,
             }),
             invalidatesTags: ['manage_image'],
         }),
         deletePhoto: builder.mutation({
-            query: ({ id }) => ({
-                url: `/admin/photo-gallery/${id}`,
+            query: (deleteId) => ({
+                url: `/admin/photo-gallery/${deleteId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ['manage_image'],
