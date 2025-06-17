@@ -195,38 +195,6 @@ const DashboardBookings = () => {
     },
   ];
 
-
-
-
-  // car image
-  const carImages = [
-    {
-      id: 1,
-      image: "/profileCar/photo3.png",
-    },
-    {
-      id: 2,
-      image: "/profileCar/photo4.png",
-    },
-    {
-      id: 3,
-      image: "/profileCar/photo5.png",
-    },
-    {
-      id: 4,
-      image: "/profileCar/photo6.png",
-    },
-    {
-      id: 5,
-      image: "/profileCar/photo1.png",
-    },
-    {
-      id: 6,
-      image: "/profileCar/photo2.png",
-    }
-  ];
-
-
   useEffect(() => {
     refetch();
   }, [searchText, currentPage, perPage, filterId, refetch]);
