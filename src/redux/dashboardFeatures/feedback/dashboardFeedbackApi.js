@@ -9,16 +9,9 @@ const dashboardFeedbackApi = baseApi.injectEndpoints({
             }),
             providesTags: ['feedback'],
         }),
-        getHighestFeedbackApi: builder.query({
-            query: ({ id }) => ({
-                url: `/admin/feedback-highlight/${id}`,
-                method: "GET"
-            }),
-            providesTags: ['feedback'],
-        }),
         deleteFeedback: builder.mutation({
-            query: ({ id }) => ({
-                url: `/admin/feedbacks/${id}`,
+            query: (deleteId) => ({
+                url: `/admin/feedbacks/${deleteId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ['feedback'],
@@ -28,4 +21,4 @@ const dashboardFeedbackApi = baseApi.injectEndpoints({
 })
 
 
-export const { useGetFeedbackApiQuery, useGetHighestFeedbackApiQuery, useDeleteFeedbackMutation } = dashboardFeedbackApi;
+export const { useGetFeedbackApiQuery, useDeleteFeedbackMutation } = dashboardFeedbackApi;

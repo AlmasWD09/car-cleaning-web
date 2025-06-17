@@ -1,6 +1,8 @@
 import { Button, Form, Input, Modal, Pagination } from "antd";
 import { useEffect, useState } from "react";
-import { useDeleteFeedbackMutation, useGetFeedbackApiQuery, useGetHighestFeedbackApiQuery } from "../../../redux/dashboardFeatures/feedback/dashboardFeedbackApi";
+import { useDeleteFeedbackMutation, useGetFeedbackApiQuery, } from "../../../redux/dashboardFeatures/feedback/dashboardFeedbackApi";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 
 
@@ -8,13 +10,16 @@ import { useDeleteFeedbackMutation, useGetFeedbackApiQuery, useGetHighestFeedbac
 const Feedbacks = () => {
   const [formOne] = Form.useForm();
   const [mondalOne, setModalOne] = useState(false);
+  const [selectId, setSelectId] = useState('')
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(5);
-
   const [hightColor, setHightColor] = useState(false)
 
+
   const { data: feebackData, refetch } = useGetFeedbackApiQuery({ per_page: perPage, page: currentPage }) // get
-  const { data: hightedFeedbackData } = useGetHighestFeedbackApiQuery() // get highest feedback
+
+
+
   const [deleteFeedback] = useDeleteFeedbackMutation()
   const allFeedbackData = feebackData?.data?.data
   const totalPaginationData = feebackData?.data?.total
@@ -22,7 +27,8 @@ const Feedbacks = () => {
 
 
   // =============  modal one start ===============
-  const showModalOne = (complated) => {
+  const showModalOne = (complated, id) => {
+    setSelectId(id)
     setModalOne(true)
     if (complated) {
       setHightColor(true)
@@ -32,8 +38,9 @@ const Feedbacks = () => {
 
   }
 
-  const handleModalOneOk = () => {
 
+
+  const handleModalOneOk = () => {
   }
 
   const handleCancelModalOne = () => {
@@ -42,25 +49,67 @@ const Feedbacks = () => {
   // =============  modal one end ===============
 
 
+  const handleHighest = async () => {
+    try {
+      const token = localStorage.getItem("admin_token"); 
+      const API = import.meta.env.VITE_API_BASE_URL;
 
-  const onFinishOne = (values) => {
-    console.log(values)
-    const formData = new FormData();
-    if (ImageFileList[0]?.originFileObj) {
-      formData.append("image", ImageFileList[0].originFileObj);
+      const res = await axios.get(`${API}/admin/feedback-highlight/${selectId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (res?.data?.status === true) {
+        toast.success(res?.data?.message);
+        refetch()
+        setModalOne(false);
+      }
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message;
+
+      if (typeof errorMessage === 'object') {
+        Object.entries(errorMessage).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            messages.forEach(msg => toast.error(msg));
+          } else {
+            toast.error(messages);
+          }
+        });
+      } else {
+        toast.error(errorMessage || "Something went wrong");
+      }
     }
 
-    //   try {
-    //     const res = ""
+  }
 
-    //     if (res?.data) {
-    //         setImageFileList([]);
-    //         formOne.resetFields()
-    //         dispatch(closeTeamModalOpenOne());
-    //     }
-    // } catch (errors) {
-    // }
 
+  // delete api
+  const handleDelete = async () => {
+    try {
+      const res = await deleteFeedback(selectId).unwrap();
+      console.log(res);
+
+      if (res?.status === true) {
+        toast.success(res?.message);
+        setModalOne(false);
+      }
+    } catch (error) {
+      const errorMessage = error?.data?.message;
+
+      if (typeof errorMessage === 'object') {
+        Object.entries(errorMessage).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            messages.forEach(msg => toast.error(msg));
+          } else {
+            toast.error(messages);
+          }
+        });
+      } else {
+
+        toast.error(errorMessage);
+      }
+    }
 
   }
 
@@ -82,13 +131,15 @@ const Feedbacks = () => {
     };
   }, [mondalOne]);
 
+
+
   return (
     <div>
       <div className="space-y-4">
         {
-          allFeedbackData?.map((item, index) => {
+          allFeedbackData?.slice().sort((a, b) => a.is_highlight - b.is_highlight).map((item, index) => {
             return (
-              <div key={index} className={`border ${item.complated ? "border-primary bg-primary bg-opacity-5" : "border-[#ccc]"} rounded-2xl p-4 space-y-2`}>
+              <div key={index} className={`border ${item?.is_highlight === 1 ? "border-primary bg-primary bg-opacity-5" : "border-[#ccc]"} rounded-2xl p-4 space-y-2`}>
                 <div className="flex justify-between items-center ">
                   <div className="flex items-center gap-2">
                     <img src={item?.user?.photo} alt="photo" className="w-[50px] h-[50px] rounded-full" />
@@ -115,7 +166,7 @@ const Feedbacks = () => {
 
                     </div>
                   </div>
-                  <span onClick={() => showModalOne(item.complated, item.inComplated)} className="cursor-pointer">
+                  <span onClick={() => showModalOne(item?.is_highlight, item?.id)} className="cursor-pointer">
                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect width="48" height="48" rx="24" fill="#F6F6F6" />
                       <path d="M24 18C25.1046 18 26 17.1046 26 16C26 14.8954 25.1046 14 24 14C22.8954 14 22 14.8954 22 16C22 17.1046 22.8954 18 24 18Z" fill="black" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -125,11 +176,6 @@ const Feedbacks = () => {
 
                   </span>
                 </div>
-                {/* <p>
-                  {item.description.length > 50
-                    ? item.description.slice(0, 300) + '...'
-                    : item.description}
-                </p> */}
                 <p>{item.comment}</p>
               </div>
             )
@@ -156,7 +202,7 @@ const Feedbacks = () => {
       >
 
         <div className="">
-          <div className="flex items-center gap-3 bg-red-100 p-4 border-b-2 border-gray-300 cursor-pointer">
+          <div onClick={handleDelete} className="flex items-center gap-3 bg-red-100 p-4 border-b-2 border-gray-300 cursor-pointer">
             <span>
               <svg width="40" height="40" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14 1H10.5L9.5 0H4.5L3.5 1H0V3H14M1 16C1 16.5304 1.21071 17.0391 1.58579 17.4142C1.96086 17.7893 2.46957 18 3 18H11C11.5304 18 12.0391 17.7893 12.4142 17.4142C12.7893 17.0391 13 16.5304 13 16V4H1V16Z" fill="#FF3F3F" />
@@ -167,7 +213,7 @@ const Feedbacks = () => {
           </div>
 
           {
-            hightColor ? <div className="flex items-center gap-3 bg-primary bg-opacity-10 p-4 cursor-pointer">
+            hightColor ? <div onClick={handleHighest} className="flex items-center gap-3 bg-primary bg-opacity-10 p-4 cursor-pointer">
               <span>
                 <svg width="35" height="35" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clipRule="evenodd" d="M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM8.823 12.14L6.058 9.373L5 10.431L8.119 13.552C8.30653 13.7395 8.56084 13.8448 8.826 13.8448C9.09116 13.8448 9.34547 13.7395 9.533 13.552L15.485 7.602L14.423 6.54L8.823 12.14Z" fill="#0063E5" />
@@ -176,7 +222,7 @@ const Feedbacks = () => {
               <p className="text-4xl font-degular font-bold text-primary">Highlighted</p>
             </div>
               :
-              <div className="flex items-center gap-3 bg-[#ffff] bg-opacity-10 p-4 cursor-pointer">
+              <div onClick={handleHighest} className="flex items-center gap-3 bg-[#ffff] bg-opacity-10 p-4 cursor-pointer">
                 <span>
                   <svg width="40" height="40" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.58 15.25L7.5 11.36L4.5 8.78L8.45 8.41L10 4.8L11.55 8.45L15.5 8.78L12.5 11.36L13.42 15.25L10 13.19L6.58 15.25ZM10 0C11.3132 0 12.6136 0.258658 13.8268 0.761205C15.0401 1.26375 16.1425 2.00035 17.0711 2.92893C17.9997 3.85752 18.7362 4.95991 19.2388 6.17317C19.7413 7.38642 20 8.68678 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C8.68678 20 7.38642 19.7413 6.17317 19.2388C4.95991 18.7362 3.85752 17.9997 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0ZM10 2C7.87827 2 5.84344 2.84285 4.34315 4.34315C2.84285 5.84344 2 7.87827 2 10C2 12.1217 2.84285 14.1566 4.34315 15.6569C5.84344 17.1571 7.87827 18 10 18C12.1217 18 14.1566 17.1571 15.6569 15.6569C17.1571 14.1566 18 12.1217 18 10C18 7.87827 17.1571 5.84344 15.6569 4.34315C14.1566 2.84285 12.1217 2 10 2Z" fill="black" />
@@ -194,7 +240,7 @@ const Feedbacks = () => {
         <Pagination
           current={currentPage}
           pageSize={perPage}
-          total={totalPaginationData|| 0}
+          total={totalPaginationData || 0}
           onChange={(page, pageSize) => {
             setCurrentPage(page)
             setPerPage(pageSize)
