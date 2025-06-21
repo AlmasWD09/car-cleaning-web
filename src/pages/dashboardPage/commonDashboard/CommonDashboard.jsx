@@ -5,7 +5,11 @@ import { useGetDashboardChartApiQuery } from "../../../redux/dashboardFeatures/d
 
 const CommonDashboard = () => {
   const { data: chartData } = useGetDashboardChartApiQuery()
-  console.log('dashboard_chart', chartData)
+const allChartData = chartData?.data
+const earningData = chartData?.data?.earning_statistics
+const bookingData = chartData?.data?.booking_statistics
+
+
 
   return (
     <div>
@@ -15,7 +19,7 @@ const CommonDashboard = () => {
           <div className="w-full flex justify-between ">
             <div>
               <h2 className=" font-degular text-[24px]">Earnings</h2>
-              <h2 className="font-semibold font-degular text-[36px] ">$500.00</h2>
+              <h2 className="font-semibold font-degular text-[36px] ">${allChartData?.earnings}</h2>
             </div>
             <img src="/dashboardCurdImage/photo1.svg" alt="" className="w-[50px] h-[50px]" />
           </div>
@@ -25,7 +29,7 @@ const CommonDashboard = () => {
           <div className="w-full flex justify-between ">
             <div>
               <h2 className=" font-degular text-[24px]">Appointments</h2>
-              <h2 className="font-semibold font-degular text-[36px] ">16</h2>
+              <h2 className="font-semibold font-degular text-[36px] ">{allChartData?.appointments}</h2>
             </div>
             <img src="/dashboardCurdImage/photo2.svg" alt="" className="w-[50px] h-[50px]" />
           </div>
@@ -35,7 +39,7 @@ const CommonDashboard = () => {
           <div className="w-full flex justify-between ">
             <div>
               <h2 className=" font-degular text-[24px]">Users</h2>
-              <h2 className="font-semibold font-degular text-[36px] ">1200</h2>
+              <h2 className="font-semibold font-degular text-[36px] ">{allChartData?.users}</h2>
             </div>
             <img src="/dashboardCurdImage/photo3.svg" alt="" className="w-[50px] h-[50px]" />
           </div>
@@ -50,10 +54,10 @@ const CommonDashboard = () => {
 
 
         <div className="bg-[#fff] w-[60%] md:h-[650px] rounded-lg">
-          <BookingChart />
+          <BookingChart bookingData={bookingData}/>
         </div>
         <div className="bg-[#fff] w-[40%] md:h-[650px] flex justify-center items-center rounded-lg ">
-          <EarningChart />
+          <EarningChart earningData={earningData}/>
         </div>
       </div>
     </div>

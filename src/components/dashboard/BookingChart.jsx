@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -12,80 +12,51 @@ import SelectBox from "../shared/SelectBox";
 
 
 
-const BookingChart = () => {
+const BookingChart = ({bookingData}) => {
+  const [chartData, setChartData] = useState([]);
   const [selectedValue, setSelectedValue] = useState("weekly");
-  const formatYAxis = (tickItem) => {
-    return `${tickItem}`;
-  };
 
 
-  const weeklyData = [
-    { name: "Sat", amt: 20 },
-    { name: "Sun", amt: 50 },
-    { name: "Mon", amt: 70 },
-    { name: "Tue", amt: 60 },
-    { name: "Wed", amt: 80 },
-    { name: "Thu", amt: 40 },
-    { name: "Fri", amt: 90 },
-  ];
-  
-  const monthlyData = [
-    { name: "Week 1", amt: 200 },
-    { name: "Week 2", amt: 300 },
-    { name: "Week 3", amt: 400 },
-    { name: "Week 4", amt: 500 },
-  ];
-  
-  const yearlyData = [
-    { name: "Jan", amt: 7000 },
-    { name: "Feb", amt: 5000 },
-    { name: "Mar", amt: 9000 },
-    { name: "Apr", amt: 9500 },
-    { name: "May", amt: 8010 },
-    { name: "Jun", amt: 10000 },
-    { name: "Jul", amt: 9000 },
-    { name: "Aug", amt: 8500 },
-    { name: "Sep", amt: 9000 },
-    { name: "Oct", amt: 12000 },
-    { name: "Nov", amt: 13000 },
-    { name: "Dec", amt: 14000 },
-  ];
 
-  const handleSelectChange = (value) => {
-    setSelectedValue(value);
-    console.log("Selected", value);
-  };
-  const selectOptions = [
-    { value: "weekly", label: "Weekly" },
-    { value: "monthly", label: "Monthly" },
-    { value: "yearly", label: "Yearly" },
-  ];
+   useEffect(()=>{
+ if (bookingData) {
+          // Transform to fit Recharts format
+          const formattedData = bookingData.map(item => ({
+            name: item.day,
+            amt: item.total,
+          }));
+          setChartData(formattedData);
+        }
+   },[bookingData])
 
-  const getChartData = () => {
-    switch (selectedValue) {
-      case "monthly":
-        return monthlyData;
-      case "yearly":
-        return weeklyData;
-      default:
-        return  yearlyData;
-    }
-  };
+
+
+  // const handleSelectChange = (value) => {
+  //   setSelectedValue(value);
+  //   console.log("Selected", value);
+  // };
+  // const selectOptions = [
+  //   { value: "weekly", label: "Weekly" },
+  //   { value: "monthly", label: "Monthly" },
+  //   { value: "yearly", label: "Yearly" },
+  // ];
+
+
   return (
     <div className=" rounded-2xl mt-2 p-2 text-gray-300 pr-14">
       <div className="flex justify-between items-center">
-        <h3 className="mb-5 text-[24px] font-degular font-semibold text-black">
+        <h3 className="mb-5 px-3 text-[24px] font-degular font-semibold text-black">
         Booking Statistics
         </h3>
-        <SelectBox
+        {/* <SelectBox
           options={selectOptions}
           value={selectedValue}
           onChange={(value) => setSelectedValue(value)}
-        />
+        /> */}
       </div>
       <div className="bg-white py-8 px-4">
         <ResponsiveContainer className=" " width="100%" height={400}>
-          <AreaChart data={getChartData()} syncId="anyId">
+          <AreaChart data={chartData} syncId="anyId">
             <defs>
               <linearGradient id="colorAmt" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
