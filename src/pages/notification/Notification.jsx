@@ -10,6 +10,8 @@ const Notification = () => {
     const [rating, setRating] = useState(0);
 
 
+
+    
     const notificationData = [
         {
             name: "Booking Successful",
@@ -51,7 +53,6 @@ const Notification = () => {
         },
 
     ];
-
 
     const showmodalOne = () => {
         setModalOpenOne(true)
