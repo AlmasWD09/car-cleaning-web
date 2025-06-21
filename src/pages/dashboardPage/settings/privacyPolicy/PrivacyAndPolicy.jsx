@@ -1,30 +1,63 @@
 import { Button } from "antd";
 import JoditEditor from "jodit-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useGetSettingApiQuery, usePostSettingApiMutation } from "../../../../redux/dashboardFeatures/setting/dashboardSettingApi";
+import toast from "react-hot-toast";
 
 
 const PrivacyAndPolicy = () => {
   const [content, setContent] = useState('');
   const editor = useRef(null);
 
+const [postSettingApi] = usePostSettingApiMutation()
+const { data: privacyData } = useGetSettingApiQuery({ type: "Privacy Policy" });
+const privaciAndPolicyData = privacyData?.data;
+const privaciContent = privacyData?.data?.[0]?.text;
 
-  const handleUpdate = () => {
-    console.log('cickk')
+
+console.log(content)
+
+useEffect(()=>{
+if(privaciContent){
+  setContent(privaciContent)
+}
+},[privaciContent])
+
+
+
+const handleUpdate = async () => {
+  const formData = new FormData();
+  formData.append("type", "Privacy Policy");
+  formData.append("text", content);
+
+
+//  formData.forEach((value, key) => {
+//   console.log(key, value);
+// });
+
+
+  try {
+    const res = await postSettingApi(formData).unwrap();
+   if(res?.status === true){
+    toast.success(res?.message)
+   }
+  } catch (error) {
+    console.log(error);
   }
+};
+
+
+
   return (
     <>
       <div className="w-full mt-6">
         <JoditEditor
-          ref={editor}
-          value={content}
-          // config={{
-          //   height: "400px", // Set your desired height
-          // }}
-          onChange={(newContent) => {
-            console.log("Editor Content:", newContent);
-            setContent(newContent);
-          }}
-        />
+            ref={editor}
+            value={content}
+            onChange={(newContent) => {
+              setContent(newContent);
+            }}
+          />
       </div>
 
       <div className="flex justify-end ">
@@ -36,6 +69,7 @@ const PrivacyAndPolicy = () => {
           Save
         </Button>
       </div>
+
     </>
   )
 }
