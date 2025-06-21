@@ -300,9 +300,14 @@ const DashboardService = () => {
   }
   return (
     <div>
+      <div className="py-4">
+        <button
+          onClick={showModalOne}
+          type="button" className="w-[274px] h-[64px] bg-primary text-[#ffff] px-8 py-2 rounded-[20px] text-xl">+ Add more</button>
+      </div>
       <div className="grid grid-cols-12 gap-4">
         {
-          allServiceData?.slice(-5)?.reverse()?.map((item, index) => {
+          allServiceData?.map((item, index) => {
             return (
               <div key={index} className="col-span-4 bg-[#ffff]  border border-[#ccc] rounded-2xl p-4">
                 <div className="flex items-center justify-between">
@@ -358,14 +363,6 @@ const DashboardService = () => {
           })
         }
       </div>
-
-      <div className="pt-4">
-        <button
-          onClick={showModalOne}
-          type="button" className="w-[274px] h-[64px] bg-primary text-[#ffff] px-8 py-2 rounded-[20px] text-xl">+ Add more</button>
-      </div>
-
-
 
 
       {/*================== modal component ============= */}

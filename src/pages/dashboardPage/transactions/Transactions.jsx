@@ -10,7 +10,7 @@ const Transactions = () => {
   const [filterId, setFilterId] = useState('')
   const [searchText, setSearchText] = useState('')
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(7);
+  const [perPage, setPerPage] = useState(6);
 
   const { data: transitionData,isLoading, refetch } = useGetTransitionApiQuery({ per_page: perPage, page: currentPage, search: searchText, filter: filterId })
   const { data: filterBookingData, } = useFilterBookingApiQuery() // filter booking
@@ -89,7 +89,7 @@ const Transactions = () => {
   return (
     <>
       <div>
-        <div className='flex justify-between items-center mb-4'>
+        <div className='flex justify-between items-center mb-2'>
           <div>
             <Space direction="vertical" style={{ marginBottom: "20px", }}>
               <Search placeholder="Enter search email or name"

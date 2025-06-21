@@ -4,6 +4,7 @@
 // export default function DonutChart({earningData}) {
 // console.log(earningData)
 
+// console.log(earningData)
 
 
 //   const data = [
@@ -56,7 +57,7 @@
 //   }
 
 //   return (
-//     <div className="pointer-events-none w-full h-[500px] flex items-center justify-center">
+//     <div className="pointer-events-none w-full h-[600px] flex items-center justify-center bg-[#fff] rounded-xl">
 //       <ResponsiveContainer width="100%" height="100%">
 //         <PieChart>
 //           <Pie
@@ -89,16 +90,6 @@
 //               position="center"
 //             />
 //           </Pie>
-//           {/* <g className="legend" transform={`translate(${350}, ${180})`}>
-//             {data.map((entry, index) => (
-//               <g key={`legend-${index}`} transform={`translate(0, ${index * 25})`}>
-//                 <circle cx={10} cy={10} r={8} fill={entry.color} />
-//                 <text x={25} y={10} dy={5} style={{ fontSize: "14px" }}>
-//                   {entry.name}
-//                 </text>
-//               </g>
-//             ))}
-//           </g> */}
 //         </PieChart>
 //       </ResponsiveContainer>
 //     </div>
@@ -108,36 +99,58 @@
 
 
 
+
 import { PieChart, Pie, Cell, ResponsiveContainer, Label } from "recharts"
 
-const COLORS = ["#9966cc", "#8a7bff", "#ff8a80", "#80deea", "#ffb74d", "#5c7cfa", "#66bb6a"]
+const COLORS = {
+  Sat: "#8a7bff",
+  Sun: "#ff8a80",
+  Mon: "#80deea",
+  Tue: "#ffb74d",
+  Wed: "#5c7cfa",
+  Thu: "#66bb6a",
+  Fri: "#9966cc",
+}
 
-export default function DonutChart({ earningData }) {
-  const earningStats = earningData?.data?.earning_statistics || []
-
-  // Map data and add colors dynamically
-  const data = earningStats.map((item, index) => ({
+export default function DonutChart({ earningData = [] }) {
+  // Transform backend data to chart format with colors
+  const data = earningData.map(item => ({
     name: item.day,
     value: item.total,
-    color: COLORS[index % COLORS.length],
-  }))
+    color: COLORS[item.day] || "#ccc" // fallback color
+  }));
 
-  const total = data.reduce((sum, entry) => sum + entry.value, 0)
-  const formattedTotal = total.toFixed(1)
+  const total = data.reduce((sum, entry) => sum + entry.value, 0);
+  const formattedTotal = total.toFixed(1);
 
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, index }) => {
-    const radius = outerRadius * 1.35
-    const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180)
-    const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180)
-    const item = data[index]
-    const textAnchor = x > cx ? "start" : "end"
+  const renderCustomizedLabel = (props) => {
+    const { cx, cy, midAngle, innerRadius, outerRadius, index } = props;
+    const radius = outerRadius * 1.35;
+    const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
+    const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
+
+    const item = data[index];
+    const textAnchor = x > cx ? "start" : "end";
 
     return (
       <g>
-        <text x={x} y={y - 15} fill={item.color} textAnchor={textAnchor} dominantBaseline="central" fontWeight="bold">
+        <text
+          x={x}
+          y={y - 15}
+          fill={item.color}
+          textAnchor={textAnchor}
+          dominantBaseline="central"
+          fontWeight="bold"
+        >
           {item.name}
         </text>
-        <text x={x} y={y + 15} fill={item.color} textAnchor={textAnchor} dominantBaseline="central">
+        <text
+          x={x}
+          y={y + 15}
+          fill={item.color}
+          textAnchor={textAnchor}
+          dominantBaseline="central"
+        >
           ${item.value}
         </text>
         <line
@@ -149,11 +162,11 @@ export default function DonutChart({ earningData }) {
           strokeWidth={1}
         />
       </g>
-    )
-  }
+    );
+  };
 
   return (
-    <div className="pointer-events-none w-full h-[500px] flex items-center justify-center">
+    <div className="pointer-events-none w-full h-[600px] flex items-center justify-center bg-[#fff] rounded-xl">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -189,5 +202,7 @@ export default function DonutChart({ earningData }) {
         </PieChart>
       </ResponsiveContainer>
     </div>
-  )
+  );
 }
+
+

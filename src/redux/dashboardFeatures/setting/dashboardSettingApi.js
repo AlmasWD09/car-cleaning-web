@@ -6,20 +6,34 @@ const dashboardSettingApi = baseApi.injectEndpoints({
             query: (settingInfo) => ({
                 url: `/admin/pages`,
                 method: "POST",
-                body:settingInfo,
+                body: settingInfo,
             }),
             invalidatesTags: ['setting'],
         }),
         getSettingApi: builder.query({
-            query: ({type,}) => ({
+            query: ({ type, }) => ({
                 url: `/admin/pages?type=${type}`,
                 method: "GET",
             }),
             providesTags: ['setting'],
         }),
-
+        getAuthProfileApi: builder.query({
+            query: () => ({
+                url: `/auth/profile`,
+                method: "GET",
+            }),
+            providesTags: ['setting'],
+        }),
+        updateAuthProfileApi: builder.mutation({
+            query: (updateInfo) => ({
+                url: `/auth/change-profile`,
+                method: "POST",
+                body: updateInfo,
+            }),
+            invalidatesTags: ['setting'],
+        }),
     })
 })
 
 
-export const {usePostSettingApiMutation,useGetSettingApiQuery} = dashboardSettingApi;
+export const { usePostSettingApiMutation, useGetSettingApiQuery,useGetAuthProfileApiQuery,useUpdateAuthProfileApiMutation } = dashboardSettingApi;

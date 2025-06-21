@@ -5,9 +5,9 @@ import { useGetDashboardChartApiQuery } from "../../../redux/dashboardFeatures/d
 
 const CommonDashboard = () => {
   const { data: chartData } = useGetDashboardChartApiQuery()
-const allChartData = chartData?.data
-const earningData = chartData?.data?.earning_statistics
-const bookingData = chartData?.data?.booking_statistics
+  const allChartData = chartData?.data
+  const earningData = chartData?.data?.earning_statistics
+  const bookingData = chartData?.data?.booking_statistics
 
 
 
@@ -51,13 +51,25 @@ const bookingData = chartData?.data?.booking_statistics
       {/* chart one/two components */}
       <div className="flex flex-col lg:flex-row justify-between gap-[20px] py-[20px]">
 
-
-
-        <div className="bg-[#fff] w-[60%] md:h-[650px] rounded-lg">
-          <BookingChart bookingData={bookingData}/>
+        <div className=" w-[60%] md:h-[650px] rounded-lg">
+          <div className=" flex justify-between items-center">
+            <h3 className="mb-3 px-3 text-[24px] font-degular font-semibold ">
+              Booking Statistics
+            </h3>
+          </div>
+          <BookingChart bookingData={bookingData} />
         </div>
-        <div className="bg-[#fff] w-[40%] md:h-[650px] flex justify-center items-center rounded-lg ">
-          <EarningChart earningData={earningData}/>
+
+
+        <div className="w-[40%] md:h-[650px] rounded-lg">
+
+          <div className="flex justify-between items-center">
+            <h3 className="mb-3 px-3 text-[24px] font-degular font-semibold ">
+              Earning Statistics
+            </h3>
+          </div>
+
+          <EarningChart earningData={earningData} />
         </div>
       </div>
     </div>

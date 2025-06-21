@@ -137,7 +137,7 @@ const Feedbacks = () => {
     <div>
       <div className="space-y-4">
         {
-          allFeedbackData?.slice().sort((a, b) => a.is_highlight - b.is_highlight).map((item, index) => {
+          allFeedbackData?.slice().sort((a, b) => b.is_highlight - a.is_highlight).map((item, index) => {
             return (
               <div key={index} className={`border ${item?.is_highlight === 1 ? "border-primary bg-primary bg-opacity-5" : "border-[#ccc]"} rounded-2xl p-4 space-y-2`}>
                 <div className="flex justify-between items-center ">
