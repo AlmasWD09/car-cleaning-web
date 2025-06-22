@@ -12,8 +12,15 @@ const dashboardNotificationApi = baseApi.injectEndpoints({
             }),
             providesTags: ['notification'],
         }),
+        postMarkRedNotificationApi: builder.mutation({
+            query: (id) => ({
+                url: `/mark-notification/${id}`,
+                method: "GET"
+            }),
+            providesTags: ['notification'],
+        }),
     })
 })
 
 
-export const {useGetNotificationApiQuery} = dashboardNotificationApi;
+export const {useGetNotificationApiQuery,usePostMarkRedNotificationApiMutation} = dashboardNotificationApi;

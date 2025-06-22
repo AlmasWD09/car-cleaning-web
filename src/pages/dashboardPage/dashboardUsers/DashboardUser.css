@@ -13,3 +13,15 @@
   border-radius: 2px;
   padding: 0 16px;
 }
+
+
+/* rating color */
+/* Add this to App.css or index.css */
+.custom-rate .ant-rate-star-full,
+.custom-rate .ant-rate-star-half {
+  color: #f43f5e !important; /* Tailwind's rose-500 */
+}
+
+.custom-rate .ant-rate-star-zero {
+  color: #e5e7eb !important; /* Tailwind's gray-200 */
+}

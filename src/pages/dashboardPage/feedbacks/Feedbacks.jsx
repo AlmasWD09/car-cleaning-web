@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Pagination } from "antd";
+import { Button, Form, Input, Modal, Pagination, Rate } from "antd";
 import { useEffect, useState } from "react";
 import { useDeleteFeedbackMutation, useGetFeedbackApiQuery, } from "../../../redux/dashboardFeatures/feedback/dashboardFeedbackApi";
 import toast from "react-hot-toast";
@@ -51,7 +51,7 @@ const Feedbacks = () => {
 
   const handleHighest = async () => {
     try {
-      const token = localStorage.getItem("admin_token"); 
+      const token = localStorage.getItem("admin_token");
       const API = import.meta.env.VITE_API_BASE_URL;
 
       const res = await axios.get(`${API}/admin/feedback-highlight/${selectId}`, {
@@ -131,8 +131,6 @@ const Feedbacks = () => {
     };
   }, [mondalOne]);
 
-
-
   return (
     <div>
       <div className="space-y-4">
@@ -144,27 +142,16 @@ const Feedbacks = () => {
                   <div className="flex items-center gap-2">
                     <img src={item?.user?.photo} alt="photo" className="w-[50px] h-[50px] rounded-full" />
                     <div>
-                      <h3 className="text-[24px] font-semibold font-degular">{item?.user?.name}</h3>
-                      <p className="flex">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <span key={i}>
-                            <svg
-                              width="20"
-                              height="26"
-                              viewBox="0 0 28 26"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M14 0L17.1432 9.67376H27.3148L19.0858 15.6525L22.229 25.3262L14 19.3475L5.77101 25.3262L8.9142 15.6525L0.685208 9.67376H10.8568L14 0Z"
-                                fill="#FF9E02"
-                              />
-                            </svg>
-                          </span>
-                        ))}
-                      </p>
 
+
+                      <h3 className="text-[24px] font-semibold font-degular">{item?.user?.name}</h3>
+
+                      <Rate character={(props) => {
+                        return <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="15" x="0" y="0" viewBox="0 0 511.987 511" xml:space="preserve" class=""><g><path fill={props?.index < props.value ? "#ffc107" : "oklch(92.8% 0.006 264.531)"} d="M510.652 185.902a27.158 27.158 0 0 0-23.425-18.71l-147.774-13.419-58.433-136.77C276.71 6.98 266.898.494 255.996.494s-20.715 6.487-25.023 16.534l-58.434 136.746-147.797 13.418A27.208 27.208 0 0 0 1.34 185.902c-3.371 10.368-.258 21.739 7.957 28.907l111.7 97.96-32.938 145.09c-2.41 10.668 1.73 21.696 10.582 28.094 4.757 3.438 10.324 5.188 15.937 5.188 4.84 0 9.64-1.305 13.95-3.883l127.468-76.184 127.422 76.184c9.324 5.61 21.078 5.097 29.91-1.305a27.223 27.223 0 0 0 10.582-28.094l-32.937-145.09 111.699-97.94a27.224 27.224 0 0 0 7.98-28.927zm0 0" opacity="1" data-original="#ffc107" class=""></path></g></svg>
+                      }} defaultValue={item?.rating} disabled />
                     </div>
+
+
                   </div>
                   <span onClick={() => showModalOne(item?.is_highlight, item?.id)} className="cursor-pointer">
                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">

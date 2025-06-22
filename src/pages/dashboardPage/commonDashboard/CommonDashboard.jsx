@@ -1,3 +1,4 @@
+import { Rate } from "antd"
 import BookingChart from "../../../components/dashboard/BookingChart"
 import EarningChart from "../../../components/dashboard/EarningChart"
 import { useGetDashboardChartApiQuery } from "../../../redux/dashboardFeatures/dashboardChart/dashboardChartApi"
@@ -13,7 +14,6 @@ const CommonDashboard = () => {
 
   return (
     <div>
-
       <div className="grid grid-cols-12 gap-[20px]">
         <div className="col-span-4 h-[149px] bg-[#ffff]  p-[20px]  flex justify-between items-center border rounded-[20px]">
           <div className="w-full flex justify-between ">
