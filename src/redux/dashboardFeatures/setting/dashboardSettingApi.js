@@ -32,8 +32,16 @@ const dashboardSettingApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['setting'],
         }),
+        updatePasswordApi: builder.mutation({
+            query: (updatePasswordInfo) => ({
+                url: `/auth/change-password`,
+                method: "POST",
+                body: updatePasswordInfo,
+            }),
+            invalidatesTags: ['setting'],
+        }),
     })
 })
 
 
-export const { usePostSettingApiMutation, useGetSettingApiQuery,useGetAuthProfileApiQuery,useUpdateAuthProfileApiMutation } = dashboardSettingApi;
+export const { usePostSettingApiMutation, useGetSettingApiQuery,useGetAuthProfileApiQuery,useUpdateAuthProfileApiMutation,useUpdatePasswordApiMutation } = dashboardSettingApi;

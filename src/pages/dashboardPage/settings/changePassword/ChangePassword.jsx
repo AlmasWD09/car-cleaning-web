@@ -1,38 +1,133 @@
 
 import { Button, Form, Input, Tabs, Upload } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGetAuthProfileApiQuery, useUpdateAuthProfileApiMutation, useUpdatePasswordApiMutation } from "../../../../redux/dashboardFeatures/setting/dashboardSettingApi";
+import toast from "react-hot-toast";
 
 const ChangePassword = () => {
   const [formOne] = Form.useForm();
   const [formTwo] = Form.useForm();
   const [previewImage, setPreviewImage] = useState(null);
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
 
-  // Handle image upload preview
-  const handleBeforeUpload = (file) => {
-    const isImage = file.type.startsWith("image/");
-    if (!isImage) {
-      alert("Please upload an image file.");
-      return false;
+
+
+  
+
+  const { data: getAuthData, isLoading } = useGetAuthProfileApiQuery()
+  const authData = getAuthData?.data
+
+  const [updateAuthProfileApi] = useUpdateAuthProfileApiMutation()
+  const [updatePasswordApi] = useUpdatePasswordApiMutation()
+
+
+  // defaut user
+  useEffect(() => {
+    if (authData) {
+      formOne.setFieldsValue({
+        ...authData,
+        name: authData?.name,
+        email: authData?.email,
+      });
+      if (authData?.photo) {
+        setPreviewImage(authData.photo);
+      }
     }
-    setPreviewImage(URL.createObjectURL(file));
-    return false; // prevents auto upload
+  }, [authData, formOne]);
+
+
+
+  const handleUpload = ({ file, onSuccess }) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPreviewImage(reader.result); // For preview
+      setSelectedImageFile(file);     // For form submission
+      onSuccess("ok"); // Ant Design expects this callback
+    };
+    reader.readAsDataURL(file);
   };
+
+
+
+
+
+
+
+
+
+
+
 
   // Form submission handlers
-  const onFinishOne = (values) => {
-    console.log('Form one values:', values);
-    // Here you would typically send the data to your backend
+  const onFinishOne = async (values) => {
+
+    const formData = new FormData();
+    formData.append("name", values?.name);
+    if (selectedImageFile) {
+      formData.append("photo", selectedImageFile);
+    }
+
+
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+
+
+
+    try {
+      const res = await updateAuthProfileApi(formData).unwrap()
+      console.log(res)
+
+      if (res?.status === true) {
+        toast.success(res?.message)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   };
 
-  const onFinishTwo = (values) => {
-    console.log('Form two values:', values);
-    // Here you would typically send the data to your backend
+  const onFinishTwo = async (values) => {
+
+    const formData = new FormData();
+    formData.append("current_password", values?.current_password);
+    formData.append("new_password", values?.new_password);
+    formData.append("c_password", values?.c_password);
+
+    
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+
+
+    try {
+      const res = await updatePasswordApi(formData).unwrap()
+      console.log(res)
+
+      if (res?.status === true) {
+        toast.success(res?.message)
+        formTwo.resetFields()
+      }
+    } catch (error) {
+      const errorMessage = error?.data?.message;
+
+      if (typeof errorMessage === 'object') {
+        Object.entries(errorMessage).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            messages.forEach(msg => toast.error(msg));
+          } else {
+            toast.error(messages);
+          }
+        });
+      } else {
+        toast.error(errorMessage);
+      }
+    }
   };
+
+
 
   const onChangeTab = (key) => {
-    console.log('Tab changed to:', key);
-    formOne.resetFields()
-    formTwo.resetFields()
+
   };
 
   const items = [
@@ -64,6 +159,7 @@ const ChangePassword = () => {
             label={<span className="font-semibold font-degular text-lg">Email</span>}
           >
             <Input
+              readOnly
               placeholder="example@gmail.com"
               className="p-4 border-none w-full bg-[#ffffff]"
             />
@@ -93,12 +189,12 @@ const ChangePassword = () => {
           <div>
             <p className="font-semibold font-degular text-lg">Current password</p>
             <Form.Item
-              name="currentPassword"
+              name="current_password"
               className="mb-7"
             >
               <Input.Password
                 placeholder="**********"
-                className="p-4 border-none w-full bg-[#ffffff]"
+                className="p-4 border-none w-[1112px] bg-[#ffffff]"
               />
             </Form.Item>
           </div>
@@ -107,7 +203,7 @@ const ChangePassword = () => {
           <div>
             <p className="font-semibold font-degular text-lg">New password</p>
             <Form.Item
-              name="newPassword"
+              name="new_password"
               rules={[{ required: true, message: "Please Input New Password" }]}
               colon={false}
             >
@@ -122,14 +218,14 @@ const ChangePassword = () => {
           <div>
             <p className="font-semibold font-degular text-lg">Confirm new password</p>
             <Form.Item
-              name="ConfirmNewPassword"
+              name="c_password"
               label=""
-              dependencies={["newPassword"]}
+              dependencies={["new_password"]}
               rules={[
                 { required: true, message: "Please input Confirm new password" },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
-                    if (!value || getFieldValue("newPassword") === value) {
+                    if (!value || getFieldValue("new_password") === value) {
                       return Promise.resolve();
                     }
                     return Promise.reject(
@@ -157,26 +253,15 @@ const ChangePassword = () => {
               </button>
             </div>
           </Form.Item>
-          {/* <Form.Item>
-            <Button
-              htmlType="submit"
-              block
-              style={{
-                backgroundColor: "#1b69ad",
-                color: "white",
-                fontFamily: "degularDisplay",
-                fontWeight: "bold",
-                fontSize: "16px",
-                padding: "24px",
-              }}
-            >
-              Submit
-            </Button>
-          </Form.Item> */}
         </Form>
       ),
     },
   ];
+
+
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
 
   return (
     <div>
@@ -186,12 +271,13 @@ const ChangePassword = () => {
           {previewImage ? (
             <img src={previewImage} alt="" className="w-[100px] rounded-full h-[100px] object-cover" />
           ) : (
-            <img src="/privacyPolicy/photo1.png" alt="" className="w-[100px] rounded-full h-[100px] object-cover" />
+            <img src={previewImage} alt="" className="w-[100px] rounded-full h-[100px] object-cover" />
           )}
           <Upload
-            showUploadList={false}
-            beforeUpload={handleBeforeUpload}
             accept="image/*"
+            maxCount={1}
+            showUploadList={false}
+            customRequest={handleUpload}
           >
             <button className="w-8 bg-white flex justify-center items-center p-2 shadow-lg rounded-full absolute right-0 bottom-5">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -202,9 +288,9 @@ const ChangePassword = () => {
             </button>
           </Upload>
         </div>
-        <h3 className="font-degular font-medium text-[30px]">John Doe</h3>
+        <h3 className="font-degular font-medium text-[30px]">{authData?.name}</h3>
         <p className="text-[#B1A8A8] font-degular font-medium text-xl">
-          example@gmail.com
+          {authData?.email}
         </p>
       </div>
 

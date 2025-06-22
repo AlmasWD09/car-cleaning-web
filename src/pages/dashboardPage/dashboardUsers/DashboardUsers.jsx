@@ -26,6 +26,9 @@ const DashboardUsers = () => {
 
     const userAllData = userData?.data?.data
     const SingleUser = singleData?.data
+    const totalPagination = userData?.data?.total
+
+
 
     // =============  modal one start ===============
     const onFinishOne = () => {
@@ -290,7 +293,7 @@ const DashboardUsers = () => {
                 <Pagination
                     current={currentPage}
                     pageSize={perPage}
-                    total={userData?.data?.total || 0}
+                    total={totalPagination || 0}
                     onChange={(page, pageSize) => {
                         setCurrentPage(page)
                         setPerPage(pageSize)

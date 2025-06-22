@@ -25,7 +25,7 @@ const DashboardBookings = () => {
   const { data: bookingData, isLoading, refetch } = useGetBookingApiQuery({ per_page: perPage, page: currentPage, search: searchText, filter: filterId }) // get booking
   const { data: filterBookingData, } = useFilterBookingApiQuery() // filter booking
   const [deleteBookingApi] = useDeleteBookingApiMutation()
-  const {data: markBooking} = useGetMarkComplateBookingApiQuery()
+  const { data: markBooking } = useGetMarkComplateBookingApiQuery()
   const { data: detailsBookingData } = useGetDetailsBookingApiQuery(detailsId)
   const allBookingData = bookingData?.data?.data
   const allFilterBookingData = filterBookingData?.data
@@ -96,7 +96,7 @@ const DashboardBookings = () => {
 
   const handleStatusChange = async () => {
 
-  
+
   }
 
   const columns = [
