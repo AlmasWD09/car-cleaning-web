@@ -3,6 +3,8 @@ import { Button, Form, Input, Tabs, Upload } from "antd";
 import { useEffect, useState } from "react";
 import { useGetAuthProfileApiQuery, useUpdateAuthProfileApiMutation, useUpdatePasswordApiMutation } from "../../../../redux/dashboardFeatures/setting/dashboardSettingApi";
 import toast from "react-hot-toast";
+import { FaEye } from "react-icons/fa";
+import { IoMdEyeOff } from "react-icons/io";
 
 const ChangePassword = () => {
   const [formOne] = Form.useForm();
@@ -196,6 +198,13 @@ const ChangePassword = () => {
               <Input.Password
                 placeholder="**********"
                 className="p-4 border-none w-[1112px] bg-[#ffffff]"
+                iconRender={(visible) => (
+                  visible ? (
+                    <FaEye className="cursor-pointer " />
+                  ) : (
+                    <IoMdEyeOff className="cursor-pointer" />
+                  )
+                )}
               />
             </Form.Item>
           </div>
@@ -211,6 +220,13 @@ const ChangePassword = () => {
               <Input.Password
                 placeholder="**********"
                 className="p-4 border-none w-[1112px] bg-[#ffffff]"
+                iconRender={(visible) => (
+                  visible ? (
+                    <FaEye className="cursor-pointer " />
+                  ) : (
+                    <IoMdEyeOff className="cursor-pointer" />
+                  )
+                )}
               />
             </Form.Item>
           </div>
@@ -242,6 +258,13 @@ const ChangePassword = () => {
               <Input.Password
                 placeholder="**********"
                 className="p-4 border-none w-[1112px] bg-[#ffffff]"
+                  iconRender={(visible) => (
+                  visible ? (
+                    <FaEye className="cursor-pointer "/>
+                  ) : (
+                    <IoMdEyeOff className="cursor-pointer"/>
+                  )
+                )}
               />
             </Form.Item>
           </div>
