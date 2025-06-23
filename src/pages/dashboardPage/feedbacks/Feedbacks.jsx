@@ -30,9 +30,10 @@ const Feedbacks = () => {
 
 
 
-
+  // find unic notification data
   const existInId = allFeedbackData?.find(item => item?.id === parseInt(feedbackId));
 
+  // sort notification data
   const sortedFeedback = allFeedbackData?.slice().sort((a, b) => {
     const aIsTarget = a.id === parseInt(feedbackId);
     const bIsTarget = b.id === parseInt(feedbackId);
@@ -43,6 +44,10 @@ const Feedbacks = () => {
     return b.is_highlight - a.is_highlight;
   });
 
+
+
+
+  
   // =============  modal one start ===============
   const showModalOne = (complated, id) => {
     setSelectId(id)

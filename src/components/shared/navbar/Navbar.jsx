@@ -3,6 +3,7 @@ import CustomContainer from "../CustomContainer";
 import { TfiClose } from "react-icons/tfi";
 import { VscMenu } from "react-icons/vsc";
 import { useEffect, useState } from "react";
+import { useGetProfileApiQuery } from "../../../redux/authontication/authApi";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -15,6 +16,12 @@ const Navbar = () => {
 
   const isCreateAccountRoute = location.pathname === "/create-account";
 
+
+
+
+  const { data: userProfileData } = useGetProfileApiQuery()
+  const userProfile = userProfileData?.data
+  // console.log(userProfile)
 
 
 

@@ -6,13 +6,27 @@ import { MdOutlineArrowOutward } from "react-icons/md";
 import { BsFacebook } from "react-icons/bs";
 import CustomContainer from "../../../components/shared/CustomContainer";
 import { motion } from "framer-motion";
+import { FaEye } from "react-icons/fa";
+import { IoMdEyeOff } from "react-icons/io";
+import { useRegisterApiMutation } from "../../../redux/authontication/authApi";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 
 const CreateAccount = () => {
+  const navigate = useNavigate();
   const [createAccountForm] = Form.useForm();
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [buttonTextChange, setButtonTextChange] = useState(false);
+
+
+
+  const [registerApi] = useRegisterApiMutation(); // register 
+
+
+
+
 
   const handleButtonChange = () => {
     setButtonTextChange(!buttonTextChange);
@@ -22,8 +36,54 @@ const CreateAccount = () => {
     setShowPassword(!showPassword);
   };
 
-  const createAccountFinish = (values) => {
-    console.log(values);
+  const createAccountFinish = async (values) => {
+
+
+    const formData = new FormData();
+
+    formData.append("name", values?.name);
+    formData.append("email", values?.email);
+    formData.append("car_brand", values?.car_brand);
+    formData.append("car_model", values?.car_model);
+    formData.append("password", values?.password);
+    formData.append("c_password", values?.c_password);
+
+
+
+    try {
+      const res = await registerApi(formData).unwrap();
+      console.log(res)
+      
+      if (res?.status === true) {
+        toast.success(res?.message);
+        navigate('/otp-code')
+
+      }
+    } catch (error) {
+      const errorMessage = error?.data?.message;
+
+      if (typeof errorMessage === 'object') {
+        Object.entries(errorMessage).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            messages.forEach(msg => toast.error(msg));
+          } else {
+            toast.error(messages);
+          }
+        });
+      } else {
+
+        toast.error(errorMessage);
+      }
+    }
+
+
+
+
+    // formData.forEach((value, key) => {
+    //   console.log(key, value);
+    // });
+
+
   };
 
 
@@ -81,7 +141,7 @@ const CreateAccount = () => {
               {/* full name */}
               <div>
                 <Form.Item
-                  name="full_name"
+                  name="name"
                   rules={[
                     { required: true, message: "Full name is required" },
                   ]}
@@ -163,7 +223,7 @@ const CreateAccount = () => {
                     disabled={buttonTextChange}
                     className="w-full md:w-[50%]"
                   >
-                    <Form.Item name="brand_name">
+                    <Form.Item name="car_brand">
                       <Input
                         placeholder="Brand name"
                         disabled={buttonTextChange}
@@ -243,9 +303,13 @@ const CreateAccount = () => {
                         />
                       </svg>
                     }
-                    iconRender={(visible) =>
-                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                    }
+                    iconRender={(visible) => (
+                      visible ? (
+                        <FaEye className="cursor-pointer " />
+                      ) : (
+                        <IoMdEyeOff className="cursor-pointer" />
+                      )
+                    )}
                     style={{
                       height: "60px",
                       borderRadius: "20px",
@@ -259,12 +323,21 @@ const CreateAccount = () => {
               {/* confirm password */}
               <div>
                 <Form.Item
-                  name="confirm_password"
+                  name="c_password"
+                  dependencies={['password']}
                   rules={[
                     {
                       required: true,
                       message: "Confirm Password is required",
                     },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue("password") === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject("Passwords do not match!");
+                      },
+                    }),
                   ]}
                 >
                   <Input.Password
@@ -283,13 +356,13 @@ const CreateAccount = () => {
                         />
                       </svg>
                     }
-                    iconRender={(visible) =>
+                    iconRender={(visible) => (
                       visible ? (
-                        <EyeTwoTone />
+                        <FaEye className="cursor-pointer " />
                       ) : (
-                        <EyeInvisibleOutlined style={{ color: "!#888888" }} />
+                        <IoMdEyeOff className="cursor-pointer" />
                       )
-                    }
+                    )}
                     style={{
                       height: "60px",
                       borderRadius: "20px",
@@ -299,6 +372,13 @@ const CreateAccount = () => {
                   />
                 </Form.Item>
               </div>
+
+
+
+
+
+
+
               {/* submit button component */}
               <Button
                 htmlType="submit"
@@ -326,35 +406,19 @@ const CreateAccount = () => {
                   </span>{" "}
                   <MdOutlineArrowOutward className="text-[24px]" />
                 </button>
-                {/* <button
-                    type="button"
-                    className="flex items-center justify-between h-[60px] rounded-[20px] px-[20px] border border-[#ccc] cursor-pointer"
-                  >
-                    <span className="flex items-center gap-2 text-[16px] md:text-[24px] font-degular ">
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20 10C20 4.47719 15.5228 0 10 0C4.47719 0 0 4.47719 0 10C0 14.9913 3.65687 19.1284 8.4375 19.8785V12.8906H5.89844V10H8.4375V7.79688C8.4375 5.29063 9.93047 3.90625 12.2147 3.90625C13.3088 3.90625 14.4531 4.10156 14.4531 4.10156V6.5625H13.1922C11.9499 6.5625 11.5625 7.33336 11.5625 8.12422V10H14.3359L13.8926 12.8906H11.5625V19.8785C16.3431 19.1284 20 14.9913 20 10Z"
-                          fill="#1877F2"
-                        />
-                        <path
-                          d="M13.8926 12.8906L14.3359 10H11.5625V8.12422C11.5625 7.33336 11.9499 6.5625 13.1922 6.5625H14.4531V4.10156C14.4531 4.10156 13.3088 3.90625 12.2147 3.90625C9.93047 3.90625 8.4375 5.29063 8.4375 7.79688V10H5.89844V12.8906H8.4375V19.8785C8.95439 19.9595 9.4768 20.0001 10 20C10.5232 20.0001 11.0456 19.9595 11.5625 19.8785V12.8906H13.8926Z"
-                          fill="white"
-                        />
-                      </svg>
-                      Continue with Facebook
-                    </span>{" "}
-                    <MdOutlineArrowOutward className="text-[24px]" />
-                  </button> */}
               </div>
             </Form>
           </div>
         </div>
+
+
+
+
+
+
+
+
+
 
         {/* right side image */}
         <div className="w-full lg:w-[80%] order-1 lg:order-2 pt-16 md:pt-0">
