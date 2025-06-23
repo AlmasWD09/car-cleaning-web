@@ -6,6 +6,8 @@ import { Dropdown } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { useDeleteBookingApiMutation, useFilterBookingApiQuery, useGetBookingApiQuery, useGetDetailsBookingApiQuery, useGetMarkComplateBookingApiQuery } from '../../../redux/dashboardFeatures/bookings/dashboardBookingApi';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+import CustomLoading from '../../../components/shared/CustomLoading';
 
 const DashboardBookings = () => {
   const [formOne] = useForm()
@@ -96,6 +98,38 @@ const DashboardBookings = () => {
 
   const handleStatusChange = async () => {
 
+     try {
+      const token = localStorage.getItem("admin_token");
+      const API = import.meta.env.VITE_API_BASE_URL;
+
+      const res = await axios.get(`${API}/admin/booking-status/${detailsBooking?.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (res?.data?.status === true) {
+        toast.success(res?.data?.message);
+        setModalOne(false);
+        // await refetch()
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error)
+      const errorMessage = error?.response?.data?.message;
+
+      if (typeof errorMessage === 'object') {
+        Object.entries(errorMessage).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            messages.forEach(msg => toast.error(msg));
+          } else {
+            toast.error(messages);
+          }
+        });
+      } else {
+        toast.error(errorMessage || "Something went wrong");
+      }
+    }
 
   }
 
@@ -199,10 +233,11 @@ const DashboardBookings = () => {
     refetch();
   }, [searchText, currentPage, perPage, filterId, refetch]);
 
+  console.log(detailsBooking?.status)
 
 
   if (isLoading) {
-    return <p>Loading.......</p>
+    return <CustomLoading />
   }
 
   return (
@@ -277,6 +312,7 @@ const DashboardBookings = () => {
         >
 
           <div className="p-8">
+            <p>{detailsBooking?.id}</p>
             <div className="max-w-6xl mx-auto p-6 bg-white">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Left Side - Car Details */}
@@ -407,13 +443,22 @@ const DashboardBookings = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3 pt-4">
-                    <button className="cursor-not-allowed flex-1 bg-[#8C63DA]  text-white font-medium py-3 px-6 rounded-full transition-colors">
-                      Ongoing
-                    </button>
-                    <button onClick={handleStatusChange} className="flex-1 bg-[#009138] hover:bg-green-600 text-white font-medium py-3 px-6 rounded-full transition-colors">
-                      Complete order
-                    </button>
+                  <div className="">
+                    {
+                      detailsBooking?.status === 'Completed' ? <button  className="cursor-not-allowed pt-4 w-full flex-1 bg-[#009138] hover:bg-green-600 text-white font-medium py-3 px-6 rounded-full transition-colors">
+                        Complete order
+                      </button>
+                        :
+                        <div className='flex gap-3 pt-4'>
+                          <button className="cursor-not-allowed flex-1 bg-[#8C63DA]  text-white font-medium py-3 px-6 rounded-full transition-colors">
+                            Ongoing
+                          </button>
+                          <button onClick={()=>handleStatusChange()} className="flex-1 bg-[#009138] hover:bg-green-600 text-white font-medium py-3 px-6 rounded-full transition-colors">
+                            Complete order
+                          </button>
+                        </div>
+                    }
+
                   </div>
                 </div>
               </div>

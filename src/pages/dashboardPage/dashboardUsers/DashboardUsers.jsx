@@ -7,6 +7,7 @@ import { useDeleteUserApiMutation, useDetailsUserApiQuery, useGetUserApiQuery } 
 import toast from 'react-hot-toast';
 const { Search } = Input;
 import "./DashboardUser.css";
+import CustomLoading from '../../../components/shared/CustomLoading';
 
 
 const DashboardUsers = () => {
@@ -14,11 +15,11 @@ const DashboardUsers = () => {
     const [selectId, setSelectId] = useState('')
     const [formOne] = useForm()
     const [currentPage, setCurrentPage] = useState(1);
-    const [perPage, setPerPage] = useState(8);
+    const [perPage, setPerPage] = useState(9);
     const [mondalOne, setModalOne] = useState(false);
     const [mondalTwo, setModalTwo] = useState(false);
 
-    const { data: userData, refetch } = useGetUserApiQuery({ per_page: perPage, page: currentPage, search: searchText })
+    const { data: userData, isLoading, refetch } = useGetUserApiQuery({ per_page: perPage, page: currentPage, search: searchText })
 
     const { data: singleData } = useDetailsUserApiQuery(selectId)
     const [deleteUserApi] = useDeleteUserApiMutation()
@@ -53,7 +54,7 @@ const DashboardUsers = () => {
         setSelectId(record?.id)
 
         try {
-            const res = await deleteUserApi(selectId).unwrap()
+            const res = await deleteUserApi(record?.id).unwrap()
             if (res?.status === true) {
                 toast.success(res?.message)
                 refetch()
@@ -148,6 +149,10 @@ const DashboardUsers = () => {
     useEffect(() => {
         refetch();
     }, [searchText, currentPage, perPage, refetch]);
+
+    if (isLoading) {
+        return <CustomLoading />
+    }
 
     return (
         <div>

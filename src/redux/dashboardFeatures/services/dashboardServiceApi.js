@@ -28,7 +28,7 @@ const dashboardServiceApi = baseApi.injectEndpoints({
             invalidatesTags: ['service'],
         }),
         updateService: builder.mutation({
-            query: ({id, updateInfo}) => ({
+            query: ({id,updateInfo}) => ({
                 url: `/admin/services/${id}`,
                 method: "PUT",
                 body:updateInfo

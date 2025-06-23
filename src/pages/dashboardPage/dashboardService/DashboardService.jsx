@@ -3,6 +3,7 @@ import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react"
 import { useAddServiceMutation, useDeleteServiceMutation, useGetDetailsServiceApiQuery, useGetServiceApiQuery, useUpdateServiceMutation } from "../../../redux/dashboardFeatures/services/dashboardServiceApi";
 import toast from "react-hot-toast";
+import CustomLoading from "../../../components/shared/CustomLoading";
 
 
 const DashboardService = () => {
@@ -50,6 +51,7 @@ const DashboardService = () => {
     if (singleServiceDetails) {
       formTwo.setFieldsValue({
         ...singleServiceDetails,
+        car_type: singleServiceDetails?.car_type,
         interior: singleServiceDetails?.interior,
         exterior: singleServiceDetails?.exterior,
         both: singleServiceDetails?.both,
@@ -74,7 +76,14 @@ const DashboardService = () => {
 
 
 
-  // =============  modal one start ===============
+  // =============  modal one start =============== {add service-----------> }
+
+  const showModalOne = () => {
+    setImageFileList([])
+    setModalOne(true)
+  }
+
+
   const onFinishOne = async (values) => {
     setLoading(true)
     const formData = new FormData();
@@ -110,12 +119,6 @@ const DashboardService = () => {
 
   }
 
-
-
-  const showModalOne = () => {
-    setModalOne(true)
-  }
-
   const handleModalOneOk = () => {
     formOne.submit()
   }
@@ -129,7 +132,7 @@ const DashboardService = () => {
 
 
 
-  // =============  modal two start ===============
+  // =============  modal two start ===============  {Edit service-----------> }
   const showModalTwo = (id) => {
     setDetailsId(id)
     setModalTwo(true)
@@ -142,6 +145,7 @@ const DashboardService = () => {
     if (ImageFileList) {
       formData.append("icon", ImageFileList[0]?.originFileObj);
     }
+    formData.append("car_type", values?.car_type);
     formData.append("interior", values?.interior);
     formData.append("exterior", values?.exterior);
     formData.append("both", values?.both);
@@ -161,8 +165,9 @@ const DashboardService = () => {
         refetch()
         setModalTwo(false)
       }
-    } catch (error) {
-      console.log(error)
+    } catch (errors) {
+      const errorMessage = errors?.data?.message
+      toast.error(errorMessage?.car_type)
     } finally {
       setLoading(false)
     }
@@ -296,15 +301,16 @@ const DashboardService = () => {
 
 
   if (isLoading) {
-    return <p>Loading...</p>
+    return <CustomLoading />
   }
   return (
     <div>
-      <div className="py-4">
+      <div className="py-4 pb-8">
         <button
           onClick={showModalOne}
           type="button" className="w-[274px] h-[64px] bg-primary text-[#ffff] px-8 py-2 rounded-[20px] text-xl">+ Add more</button>
       </div>
+
       <div className="grid grid-cols-12 gap-4">
         {
           allServiceData?.map((item, index) => {
@@ -394,7 +400,7 @@ const DashboardService = () => {
                   rules={[
                     {
                       required: ImageFileList.length === 0,
-                      message: "Image required!",
+                      message: "Image required",
                     },
                   ]}
                 >
@@ -421,7 +427,7 @@ const DashboardService = () => {
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Car Type</p>
                 <Form.Item name="car_type" className="mb-0"
-                  rules={[{ required: true, message: "Car type is required!" }]}
+                  rules={[{ required: true, message: "Car type is required" }]}
                 >
                   <Input placeholder="car name" style={{ height: "50px", borderRadius: "20px" }} />
                 </Form.Item>
@@ -432,10 +438,10 @@ const DashboardService = () => {
                 <p className="text-[20px] font-medium font-degular">Interior</p>
                 <Form.Item name="interior" className="mb-0"
                   rules={[
-                    { required: true, message: "Interior price is required!" },
+                    { required: true, message: "Interior price is required" },
                     {
                       pattern: /^[0-9]+$/,
-                      message: "Interior price must be a number!",
+                      message: "Interior price must be a number",
                     },
                   ]}
                 >
@@ -448,10 +454,10 @@ const DashboardService = () => {
                 <p className="text-[20px] font-medium font-degular">Exterior</p>
                 <Form.Item name="exterior" className="mb-0"
                   rules={[
-                    { required: true, message: "Exterior price is required!" },
+                    { required: true, message: "Exterior price is required" },
                     {
                       pattern: /^[0-9]+$/,
-                      message: "Exterior price must be a number!",
+                      message: "Exterior price must be a number",
                     },
                   ]}
                 >
@@ -464,10 +470,10 @@ const DashboardService = () => {
                 <p className="text-[20px] font-medium font-degular">Both</p>
                 <Form.Item name="both" className="mb-0"
                   rules={[
-                    { required: true, message: "Both price is required!" },
+                    { required: true, message: "Both price is required" },
                     {
                       pattern: /^[0-9]+$/,
-                      message: "Both price must be a number!",
+                      message: "Both price must be a number",
                     },
                   ]}
                 >
@@ -528,7 +534,7 @@ const DashboardService = () => {
                   rules={[
                     {
                       required: ImageFileList.length === 0,
-                      message: "Image required!",
+                      message: "Image required",
                     },
                   ]}
                 >
@@ -552,15 +558,25 @@ const DashboardService = () => {
               </div>
 
 
+              {/* car type */}
+              <div className="grid grid-cols-2 items-center gap-4">
+                <p className="text-[20px] font-medium font-degular">Car Type</p>
+                <Form.Item name="car_type" className="mb-0"
+                  rules={[{ required: true, message: "Car type is required" }]}
+                >
+                  <Input placeholder="car name" style={{ height: "50px", borderRadius: "20px" }} />
+                </Form.Item>
+              </div>
+
               {/* Interior */}
               <div className="grid grid-cols-2 items-center gap-4">
                 <p className="text-[20px] font-medium font-degular">Interior</p>
                 <Form.Item name="interior" className="mb-0"
                   rules={[
-                    { required: true, message: "Interior price is required!" },
+                    { required: true, message: "Interior price is required" },
                     {
                       pattern: /^[0-9]+$/,
-                      message: "Interior price must be a number!",
+                      message: "Interior price must be a number",
                     },
                   ]}
                 >
@@ -573,10 +589,10 @@ const DashboardService = () => {
                 <p className="text-[20px] font-medium font-degular">Exterior</p>
                 <Form.Item name="exterior" className="mb-0"
                   rules={[
-                    { required: true, message: "Exterior price is required!" },
+                    { required: true, message: "Exterior price is required" },
                     {
                       pattern: /^[0-9]+$/,
-                      message: "Exterior price must be a number!",
+                      message: "Exterior price must be a number",
                     },
                   ]}
                 >
@@ -589,10 +605,10 @@ const DashboardService = () => {
                 <p className="text-[20px] font-medium font-degular">Both</p>
                 <Form.Item name="both" className="mb-0"
                   rules={[
-                    { required: true, message: "Both price is required!" },
+                    { required: true, message: "Both price is required" },
                     {
                       pattern: /^[0-9]+$/,
-                      message: "Both price must be a number!",
+                      message: "Both price must be a number",
                     },
                   ]}
                 >
