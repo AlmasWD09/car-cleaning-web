@@ -15,7 +15,14 @@ const dashboardNotificationApi = baseApi.injectEndpoints({
         postMarkRedNotificationApi: builder.mutation({
             query: (id) => ({
                 url: `/mark-notification/${id}`,
-                method: "GET"
+                method: "POST"
+            }),
+            providesTags: ['notification'],
+        }),
+        postAllMarkRedNotificationApi: builder.mutation({
+            query: () => ({
+                url: `/mark-all-notification`,
+                method: "POST"
             }),
             providesTags: ['notification'],
         }),
@@ -23,4 +30,4 @@ const dashboardNotificationApi = baseApi.injectEndpoints({
 })
 
 
-export const {useGetNotificationApiQuery,usePostMarkRedNotificationApiMutation} = dashboardNotificationApi;
+export const {useGetNotificationApiQuery,usePostMarkRedNotificationApiMutation,usePostAllMarkRedNotificationApiMutation} = dashboardNotificationApi;

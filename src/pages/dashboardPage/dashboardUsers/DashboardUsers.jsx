@@ -15,7 +15,7 @@ const DashboardUsers = () => {
     const [selectId, setSelectId] = useState('')
     const [formOne] = useForm()
     const [currentPage, setCurrentPage] = useState(1);
-    const [perPage, setPerPage] = useState(9);
+    const [perPage, setPerPage] = useState(8);
     const [mondalOne, setModalOne] = useState(false);
     const [mondalTwo, setModalTwo] = useState(false);
 

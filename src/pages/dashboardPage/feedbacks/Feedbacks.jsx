@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useDeleteFeedbackMutation, useGetFeedbackApiQuery, } from "../../../redux/dashboardFeatures/feedback/dashboardFeedbackApi";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 
 
@@ -16,15 +17,31 @@ const Feedbacks = () => {
   const [hightColor, setHightColor] = useState(false)
 
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const feedbackId = queryParams.get('id');
+
+
+
   const { data: feebackData, refetch } = useGetFeedbackApiQuery({ per_page: perPage, page: currentPage }) // get
-
-
-
   const [deleteFeedback] = useDeleteFeedbackMutation()
   const allFeedbackData = feebackData?.data?.data
   const totalPaginationData = feebackData?.data?.total
 
 
+
+
+  const existInId = allFeedbackData?.find(item => item?.id === parseInt(feedbackId));
+
+  const sortedFeedback = allFeedbackData?.slice().sort((a, b) => {
+    const aIsTarget = a.id === parseInt(feedbackId);
+    const bIsTarget = b.id === parseInt(feedbackId);
+
+    if (aIsTarget && !bIsTarget) return -1;
+    if (!aIsTarget && bIsTarget) return 1;
+
+    return b.is_highlight - a.is_highlight;
+  });
 
   // =============  modal one start ===============
   const showModalOne = (complated, id) => {
@@ -135,9 +152,9 @@ const Feedbacks = () => {
     <div>
       <div className="space-y-4">
         {
-          allFeedbackData?.slice().sort((a, b) => b.is_highlight - a.is_highlight).map((item, index) => {
+          sortedFeedback?.map((item, index) => {
             return (
-              <div key={index} className={`border ${item?.is_highlight === 1 ? "border-primary bg-primary bg-opacity-5" : "border-[#ccc]"} rounded-2xl p-4 space-y-2`}>
+              <div key={index} className={`border ${item?.is_highlight === 1 ? "border-primary bg-primary bg-opacity-5" : "border-[#ccc]"} rounded-2xl p-4 space-y-2 ${existInId?.id === item?.id ? 'bg-gray-200' : ""}`}>
                 <div className="flex justify-between items-center ">
                   <div className="flex items-center gap-2">
                     <img src={item?.user?.photo} alt="photo" className="w-[50px] h-[50px] rounded-full" />

@@ -79,27 +79,42 @@
 .custom-search-height .ant-input {
   height: 50px;
   width: 300px;
-  font-size: 16px; /* Optional: for better vertical alignment */
+  font-size: 16px;
+  /* Optional: for better vertical alignment */
 }
 
 .custom-search-height .ant-btn {
   height: 50px;
-  font-size: 16px; /* Optional */
+  font-size: 16px;
+  /* Optional */
   display: flex;
   align-items: center;
 }
 
 
 /* Target the header row */
-.custom-table-header .ant-table-thead > tr > th {
-  background-color: #1890ff; /* Your custom background color */
-  color: white;              /* Text color */
-  font-weight: bold;         /* Optional */
+.custom-table-header .ant-table-thead>tr>th {
+  background-color: #1890ff;
+  /* Your custom background color */
+  color: white;
+  /* Text color */
+  font-weight: bold;
+  /* Optional */
 }
-
 
 .ant-menu-title-content {
   color: white;
 }
 
 
+
+
+/* Remove default Ant Design hover */
+.ant-table-tbody>tr:hover>td {
+  background: transparent !important;
+}
+
+/* Force  background */
+.ant-table-tbody>tr.highlight-row>td {
+  background: gray !important;
+}

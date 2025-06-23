@@ -8,6 +8,7 @@ import { useDeleteBookingApiMutation, useFilterBookingApiQuery, useGetBookingApi
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import CustomLoading from '../../../components/shared/CustomLoading';
+import { useLocation } from 'react-router-dom';
 
 const DashboardBookings = () => {
   const [formOne] = useForm()
@@ -22,6 +23,12 @@ const DashboardBookings = () => {
   const [mondalOne, setModalOne] = useState(false);
   const [mondalTwo, setModalTwo] = useState(false);
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const notificationId = queryParams.get('id');
+
+
+
 
 
   const { data: bookingData, isLoading, refetch } = useGetBookingApiQuery({ per_page: perPage, page: currentPage, search: searchText, filter: filterId }) // get booking
@@ -34,6 +41,14 @@ const DashboardBookings = () => {
   const totalPaginationData = bookingData?.data?.total
   const detailsBooking = detailsBookingData?.data
 
+
+
+  // const existInId = allBookingData?.find(item => item?.id === parseInt(notificationId));
+
+
+  //  const sortedData = [...allBookingData].sort((a, b) => {
+  //     return String(a.id) === notificationId ? -1 : String(b.id) === notificationId ? 1 : 0;
+  //   });
 
 
 
@@ -98,7 +113,7 @@ const DashboardBookings = () => {
 
   const handleStatusChange = async () => {
 
-     try {
+    try {
       const token = localStorage.getItem("admin_token");
       const API = import.meta.env.VITE_API_BASE_URL;
 
@@ -115,7 +130,6 @@ const DashboardBookings = () => {
         window.location.reload();
       }
     } catch (error) {
-      console.log(error)
       const errorMessage = error?.response?.data?.message;
 
       if (typeof errorMessage === 'object') {
@@ -148,7 +162,7 @@ const DashboardBookings = () => {
     {
       title: 'Email', dataIndex: 'email',
       render: (_, record) => (
-        <span>{record?.user?.email}</span>
+          <span>{record?.user?.email}</span>
       )
     },
 
@@ -233,7 +247,7 @@ const DashboardBookings = () => {
     refetch();
   }, [searchText, currentPage, perPage, filterId, refetch]);
 
-  console.log(detailsBooking?.status)
+
 
 
   if (isLoading) {
@@ -279,14 +293,18 @@ const DashboardBookings = () => {
               </div>
             }
           </div>
-
         </div>
+
 
         <div className='z-20'>
           <Table
             columns={columns}
             dataSource={allBookingData}
             pagination={false}
+            rowKey="id"
+            rowClassName={(record) => {
+              return String(record.id) === notificationId ? "!bg-gray-200" : "";
+            }}
           />
         </div>
 
@@ -445,7 +463,7 @@ const DashboardBookings = () => {
                   {/* Action Buttons */}
                   <div className="">
                     {
-                      detailsBooking?.status === 'Completed' ? <button  className="cursor-not-allowed pt-4 w-full flex-1 bg-[#009138] hover:bg-green-600 text-white font-medium py-3 px-6 rounded-full transition-colors">
+                      detailsBooking?.status === 'Completed' ? <button className="cursor-not-allowed pt-4 w-full flex-1 bg-[#009138] hover:bg-green-600 text-white font-medium py-3 px-6 rounded-full transition-colors">
                         Complete order
                       </button>
                         :
@@ -453,7 +471,7 @@ const DashboardBookings = () => {
                           <button className="cursor-not-allowed flex-1 bg-[#8C63DA]  text-white font-medium py-3 px-6 rounded-full transition-colors">
                             Ongoing
                           </button>
-                          <button onClick={()=>handleStatusChange()} className="flex-1 bg-[#009138] hover:bg-green-600 text-white font-medium py-3 px-6 rounded-full transition-colors">
+                          <button onClick={() => handleStatusChange()} className="flex-1 bg-[#009138] hover:bg-green-600 text-white font-medium py-3 px-6 rounded-full transition-colors">
                             Complete order
                           </button>
                         </div>

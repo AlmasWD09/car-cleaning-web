@@ -1,13 +1,18 @@
-import { useGetNotificationApiQuery, usePostMarkRedNotificationApiMutation } from "../../../redux/dashboardFeatures/notification/dashboardNotificationApi"
+import { useNavigate } from "react-router-dom"
+import { useGetNotificationApiQuery, usePostAllMarkRedNotificationApiMutation, usePostMarkRedNotificationApiMutation } from "../../../redux/dashboardFeatures/notification/dashboardNotificationApi"
+import toast from "react-hot-toast"
 
 
 const DashboardNotification = () => {
-
+    const navigate = useNavigate()
     const { data: getNotification, refetch } = useGetNotificationApiQuery()
     const notificationData = getNotification?.data
 
-
     const [postMarkRedNotificationApi] = usePostMarkRedNotificationApiMutation()
+    const [postAllMarkRedNotificationApi] = usePostAllMarkRedNotificationApiMutation()
+
+
+
 
 
     // date formate
@@ -34,8 +39,26 @@ const DashboardNotification = () => {
     }
 
 
-    const handleMarkAsRead = () => {
-        console.log('click')
+    const handleMarkAsRead = async () => {
+        try {
+            const res = await postAllMarkRedNotificationApi().unwrap()
+            if (res?.status === true) {
+                toast.success(res?.message)
+                await refetch()
+            }
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message;
+
+            if (typeof errorMessage === 'object') {
+                Object.entries(errorMessage).forEach(([field, messages]) => {
+                    if (Array.isArray(messages)) {
+                        messages.forEach(msg => toast.error(msg));
+                    } else {
+                        toast.error(messages);
+                    }
+                });
+            }
+        }
     }
 
 
@@ -43,15 +66,76 @@ const DashboardNotification = () => {
         if (text === "mark_read") {
             try {
                 const res = await postMarkRedNotificationApi(id).unwrap()
-                console.log(res)
-                refetch()
-            } catch (errors) {
-                console.log(errors)
+                if (res?.status === true) {
+                    toast.success(res?.message)
+                    await refetch()
+                }
+            } catch (error) {
+                const errorMessage = error?.response?.data?.message;
+
+                if (typeof errorMessage === 'object') {
+                    Object.entries(errorMessage).forEach(([field, messages]) => {
+                        if (Array.isArray(messages)) {
+                            messages.forEach(msg => toast.error(msg));
+                        } else {
+                            toast.error(messages);
+                        }
+                    });
+                }
             }
         }
     }
 
 
+    const handleTapToView = async (type, data, markId) => {
+
+        if (type === 'New Appointment') {
+            try {
+                const res = await postMarkRedNotificationApi(markId).unwrap()
+                if (res?.status === true) {
+                    toast.success(res?.message)
+                    await refetch()
+                }
+            } catch (error) {
+                const errorMessage = error?.response?.data?.message;
+
+                if (typeof errorMessage === 'object') {
+                    Object.entries(errorMessage).forEach(([field, messages]) => {
+                        if (Array.isArray(messages)) {
+                            messages.forEach(msg => toast.error(msg));
+                        } else {
+                            toast.error(messages);
+                        }
+                    });
+                }
+            } finally {
+                navigate(`/admin/dashboard/bookings?id=${data?.appointment_id}`);
+            }
+        }
+        else if (type === 'New Feedback') {
+            try {
+                const res = await postMarkRedNotificationApi(markId).unwrap()
+                if (res?.status === true) {
+                    toast.success(res?.message)
+                    await refetch()
+                }
+            } catch (error) {
+                const errorMessage = error?.response?.data?.message;
+
+                if (typeof errorMessage === 'object') {
+                    Object.entries(errorMessage).forEach(([field, messages]) => {
+                        if (Array.isArray(messages)) {
+                            messages.forEach(msg => toast.error(msg));
+                        } else {
+                            toast.error(messages);
+                        }
+                    });
+                }
+            } finally {
+                navigate(`/admin/dashboard/feedbacks?id=${data?.feedback_id}`);
+            }
+        }
+    }
 
 
 
@@ -113,7 +197,7 @@ const DashboardNotification = () => {
                                     }
                                     <h2 className="text-[24px] font-degular font-semibold">{item?.data?.title}</h2>
                                     <p>{item?.data?.sub_title}
-                                        <span className="text-[#888888] pl-1">
+                                        <span onClick={() => handleTapToView((item?.data?.type), (item?.data), (item.id))} className="cursor-pointer text-[#888888] pl-1">
                                             {item?.data?.type === "New Appointment" || item?.data?.type === "New Feedback"
                                                 ? "Tap to view"
                                                 : ""}
@@ -136,7 +220,7 @@ const DashboardNotification = () => {
                                         {formatTime((item?.created_at))}
                                     </span>
                                 </div>
-                                <div className="col-span-3 place-items-end">
+                                <div className="col-span-3 h-full flex justify-end items-center">
                                     {
                                         item?.read_at === null ? <svg onClick={() => handleMark('mark_read', item?.id)} className="cursor-pointer" width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M19.8276 6.4C20.669 6.4 21.4759 6.06286 22.0708 5.46274C22.6658 4.86263 23 4.04869 23 3.2C23 2.35131 22.6658 1.53737 22.0708 0.937258C21.4759 0.337142 20.669 0 19.8276 0C18.9862 0 18.1793 0.337142 17.5844 0.937258C16.9894 1.53737 16.6552 2.35131 16.6552 3.2C16.6552 4.04869 16.9894 4.86263 17.5844 5.46274C18.1793 6.06286 18.9862 6.4 19.8276 6.4ZM15.4655 3.2C15.4655 5.384 17.0438 7.1968 19.113 7.5416L11.1034 11.8912L1.17379 6.4984L0.00317237 5.8424C0.0434279 4.91575 0.436708 4.04053 1.10102 3.39921C1.76534 2.75788 2.64942 2.39994 3.56897 2.4H15.5369C15.4893 2.65973 15.4655 2.9264 15.4655 3.2ZM0 7.6704V16.4C0 17.3548 0.376015 18.2705 1.04533 18.9456C1.71464 19.6207 2.62242 20 3.56897 20H18.6379C19.5845 20 20.4923 19.6207 21.1616 18.9456C21.8309 18.2705 22.2069 17.3548 22.2069 16.4V7.6704L21.7897 7.9048L11.4794 13.5048C11.3638 13.5675 11.2347 13.6004 11.1034 13.6004C10.9722 13.6004 10.8431 13.5675 10.7275 13.5048L0.407655 7.8992L0 7.6704Z" fill="black" />
