@@ -19,7 +19,7 @@ const Navbar = () => {
 
 
 
-  const { data: userProfileData } = useGetProfileApiQuery()
+  const { data: userProfileData ,refetch} = useGetProfileApiQuery()
   const userProfile = userProfileData?.data
 
 

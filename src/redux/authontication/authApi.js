@@ -38,11 +38,33 @@ const authApi = baseApi.injectEndpoints({
                 url: `/auth/profile`,
                 method: "GET",
             }),
+            providesTags: ['auth'],
+        }),
+        getServiceApi: builder.query({
+            query: () => ({
+                url: `/bookings`,
+                method: "GET",
+            }),
+            providesTags: ['auth'],
+        }),
+        updateProfileApi: builder.mutation({
+            query: (updateInfo) => ({
+                url: `/auth/change-profile`,
+                method: "POST",
+                body:updateInfo,
+            }),
             invalidatesTags: ['auth'],
         }),
-
+        updateSinglePhotoApi: builder.mutation({
+            query: (formData) => ({
+                url: `/auth/change-profile-photo`,
+                method: "POST",
+                body:formData,
+            }),
+            invalidatesTags: ['auth'],
+        }),
     })
 })
 
 
-export const { usePostAuthApiMutation,useOtpSendApiMutation,useRegisterApiMutation,useGetProfileApiQuery,useLogOutAuthApiMutation} = authApi;
+export const { usePostAuthApiMutation, useOtpSendApiMutation, useRegisterApiMutation, useGetProfileApiQuery, useLogOutAuthApiMutation, useGetServiceApiQuery, useUpdateProfileApiMutation,useUpdateSinglePhotoApiMutation} = authApi;

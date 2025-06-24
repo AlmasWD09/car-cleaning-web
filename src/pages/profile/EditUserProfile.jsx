@@ -1,31 +1,137 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Upload } from "antd";
 import { useEffect, useState } from "react";
 import CustomContainer from "../../components/shared/CustomContainer";
 import { useNavigate } from "react-router-dom";
+import { useGetAuthProfileApiQuery } from "../../redux/dashboardFeatures/setting/dashboardSettingApi";
+import { useUpdateProfileApiMutation, useUpdateSinglePhotoApiMutation } from "../../redux/authontication/authApi";
+import toast from "react-hot-toast";
+import CustomLoading from "../../components/shared/CustomLoading";
+import { PlusOutlined } from "@ant-design/icons";
 
 
 const EditUserProfile = () => {
   const navigate = useNavigate()
-  const [createAccountForm] = Form.useForm();
+  const [loading, setLoading] = useState(false)
+  const [ImageFileList, setImageFileList] = useState([]);
+  const [formOne] = Form.useForm();
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [buttonTextChange, setButtonTextChange] = useState(false);
 
-  const handleButtonChange = () => {
-    setButtonTextChange(!buttonTextChange);
+  const [fileList, setFileList] = useState([]);
+
+  const handleChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
   };
 
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
+
+  const { data: userProfileData, isLoading, refetch } = useGetAuthProfileApiQuery();
+  const userProfile = userProfileData?.data
+  const carPhoto = userProfile?.car_photos
+  console.log(userProfile)
+
+  const [updateProfileApi] = useUpdateProfileApiMutation()
+  const [updateSinglePhotoApi] = useUpdateSinglePhotoApiMutation()
+
+
+
+
+
+  const [imageUrl, setImageUrl] = useState("");
+  useEffect(() => {
+    if (userProfile) {
+      formOne.setFieldsValue({
+        ...userProfile,
+        email: userProfile?.email,
+
+      })
+    }
+
+    if (userProfile?.photo) {
+      setImageUrl(userProfile?.photo);
+    }
+  }, [userProfile]);
+
+
+
+  // only image upload function
+  const handleUpload = async ({ file }) => {
+    setLoading(true)
+    const formData = new FormData();
+    formData.append("photo", file);
+
+    // formData.forEach((value, key) => {
+    //   console.log('key------>', key, 'value------>', value);
+    // });
+
+
+
+    try {
+      const res = await updateSinglePhotoApi(formData).unwrap()
+      console.log(res)
+      if (res?.status === true) {
+        toast.success(res?.message)
+        refetch()
+      }
+    }
+    catch (errors) {
+      toast.error(errors.message);
+    } finally {
+      setLoading(false)
+    }
   };
 
-  const createAccountFinish = (values) => {
-    console.log(values);
+
+  const createAccountFinish = async (values) => {
+    const formData = new FormData();
+    formData.append("name", values?.name);
+    formData.append("phone", values?.phone);
+    formData.append("car_brand", values?.car_brand);
+    formData.append("car_model", values?.car_model);
+
+    try {
+      const res = await updateProfileApi(formData).unwrap()
+      if (res?.status === true) {
+        toast.success(res?.message)
+        refetch()
+      }
+    } catch (error) {
+      const errorMessage = error?.data?.message;
+
+      if (typeof errorMessage === 'object') {
+        Object.entries(errorMessage).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            messages.forEach(msg => toast.error(msg));
+          } else {
+            toast.error(messages);
+          }
+        });
+      } else {
+
+        toast.error(errorMessage);
+      }
+    }
+
   };
+
+
+
+
+  const handleUploadCarImage = async (options) => {
+    const { file, onSuccess, onError } = options;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  if (isLoading) {
+    return <CustomLoading />
+  }
 
   return (
     <section className="pt-20 lg:pt-[120px] bg-[#f6f6f6] pb-8">
@@ -53,36 +159,62 @@ const EditUserProfile = () => {
 
           {/* left side */}
           <div className=" w-full lg:w-[60%]">
-            <div className="rounded-lg flex justify-center items-center w-full mx-auto ">
-              <div className="flex flex-col text-center gap-3 md:gap-0 pb-8">
-                <div className="">
-                  <img
-                    src="/profileCar/photo6.png"
-                    alt=""
-                    className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] lg:h-[140px] lg:w-[140px] object-cover rounded-full "
-                  />
-                </div>
-                <div className="flex justify-center">
-                  <button className="flex items-center gap-2 border border-primary px-8 mt-2 py-2 rounded text-[16px] font-semibold text-primary font-degular">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M17.71 4.04125C18.1 3.65125 18.1 3.00125 17.71 2.63125L15.37 0.291249C15 -0.0987512 14.35 -0.0987512 13.96 0.291249L12.12 2.12125L15.87 5.87125M0 14.2512V18.0012H3.75L14.81 6.93125L11.06 3.18125L0 14.2512Z" fill="#0063E6" />
-                    </svg>
-                    Change</button>
+
+
+            <Form form={formOne} onFinish={createAccountFinish}>
+              <div className="rounded-lg flex justify-center items-center w-full mx-auto">
+                <div className="relative cursor-pointer mb-16">
+                  <Upload
+                    accept="image/*"
+                    maxCount={1}
+                    showUploadList={false}
+                    customRequest={handleUpload}
+                  >
+                    <img
+                      src={imageUrl}
+                      alt=""
+                      className="h-[200px] w-[200px] object-cover rounded-full"
+                    />
+                    <span className="absolute bottom-0 right-0">
+                      <svg width="53" height="45" viewBox="0 0 53 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g filter="url(#filter0_d_87_1388)">
+                          <rect x="6.5" y="6" width="40" height="33" rx="3" fill="white" shape-rendering="crispEdges" />
+                          <g filter="url(#filter1_d_87_1388)">
+                            <path d="M33.5 13.5C34.2956 13.5 35.0587 13.8161 35.6213 14.3787C36.1839 14.9413 36.5 15.7044 36.5 16.5V28.5C36.5 29.2956 36.1839 30.0587 35.6213 30.6213C35.0587 31.1839 34.2956 31.5 33.5 31.5H19.5C18.7044 31.5 17.9413 31.1839 17.3787 30.6213C16.8161 30.0587 16.5 29.2956 16.5 28.5V16.5C16.5 15.7044 16.8161 14.9413 17.3787 14.3787C17.9413 13.8161 18.7044 13.5 19.5 13.5H33.5ZM26.5 17.5C25.1739 17.5 23.9021 18.0268 22.9645 18.9645C22.0268 19.9021 21.5 21.1739 21.5 22.5C21.5 23.8261 22.0268 25.0979 22.9645 26.0355C23.9021 26.9732 25.1739 27.5 26.5 27.5C27.8261 27.5 29.0979 26.9732 30.0355 26.0355C30.9732 25.0979 31.5 23.8261 31.5 22.5C31.5 21.1739 30.9732 19.9021 30.0355 18.9645C29.0979 18.0268 27.8261 17.5 26.5 17.5ZM26.5 19.5C27.2956 19.5 28.0587 19.8161 28.6213 20.3787C29.1839 20.9413 29.5 21.7044 29.5 22.5C29.5 23.2956 29.1839 24.0587 28.6213 24.6213C28.0587 25.1839 27.2956 25.5 26.5 25.5C25.7044 25.5 24.9413 25.1839 24.3787 24.6213C23.8161 24.0587 23.5 23.2956 23.5 22.5C23.5 21.7044 23.8161 20.9413 24.3787 20.3787C24.9413 19.8161 25.7044 19.5 26.5 19.5ZM33.5 16.5H32.5C32.2451 16.5003 32 16.5979 31.8146 16.7728C31.6293 16.9478 31.5178 17.187 31.5028 17.4414C31.4879 17.6958 31.5707 17.9464 31.7343 18.1418C31.8979 18.3373 32.1299 18.4629 32.383 18.493L32.5 18.5H33.5C33.7549 18.4997 34 18.4021 34.1854 18.2272C34.3707 18.0522 34.4822 17.813 34.4972 17.5586C34.5121 17.3042 34.4293 17.0536 34.2657 16.8582C34.1021 16.6627 33.8701 16.5371 33.617 16.507L33.5 16.5Z" fill="black" />
+                          </g>
+                        </g>
+                        <defs>
+                          <filter id="filter0_d_87_1388" x="0.5" y="0" width="52" height="45" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                            <feOffset />
+                            <feGaussianBlur stdDeviation="3" />
+                            <feComposite in2="hardAlpha" operator="out" />
+                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_87_1388" />
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_87_1388" result="shape" />
+                          </filter>
+                          <filter id="filter1_d_87_1388" x="12.5" y="13.5" width="28" height="26" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                            <feOffset dy="4" />
+                            <feGaussianBlur stdDeviation="2" />
+                            <feComposite in2="hardAlpha" operator="out" />
+                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_87_1388" />
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_87_1388" result="shape" />
+                          </filter>
+                        </defs>
+                      </svg>
+                    </span>
+                  </Upload>
                 </div>
               </div>
-            </div>
-
-
-
-            <Form form={createAccountForm} onFinish={createAccountFinish}>
 
               {/* full name */}
               <div>
                 <Form.Item
-                  name="full_name"
-                  rules={[
-                    { required: true, message: "Full name is required" },
-                  ]}
+                  name="name"
                 >
                   <Input
                     placeholder="Your full name"
@@ -113,12 +245,9 @@ const EditUserProfile = () => {
               <div>
                 <Form.Item
                   name="email"
-                  rules={[
-                    { required: true, message: "Email is required" },
-                    { type: "email", message: "Enter a valid email" },
-                  ]}
                 >
                   <Input
+                    readOnly
                     placeholder="Enter your email"
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
@@ -153,9 +282,6 @@ const EditUserProfile = () => {
               <div>
                 <Form.Item
                   name="phone"
-                  rules={[
-                    { required: true, message: "phone number is required" },
-                  ]}
                 >
                   <Input
                     placeholder="Your phone number"
@@ -186,7 +312,7 @@ const EditUserProfile = () => {
                     className="w-full md:w-[50%]"
                   >
                     <p className="text-[16px] font-semibold font-degular">Brand Name</p>
-                    <Form.Item name="brand_name">
+                    <Form.Item name="car_brand">
                       <Input
                         placeholder="Brand name"
                         disabled={buttonTextChange}
@@ -265,25 +391,30 @@ const EditUserProfile = () => {
             </Form>
           </div>
 
+
+
+
+
+
+
+
+
           {/* right side */}
           <div className="w-full lg:w-[40%]">
             <p className="text-[28px] font-medium font-degular text-[#000000 py-2">Pictures</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className=" col-span-1 h-[146px] rounded-2xl">
-                <img src="/profileCar/photo1.png" alt="car" className="w-full h-full object-cover rounded-2xl" />
-              </div>
-              <div className=" col-span-1 h-[146px] rounded-2xl">
-                <img src="/profileCar/photo2.png" alt="car" className="w-full h-full object-cover rounded-2xl" />
-              </div>
-              <div className=" col-span-1 h-[146px] rounded-2xl"> <img src="/profileCar/photo3.png" alt="" className="w-full h-full object-cover rounded-2xl" /></div>
-              <div className=" col-span-1 h-[146px] rounded-2xl"> <img src="/profileCar/photo4.png" alt="" className="w-full h-full object-cover rounded-2xl" /></div>
-              <div className=" col-span-1 h-[146px] rounded-2xl"> <img src="/profileCar/photo5.png" alt="" className="w-full h-full object-cover rounded-2xl" /></div>
-              <div className=" col-span-1 h-[146px] rounded-2xl border border-[#ccc] text-7xl flex justify-center items-center">+</div>
+              {
+                [...Array(6)].map((item,index) => {
+                  return (
+                    <button key={index} className=" col-span-1 h-[146px] rounded-2xl border border-[#ccc] text-7xl flex justify-center items-center">+</button>
+                  )
+                })
+              }
             </div>
           </div>
         </div>
       </CustomContainer>
-    </section>
+    </section >
   )
 }
 

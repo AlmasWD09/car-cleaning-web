@@ -8,6 +8,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { usePostAuthApiMutation } from "../../../redux/authontication/authApi";
 import toast from "react-hot-toast";
+import { FaEye } from "react-icons/fa";
+import { IoMdEyeOff } from "react-icons/io";
 
 const Login = () => {
   const navigate = useNavigate()
@@ -30,7 +32,7 @@ const Login = () => {
       console.log(res)
       if (res.status === true) {
         toast.success(res?.message)
-        localStorage.setItem("user_token", token);
+        localStorage.setItem("token", token);
         navigate('/')
       }
 
@@ -130,9 +132,13 @@ const Login = () => {
                         />
                       </svg>
                     }
-                    iconRender={(visible) =>
-                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                    }
+                    iconRender={(visible) => (
+                      visible ? (
+                        <FaEye className="cursor-pointer " />
+                      ) : (
+                        <IoMdEyeOff className="cursor-pointer" />
+                      )
+                    )}
                     style={{
                       height: "60px",
                       borderRadius: "20px",
@@ -170,7 +176,7 @@ const Login = () => {
                   paddingInline: "20px",
                 }}
               >
-                Create account
+                Login
               </Button>
               <div className="md:pt-[20px]">
                 <Divider style={{ borderColor: '#ccc' }}>or</Divider>

@@ -27,7 +27,7 @@ const dashboardBookingApi = baseApi.injectEndpoints({
         }),
         getDetailsBookingApi: builder.query({
             query: (detailsId) => ({
-                url: `/admin/bookings/${detailsId}`,
+                url: `/bookings/${detailsId}`,
                 method: "GET"
             }),
             providesTags: ['booking'],

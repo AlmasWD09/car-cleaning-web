@@ -23,7 +23,7 @@ const DashboardLogin = () => {
             const token = res.data?.access_token;
             if (res.status === true) {
                 console.log(res.message)
-                localStorage.setItem("admin_token", token);
+                localStorage.setItem("token", token);
                 navigate('/admin/dashboard')
             }
 

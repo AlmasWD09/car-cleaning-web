@@ -33,7 +33,7 @@ const OtpCode = () => {
             const token = res?.data?.access_token
 
             if (res?.status === true) {
-                localStorage.setItem("user_token", token);
+                localStorage.setItem("token", token);
                 toast.success(res?.message);
                 forgetPasswordForm.resetFields()
                 navigate('/')
