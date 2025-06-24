@@ -16,7 +16,7 @@
 //         }
 //     }),
 //     // refresh for this tag
-//     tagTypes: ["auth", "manage_user", "chart", "booking", "service", "manage_image", "manage_date", "transition", "feedback", "setting", "notification","",],
+//     tagTypes: ["auth", "manage_user", "chart", "booking", "service", "manage_image", "manage_date", "transition", "feedback", "setting", "notification","gallary",""],
 //     endpoints: () => ({}),
 // });
 
@@ -65,6 +65,7 @@ export const baseApi = createApi({
     "feedback",
     "setting",
     "notification",
+    "gallary",
     "",
   ],
   endpoints: () => ({}),
