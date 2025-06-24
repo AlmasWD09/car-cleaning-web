@@ -38,6 +38,7 @@ import DashboardCreateNewPassword from "../pages/dashboardPage/dashboardAuthenti
 import DashboardBookings from "../pages/dashboardPage/dashboardBookings/DashboardBookings";
 import DashboardNotification from "../pages/dashboardPage/dashboardNotification/DashboardNotification";
 import DashboardUsers from "../pages/dashboardPage/dashboardUsers/DashboardUsers";
+import PrivatRoutes from "./PrivatRoutes";
 
 
 
@@ -133,55 +134,81 @@ const router = createBrowserRouter([
   // dashboard routers =========================================
   {
     path: "/admin/dashboard",
-    element: <Dashboard />,
+    element: <PrivatRoutes>
+      <Dashboard />
+    </PrivatRoutes>,
     children: [
       {
         path: "/admin/dashboard",
-        element: <CommonDashboard />
+        element: <PrivatRoutes>
+          <CommonDashboard />
+        </PrivatRoutes>
       },
       {
         path: "users",
-        element: <DashboardUsers />
+        element: <PrivatRoutes>
+          <DashboardUsers />
+        </PrivatRoutes>
       },
       {
         path: "bookings",
-        element: <DashboardBookings />
+        element: <PrivatRoutes>
+          <DashboardBookings />
+        </PrivatRoutes>
       },
       {
         path: "services",
-        element: <DashboardService />
+        element: <PrivatRoutes>
+          <DashboardService />
+        </PrivatRoutes>
       },
       {
         path: "manage-images",
-        element: <ManageImages />
+        element: <PrivatRoutes>
+          <ManageImages />
+        </PrivatRoutes>
       },
       {
         path: "manage-dates",
-        element: <ManageDates />
+        element: <PrivatRoutes>
+          <ManageDates />
+        </PrivatRoutes>
       },
       {
         path: "transactions",
-        element: <Transactions />
+        element: <PrivatRoutes>
+          <Transactions />
+        </PrivatRoutes>
       },
       {
         path: "feedbacks",
-        element: <Feedbacks />
+        element: <PrivatRoutes>
+          <Feedbacks />
+        </PrivatRoutes>
       },
       {
         path: "change-password",
-        element: <ChangePassword />
+        element: <PrivatRoutes>
+          <ChangePassword />
+        </PrivatRoutes>
       },
       {
         path: "privacy&policy",
-        element: <PrivacyAndPolicy />
+        element: <PrivatRoutes>
+          <PrivacyAndPolicy />
+        </PrivatRoutes>
       },
       {
         path: "terms-condition",
-        element: <TermsAndConditions />
+        element: <PrivatRoutes>
+          <TermsAndConditions />
+        </PrivatRoutes>
       },
       {
         path: "notifications",
-        element: <DashboardNotification />
+        element: <PrivatRoutes>
+          <DashboardNotification />
+        </PrivatRoutes>
       },
 
     ]
@@ -189,20 +216,20 @@ const router = createBrowserRouter([
 
   // dashboard authentication routes =====================
   {
-    path:"/admin/dashboard/login",
-    element:<DashboardLogin />
+    path: "/admin/dashboard/login",
+    element: <DashboardLogin />
   },
   {
-    path:"/admin/dashboard/forget-password",
-    element:<DashboardForgetPassword />
+    path: "/admin/dashboard/forget-password",
+    element: <DashboardForgetPassword />
   },
   {
-    path:"/admin/dashboard/otp-code",
-    element:<DashboardOtpCode />
+    path: "/admin/dashboard/otp-code",
+    element: <DashboardOtpCode />
   },
   {
-    path:"/admin/dashboard/create-new-password",
-    element:<DashboardCreateNewPassword />
+    path: "/admin/dashboard/create-new-password",
+    element: <DashboardCreateNewPassword />
   },
 ]);
 

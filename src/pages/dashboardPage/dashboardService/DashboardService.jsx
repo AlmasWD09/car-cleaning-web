@@ -280,7 +280,7 @@ const DashboardService = () => {
 
 
   const handleDelete = (indexToDelete) => {
-    const newSlots = slotData.filter((_, index) => index !== indexToDelete);
+    const newSlots = slotData?.filter((_, index) => index !== indexToDelete);
     setSlotData(newSlots);
   }
 
@@ -303,6 +303,8 @@ const DashboardService = () => {
   if (isLoading) {
     return <CustomLoading />
   }
+
+
   return (
     <div>
       <div className="py-4 pb-8">
@@ -405,7 +407,6 @@ const DashboardService = () => {
                   ]}
                 >
                   <Upload
-
                     accept="image/*"
                     maxCount={1}
                     showUploadList={{ showPreviewIcon: true }}
