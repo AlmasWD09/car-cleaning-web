@@ -31,9 +31,12 @@ const OtpCode = () => {
         try {
             const res = await otpSendApi(formData).unwrap();
             const token = res?.data?.access_token
+            const role = res?.data?.user?.role
+
 
             if (res?.status === true) {
                 localStorage.setItem("token", token);
+                localStorage.setItem("role", role);
                 toast.success(res?.message);
                 forgetPasswordForm.resetFields()
                 navigate('/')

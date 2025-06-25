@@ -21,9 +21,12 @@ const DashboardLogin = () => {
         try {
             const res = await postAuthApi(authInfo).unwrap()
             const token = res.data?.access_token;
+            const role = res?.data?.user?.role
+
+            console.log(res)
             if (res.status === true) {
-                console.log(res.message)
                 localStorage.setItem("token", token);
+                localStorage.setItem("role", role);
                 navigate('/admin/dashboard')
             }
 

@@ -34,6 +34,7 @@ const UserProfile = () => {
             if (res?.data === true) {
                 toast.success(res?.message);
                 localStorage.removeItem("token")
+                localStorage.removeItem("role")
                 navigate('/login')
             }
         } catch (error) {

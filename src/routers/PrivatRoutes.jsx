@@ -6,12 +6,14 @@ import CustomLoading from "../components/shared/CustomLoading";
 const PrivatRoutes = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [token, setToken] = useState(null);
+    const [role, setRole] = useState(null);
     const location = useLocation();
 
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-
+        const role = localStorage.getItem("role");
+        setRole(role)
         setToken(token);
         setTimeout(() => setLoading(false), 1000);
     }, []);
@@ -20,7 +22,7 @@ const PrivatRoutes = ({ children }) => {
         return <CustomLoading />;
     }
 
-    if (token) {
+    if (token && (role === 'ADMIN')) {
         return children
     }
     return <Navigate to="/admin/dashboard/login" state={{ from: location }} replace></Navigate>
