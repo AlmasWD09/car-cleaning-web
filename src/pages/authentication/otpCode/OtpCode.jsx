@@ -1,17 +1,20 @@
 import { Button, Flex, Form, Input } from "antd"
 import CustomContainer from "../../../components/shared/CustomContainer";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useOtpSendApiMutation } from "../../../redux/authontication/authApi";
+import { useForgetPasswordApiMutation, useOtpSendApiMutation } from "../../../redux/authontication/authApi";
 import toast from "react-hot-toast";
 
 
 const OtpCode = () => {
     const navigate = useNavigate()
     const [forgetPasswordForm] = Form.useForm();
-
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const queryEmail = queryParams.get('email');
 
     const [otpSendApi] = useOtpSendApiMutation()
+    const [forgetPasswordApi] = useForgetPasswordApiMutation()
 
 
 
@@ -22,7 +25,7 @@ const OtpCode = () => {
 
         try {
             const res = await otpSendApi(formData).unwrap();
-             const token = res?.data?.access_token
+            const token = res?.data?.access_token
             const role = res?.data?.user?.role
             const email = res?.data?.user?.email
 
@@ -51,6 +54,33 @@ const OtpCode = () => {
     }
 
 
+    const handleResentOtp = async () => {
+        const formData = new FormData();
+        formData.append("email", queryEmail);
+
+        try {
+            const res = await forgetPasswordApi(formData).unwrap();
+            console.log(res)
+            if (res?.status === true) {
+                toast.success(res?.message);
+            }
+        } catch (error) {
+            const errorMessage = error?.data?.message;
+
+            if (typeof errorMessage === 'object') {
+                Object.entries(errorMessage).forEach(([field, messages]) => {
+                    if (Array.isArray(messages)) {
+                        messages.forEach(msg => toast.error(msg));
+                    } else {
+                        toast.error(messages);
+                    }
+                });
+            } else {
+
+                toast.error(errorMessage);
+            }
+        }
+    }
 
 
 
@@ -112,6 +142,14 @@ const OtpCode = () => {
                                     Verify Code
                                 </Button>
                             </Form>
+
+
+                            <p className="text-center mt-10 text-sm font-normal mb-6 text-[#5C5C5C]">
+                                You have not received the email?
+                                <Button onClick={() => handleResentOtp()} className="pl-1 text-primary " type="link">
+                                    Resend
+                                </Button>
+                            </p>
                         </div>
                     </div>
 

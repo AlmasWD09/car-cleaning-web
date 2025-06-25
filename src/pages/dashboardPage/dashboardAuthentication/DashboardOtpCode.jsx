@@ -1,17 +1,23 @@
 import AuthWrapper from "./AuthWrapper"
 import { Button, Input } from "antd";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useOtpSendApiMutation } from "../../../redux/authontication/authApi";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useForgetPasswordApiMutation, useOtpSendApiMutation } from "../../../redux/authontication/authApi";
 import toast from "react-hot-toast";
 
 const DashboardOtpCode = () => {
     const navigate = useNavigate();
     const [otpCode, setOtpCode] = useState("");
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const queryEmail = queryParams.get('email');
+
+
 
 
 
     const [otpSendApi] = useOtpSendApiMutation()
+    const [forgetPasswordApi] = useForgetPasswordApiMutation()
 
     // Define the `onChange` handler with the correct type
     const onChange = (value) => {
@@ -55,6 +61,38 @@ const DashboardOtpCode = () => {
     };
 
 
+    const handleResentOtp = async () => {
+        const formData = new FormData();
+        formData.append("email", queryEmail);
+
+        try {
+            const res = await forgetPasswordApi(formData).unwrap();
+            console.log(res)
+            if (res?.status === true) {
+                toast.success(res?.message);
+            }
+        } catch (error) {
+            const errorMessage = error?.data?.message;
+
+            if (typeof errorMessage === 'object') {
+                Object.entries(errorMessage).forEach(([field, messages]) => {
+                    if (Array.isArray(messages)) {
+                        messages.forEach(msg => toast.error(msg));
+                    } else {
+                        toast.error(messages);
+                    }
+                });
+            } else {
+
+                toast.error(errorMessage);
+            }
+        }
+    }
+
+
+
+
+
     return (
         <AuthWrapper>
             <div className="text-center mb-12 font-degular">
@@ -91,7 +129,7 @@ const DashboardOtpCode = () => {
 
             <p className="text-center mt-10 text-sm font-normal mb-6 text-[#5C5C5C]">
                 You have not received the email?
-                <Button className="pl-1 text-primary " type="link">
+                <Button onClick={() => handleResentOtp()} className="pl-1 text-primary " type="link">
                     Resend
                 </Button>
             </p>

@@ -34,7 +34,7 @@ const ForgetPassword = () => {
             console.log(res)
             if (res.status === true) {
                 toast.success(res?.message)
-                navigate("/otp-code");
+                navigate(`/otp-code?email=${values?.email}`);
             }
 
         } catch (error) {

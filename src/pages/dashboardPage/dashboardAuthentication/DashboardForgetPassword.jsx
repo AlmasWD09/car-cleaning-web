@@ -20,7 +20,7 @@ const DashboardForgetPassword = () => {
       console.log(res)
       if (res.status === true) {
         toast.success(res?.message)
-        navigate("/admin/dashboard/otp-code");
+        navigate(`/admin/dashboard/otp-code?email=${values?.email}`);
       }
 
     } catch (error) {
