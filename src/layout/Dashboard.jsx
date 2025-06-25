@@ -180,6 +180,24 @@ const Dashboard = () => {
                     ),
                 },
                 {
+                    path: '/admin/dashboard/aboutUs',
+                    title: "About Us",
+                    icon: (
+                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.99998 0.5C4.47717 0.5 0 4.97712 0 10.5C0 16.0228 4.47717 20.5 9.99998 20.5C15.5229 20.5 20 16.0228 20 10.5C20 4.97712 15.5229 0.5 9.99998 0.5ZM9.99998 18.5C5.58881 18.5 2.00001 14.9112 2.00001 10.5C2.00001 6.08876 5.58876 2.50001 9.99998 2.50001C14.4112 2.50001 18 6.08876 18 10.5C18 14.9112 14.4112 18.5 9.99998 18.5ZM11.2522 6.5C11.2522 7.22506 10.7243 7.75001 10.0101 7.75001C9.26713 7.75001 8.75217 7.22501 8.75217 6.48612C8.75217 5.77596 9.28106 5.25003 10.0101 5.25003C10.7243 5.25003 11.2522 5.77596 11.2522 6.5ZM9.0022 9.49999H11.0022V15.5H9.0022V9.49999Z" fill="#D2D2D2" />
+                        </svg>
+
+
+                    ),
+                    activeIcon: (
+                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.99998 0.5C4.47717 0.5 0 4.97712 0 10.5C0 16.0228 4.47717 20.5 9.99998 20.5C15.5229 20.5 20 16.0228 20 10.5C20 4.97712 15.5229 0.5 9.99998 0.5ZM9.99998 18.5C5.58881 18.5 2.00001 14.9112 2.00001 10.5C2.00001 6.08876 5.58876 2.50001 9.99998 2.50001C14.4112 2.50001 18 6.08876 18 10.5C18 14.9112 14.4112 18.5 9.99998 18.5ZM11.2522 6.5C11.2522 7.22506 10.7243 7.75001 10.0101 7.75001C9.26713 7.75001 8.75217 7.22501 8.75217 6.48612C8.75217 5.77596 9.28106 5.25003 10.0101 5.25003C10.7243 5.25003 11.2522 5.77596 11.2522 6.5ZM9.0022 9.49999H11.0022V15.5H9.0022V9.49999Z" fill="#0063E5" />
+                        </svg>
+
+
+                    ),
+                },
+                {
                     path: '/admin/dashboard/privacy&policy',
                     title: "PrivacyPolicy",
                     icon: (
@@ -325,6 +343,19 @@ const Dashboard = () => {
                             You can change your admin panel password from here.
                         </p>
                     </>
+                );
+            case "/admin/dashboard/aboutUs":
+                return (
+                    <h1 className="text-[#333333] font-semibold text-[24px]">
+                        <>
+                            <h1 className="text-[#333333] font-semibold text-[30px]">
+                                About Us
+                            </h1>
+                            <p className="font-normal text-lg -mt-3 mb-4">
+                                You can change your about us section of your website and app from here.
+                            </p>
+                        </>
+                    </h1>
                 );
             case "/admin/dashboard/privacy&policy":
                 return (
@@ -500,7 +531,7 @@ const Dashboard = () => {
 
 
                     <div className="mx-7 mt-36">
-                        <Button onClick={()=>handleLogout()} className="gap-3 w-full flex justify-start p-6 bg-[#FFE8E8] text-base font-popping font-semibold text-[#FF0000] ">
+                        <Button onClick={() => handleLogout()} className="gap-3 w-full flex justify-start p-6 bg-[#FFE8E8] text-base font-popping font-semibold text-[#FF0000] ">
                             <svg
                                 width="37"
                                 height="38"

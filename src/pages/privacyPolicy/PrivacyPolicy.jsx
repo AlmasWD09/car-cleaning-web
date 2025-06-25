@@ -1,10 +1,30 @@
 import { Link, useNavigate, } from "react-router-dom"
 import CustomContainer from "../../components/shared/CustomContainer"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useGetFooterApiQuery } from "../../redux/web/footer/footerApi";
 
 
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
+  const [content, setContent] = useState('');
+
+  const { data: privacyData } = useGetFooterApiQuery("Privacy Policy")
+  const privacyContent = privacyData?.data?.[0]?.text;
+
+
+  console.log(privacyContent)
+
+
+  useEffect(() => {
+    if (privacyContent) {
+      setContent(privacyContent)
+    }
+  }, [privacyContent])
+
+
+
+
+
 
 
 
@@ -48,11 +68,10 @@ const PrivacyPolicy = () => {
             <h2 className="absolute pb-8 text-[#ffff] text-[20px] lg:text-[50px] font-degular">Privacy Policy</h2>
           </div>
 
-          <p className="lg:w-[1008px] text-center text-[20px] text-wrap md:text-[24px] font-degular">At LWR we value your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and safeguard your data.</p>
+          {/* <p className="lg:w-[1008px] text-center text-[20px] text-wrap md:text-[24px] font-degular">At LWR we value your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and safeguard your data.</p> */}
         </div>
 
-
-        <div className="">
+        {/* <div className="">
           <div className=" py-12 ">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6">
 
@@ -113,8 +132,15 @@ const PrivacyPolicy = () => {
 
             </div>
           </div>
-        </div>
+        </div> */}
 
+
+        <div className="px-36">
+          <div
+            dangerouslySetInnerHTML={{ __html: content }}
+            className=""
+          />
+        </div>
       </CustomContainer>
     </section>
   )

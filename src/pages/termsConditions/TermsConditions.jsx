@@ -1,9 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import CustomContainer from "../../components/shared/CustomContainer"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useGetFooterApiQuery } from "../../redux/web/footer/footerApi";
 
 const TermsConditions = () => {
   const navigate = useNavigate();
+  const [content, setContent] = useState('');
+
+  const { data: termsData } = useGetFooterApiQuery("Terms & Conditions")
+  const termsContent = termsData?.data?.[0]?.text;
+
+
+console.log(termsContent)
+
+
+  useEffect(() => {
+    if (termsContent) {
+      setContent(termsContent)
+    }
+  }, [termsContent])
+
+
 
 
 
@@ -12,9 +29,6 @@ const TermsConditions = () => {
   const handleNavigate = () => {
     navigate('/service-book')
   }
-
-
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -54,11 +68,10 @@ const TermsConditions = () => {
             <h2 className="absolute pb-8 text-[#ffff] text-[20px] lg:text-[50px] font-degular">Terms & Conditions</h2>
           </div>
 
-          <p className="lg:w-[1051px] text-center text-[20px] text-wrap md:text-[24px] font-degular">Welcome to LWR By using our services, you agree to the following terms and conditions. Please read them carefully.</p>
+          {/* <p className="lg:w-[1051px] text-center text-[20px] text-wrap md:text-[24px] font-degular">Welcome to LWR By using our services, you agree to the following terms and conditions. Please read them carefully.</p> */}
         </div>
 
-
-        <div className="">
+        {/* <div className="">
           <div className=" py-12 ">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6">
 
@@ -127,8 +140,14 @@ const TermsConditions = () => {
 
             </div>
           </div>
-        </div>
+        </div> */}
 
+        <div className="px-36">
+          <div
+            dangerouslySetInnerHTML={{ __html: content }}
+            className=""
+          />
+        </div>
       </CustomContainer>
     </section>
   )

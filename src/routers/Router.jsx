@@ -39,6 +39,7 @@ import DashboardBookings from "../pages/dashboardPage/dashboardBookings/Dashboar
 import DashboardNotification from "../pages/dashboardPage/dashboardNotification/DashboardNotification";
 import DashboardUsers from "../pages/dashboardPage/dashboardUsers/DashboardUsers";
 import PrivatRoutes from "./PrivatRoutes";
+import AboutUs from "../pages/dashboardPage/settings/aboutUs/AboutUs";
 
 
 
@@ -190,6 +191,12 @@ const router = createBrowserRouter([
         path: "change-password",
         element: <PrivatRoutes>
           <ChangePassword />
+        </PrivatRoutes>
+      },
+      {
+        path: "aboutUs",
+        element: <PrivatRoutes>
+          <AboutUs />
         </PrivatRoutes>
       },
       {

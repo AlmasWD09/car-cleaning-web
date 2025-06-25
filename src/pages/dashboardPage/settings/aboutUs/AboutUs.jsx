@@ -2,33 +2,34 @@
 import { Button } from "antd";
 import JoditEditor from "jodit-react";
 import { useEffect, useRef, useState } from "react";
-import { useGetSettingApiQuery, usePostSettingApiMutation } from "../../../../redux/dashboardFeatures/setting/dashboardSettingApi";
+
 import toast from "react-hot-toast";
+import { useGetSettingApiQuery, usePostSettingApiMutation } from "../../../../redux/dashboardFeatures/setting/dashboardSettingApi";
 
 
-const TermsAndConditions = () => {
+const AboutUs = () => {
   const [content, setContent] = useState('');
   const editor = useRef(null);
 
 const [postSettingApi] = usePostSettingApiMutation()
-const { data: privacyData } = useGetSettingApiQuery({ type: "Terms & Conditions" });
+const { data: privacyData } = useGetSettingApiQuery({ type: "About Us" });
 const privaciAndPolicyData = privacyData?.data;
-const privaciContent = privacyData?.data?.[0]?.text;
+const aboutContent = privacyData?.data?.[0]?.text;
 
 
-
+console.log(content)
 
 useEffect(()=>{
-if(privaciContent){
-  setContent(privaciContent)
+if(aboutContent){
+  setContent(aboutContent)
 }
-},[privaciContent])
+},[aboutContent])
 
 
 
 const handleUpdate = async () => {
   const formData = new FormData();
-  formData.append("type", "Terms & Conditions");
+  formData.append("type", "About Us");
   formData.append("text", content);
 
 
@@ -75,7 +76,7 @@ const handleUpdate = async () => {
   )
 }
 
-export default TermsAndConditions
+export default AboutUs
 
 
 
