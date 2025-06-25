@@ -2,17 +2,61 @@
 import CustomContainer from "../../../components/shared/CustomContainer"
 import { Button, Form, Input } from "antd"
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForgetPasswordApiMutation } from "../../../redux/authontication/authApi";
+import toast from "react-hot-toast";
 
 
 
 const ForgetPassword = () => {
+    const navigate = useNavigate();
     const [forgetPasswordForm] = Form.useForm();
     const [isFocused, setIsFocused] = useState(false);
 
-    const forgetPasswordFinish = (values) => {
-        console.log(values);
+
+    const [forgetPasswordApi] = useForgetPasswordApiMutation()
+
+
+
+    const forgetPasswordFinish = async (values) => {
+        const formData = new FormData();
+        formData.append("email", values?.email);
+
+
+        // formData.forEach((value, key) => {
+        //     console.log('key------>', key, 'value------>', value);
+        // });
+
+
+
+        try {
+            const res = await forgetPasswordApi(formData).unwrap()
+            console.log(res)
+            if (res.status === true) {
+                toast.success(res?.message)
+                navigate("/otp-code");
+            }
+
+        } catch (error) {
+            const errorMessage = error?.data?.message;
+
+            if (typeof errorMessage === 'object') {
+                Object.entries(errorMessage).forEach(([field, messages]) => {
+                    if (Array.isArray(messages)) {
+                        messages.forEach(msg => toast.error(msg));
+                    } else {
+                        toast.error(messages);
+                    }
+                });
+            } else {
+
+                toast.error(errorMessage);
+            }
+        }
+
     };
+
+
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -86,23 +130,21 @@ const ForgetPassword = () => {
                                 </div>
 
                                 {/* submit button component */}
-                                <Link to='/otp-code'>
-                                    <Button
-                                        htmlType="submit"
-                                        block
-                                        style={{
-                                            backgroundColor: "#0063E5",
-                                            color: "#ffffff",
-                                            fontSize: "20px",
-                                            fontWeight: "600",
-                                            height: "60px",
-                                            borderRadius: "20px",
-                                            paddingInline: "20px",
-                                        }}
-                                    >
-                                        Send Code
-                                    </Button>
-                                </Link>
+                                <Button
+                                    htmlType="submit"
+                                    block
+                                    style={{
+                                        backgroundColor: "#0063E5",
+                                        color: "#ffffff",
+                                        fontSize: "20px",
+                                        fontWeight: "600",
+                                        height: "60px",
+                                        borderRadius: "20px",
+                                        paddingInline: "20px",
+                                    }}
+                                >
+                                    Send Code
+                                </Button>
                             </Form>
                         </div>
                     </div>

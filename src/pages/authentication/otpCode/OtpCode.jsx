@@ -15,31 +15,22 @@ const OtpCode = () => {
 
 
 
-
-
-
-
-
-
-
-
     const forgetPasswordFinish = async (values) => {
-        const formData = new FormData();
 
+        const formData = new FormData();
         formData.append("otp", values?.otp);
 
         try {
             const res = await otpSendApi(formData).unwrap();
-            const token = res?.data?.access_token
+             const token = res?.data?.access_token
             const role = res?.data?.user?.role
-
+            const email = res?.data?.user?.email
 
             if (res?.status === true) {
                 localStorage.setItem("token", token);
                 localStorage.setItem("role", role);
                 toast.success(res?.message);
-                forgetPasswordForm.resetFields()
-                navigate('/')
+                navigate(`/create-new-password?email=${email}`)
             }
         } catch (error) {
             const errorMessage = error?.data?.message;

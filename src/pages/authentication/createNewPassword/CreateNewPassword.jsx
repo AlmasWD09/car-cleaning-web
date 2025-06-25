@@ -1,16 +1,58 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import CustomContainer from "../../../components/shared/CustomContainer"
 import { Button, Form, Input } from "antd"
 import { useEffect, useState } from "react";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useResetPasswordApiMutation } from "../../../redux/authontication/authApi";
+import toast from "react-hot-toast";
 
 
 const CreateNewPassword = () => {
   const [createNewPasswordForm] = Form.useForm();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const queryEmail = queryParams.get('email');
 
-  const createNewPasswordFinish = (values) => {
-    console.log(values);
+
+
+  const [resetPasswordApi] = useResetPasswordApiMutation()
+
+
+  const createNewPasswordFinish = async (values) => {
+
+    const formData = new FormData();
+    formData.append("email", queryEmail);
+    formData.append("password", values?.password);
+    formData.append("c_password", values?.c_password);
+
+    try {
+      const res = await resetPasswordApi(formData).unwrap();
+      
+      if (res?.status === true) {
+        toast.success(res?.message);
+        navigate('/password-successfull')
+
+      }
+    } catch (error) {
+      const errorMessage = error?.data?.message;
+
+      if (typeof errorMessage === 'object') {
+        Object.entries(errorMessage).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            messages.forEach(msg => toast.error(msg));
+          } else {
+            toast.error(messages);
+          }
+        });
+      } else {
+
+        toast.error(errorMessage);
+      }
+    }
   };
+
 
 
   useEffect(() => {
@@ -68,9 +110,7 @@ const CreateNewPassword = () => {
                           />
                         </svg>
                       }
-                      iconRender={(visible) =>
-                        visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                      }
+                      iconRender={(visible) => (visible ? <FaEye /> : <FaEyeSlash />)}
                       style={{
                         height: "60px",
                         borderRadius: "20px",
@@ -84,13 +124,25 @@ const CreateNewPassword = () => {
                 {/* confirm password */}
                 <div>
                   <Form.Item
-                    name="confirm_password"
+                    name="c_password"
+                    label=""
+                    dependencies={["password"]}
                     rules={[
-                      {
-                        required: true,
-                        message: "Confirm Password is required",
-                      },
+                      { required: true, message: "Please input Confirm new password" },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || getFieldValue("password") === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error(
+                              "The two passwords that you entered do not match!"
+                            )
+                          );
+                        },
+                      }),
                     ]}
+                    colon={false}
                   >
                     <Input.Password
                       placeholder="Enter Your Confirm Password"
@@ -108,13 +160,7 @@ const CreateNewPassword = () => {
                           />
                         </svg>
                       }
-                      iconRender={(visible) =>
-                        visible ? (
-                          <EyeTwoTone />
-                        ) : (
-                          <EyeInvisibleOutlined style={{ color: "!#888888" }} />
-                        )
-                      }
+                      iconRender={(visible) => (visible ? <FaEye /> : <FaEyeSlash />)}
                       style={{
                         height: "60px",
                         borderRadius: "20px",
@@ -126,23 +172,21 @@ const CreateNewPassword = () => {
                 </div>
 
                 {/* submit button component */}
-                <Link to='/password-successfull'>
-                  <Button
-                    htmlType="submit"
-                    block
-                    style={{
-                      backgroundColor: "#0063E5",
-                      color: "#ffffff",
-                      fontSize: "20px",
-                      fontWeight: "600",
-                      height: "60px",
-                      borderRadius: "20px",
-                      paddingInline: "20px",
-                    }}
-                  >
-                    Change password
-                  </Button>
-                </Link>
+                <Button
+                  htmlType="submit"
+                  block
+                  style={{
+                    backgroundColor: "#0063E5",
+                    color: "#ffffff",
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    height: "60px",
+                    borderRadius: "20px",
+                    paddingInline: "20px",
+                  }}
+                >
+                  Change password
+                </Button>
               </Form>
             </div>
           </div>

@@ -43,6 +43,7 @@ const DashboardForgetPassword = () => {
 
 
   };
+  
   return (
     <AuthWrapper>
       <p className="font-popping font-semibold text-2xl text-[#333333 mb-6 font-degular]">
