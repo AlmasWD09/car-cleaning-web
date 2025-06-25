@@ -1,13 +1,31 @@
 import { useNavigate } from "react-router-dom";
 import CustomContainer from "../../shared/CustomContainer";
 import GroupAvater from "../../shared/GroupAvater";
+import { useGetHomeApiQuery } from "../../../redux/web/home/homeApi";
+import { Rate } from "antd";
+import CustomLoading from "../../shared/CustomLoading";
 
 const Banner = () => {
   const navigate = useNavigate();
 
+
+  const { data: getHome,isLoading } = useGetHomeApiQuery()
+  const homeData = getHome?.data
+  const happyClientPhoto = homeData?.latest_images
+  const rating = homeData?.latest_comment?.rating
+  const latestComment = homeData?.latest_comment?.user
+
+
   const handleServiceBookPage = () => {
     navigate("/service-book");
   };
+
+
+if(isLoading){
+  return <CustomLoading />
+}
+
+
   return (
     <section className="bg-[#f6f6f6] font-degular pt-20 lg:pt-[80px]">
       <CustomContainer>
@@ -45,20 +63,26 @@ const Banner = () => {
                 {/* group avater component */}
                 <div className="pt-[50px] lg:pt-[109px]">
                   <h2 className="font-bold text-[24px] text-[#000000]">
-                    200 +
+                    {homeData?.happy_clients} +
                   </h2>
                   <p className="text-[20px]">Happy Clients</p>
-                  <GroupAvater />
+                  <GroupAvater happyClientPhoto={happyClientPhoto} />
                 </div>
               </div>
+
+
+
+
+
+
+
+
 
 
               {/* right side image */}
               <div className="relative top-16">
                 <svg
                   className="w-[280px] md:w-[600px] mx-auto"
-                  // width="608"
-                  // height="126"
                   viewBox="0 0 758 126"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -92,68 +116,34 @@ const Banner = () => {
                     WebkitBackdropFilter: 'blur(10px)',
                     border: '1px solid #ffffff'
                   }}>
-                    <img src="/bannerAvater/prity1.png" alt="photo" className="object-contain " />
+                    <img src={latestComment?.photo} alt="photo" className="w-[40px] h-[40px] rounded-full" />
                     <div>
                       <h4 className="font-medium lg:text-[20px] text-[#000000]">
-                        Jenifer Lopej
+                        {latestComment?.name}
                       </h4>
-                      <span className="flex items-center gap-1">
-                        <svg
-                          className="w-[25px] md:w-[30px] lg:w-[40px]"
-                          viewBox="0 0 20 19"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
-                            fill="#FFAE00"
-                          />
-                        </svg>
-                        <svg
-                          className="w-[25px] md:w-[30px] lg:w-[40px]"
-                          viewBox="0 0 20 19"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
-                            fill="#FFAE00"
-                          />
-                        </svg>
-                        <svg
-                          className="w-[25px] md:w-[30px] lg:w-[40px]"
-                          viewBox="0 0 20 19"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
-                            fill="#FFAE00"
-                          />
-                        </svg>
-                        <svg
-                          className="w-[25px] md:w-[30px] lg:w-[40px]"
-                          viewBox="0 0 20 19"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
-                            fill="#FFAE00"
-                          />
-                        </svg>
-                        <svg
-                          className="w-[25px] md:w-[30px] lg:w-[40px]"
-                          viewBox="0 0 20 19"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z"
-                            fill="#FFAE00"
-                          />
-                        </svg>
-                      </span>
+                      {typeof rating === "number" && (
+                        <Rate
+                          character={(props) => {
+                            return (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="15"
+                                height="15"
+                                viewBox="0 0 511.987 511"
+                              >
+                                <path
+                                  fill={
+                                    props.index < rating ? "#ffc107" : "#E0E0E0" // fallback color
+                                  }
+                                  d="M510.652 185.902a27.158 27.158 0 0 0-23.425-18.71l-147.774-13.419-58.433-136.77C276.71 6.98 266.898.494 255.996.494s-20.715 6.487-25.023 16.534l-58.434 136.746-147.797 13.418A27.208 27.208 0 0 0 1.34 185.902c-3.371 10.368-.258 21.739 7.957 28.907l111.7 97.96-32.938 145.09c-2.41 10.668 1.73 21.696 10.582 28.094 4.757 3.438 10.324 5.188 15.937 5.188 4.84 0 9.64-1.305 13.95-3.883l127.468-76.184 127.422 76.184c9.324 5.61 21.078 5.097 29.91-1.305a27.223 27.223 0 0 0 10.582-28.094l-32.937-145.09 111.699-97.94a27.224 27.224 0 0 0 7.98-28.927zm0 0"
+                                />
+                              </svg>
+                            );
+                          }}
+                          defaultValue={rating}
+                          disabled
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

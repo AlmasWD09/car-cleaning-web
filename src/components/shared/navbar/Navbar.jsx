@@ -25,7 +25,6 @@ const Navbar = () => {
 
 
 
-
   // Background color change on scroll
   useEffect(() => {
     const changeBackground = () => {
@@ -171,7 +170,7 @@ const Navbar = () => {
                     ) : (
                       <>
                         {
-                          userProfile ? <span
+                          userProfile?.role === 'USER' ? <span
                             onClick={handlNavigateUserProfile}
                             className="flex items-center bg-primary rounded-full gap-2"
                           >
