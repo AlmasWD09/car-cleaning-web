@@ -1,18 +1,60 @@
 import AuthWrapper from "./AuthWrapper"
 import { Button, Input } from "antd";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useOtpSendApiMutation } from "../../../redux/authontication/authApi";
+import toast from "react-hot-toast";
 
 const DashboardOtpCode = () => {
     const navigate = useNavigate();
+    const [otpCode, setOtpCode] = useState("");
+
+
+
+    const [otpSendApi] = useOtpSendApiMutation()
 
     // Define the `onChange` handler with the correct type
-    const onChange = (text) => {
-        console.log("onChange:", text);
+    const onChange = (value) => {
+        setOtpCode(value);
     };
 
-    const handleVerify = () => {
-        navigate("");
+    const handleVerify = async () => {
+
+        const formData = new FormData();
+        formData.append("otp", otpCode);
+
+        try {
+            const res = await otpSendApi(formData).unwrap();
+            const token = res?.data?.access_token
+            const role = res?.data?.user?.role
+            const email = res?.data?.user?.email
+
+
+            if (res?.status === true) {
+                localStorage.setItem("token", token);
+                localStorage.setItem("role", role);
+                toast.success(res?.message);
+                navigate(`/admin/dashboard/create-new-password?email=${email}`)
+            }
+        } catch (error) {
+            const errorMessage = error?.data?.message;
+
+            if (typeof errorMessage === 'object') {
+                Object.entries(errorMessage).forEach(([field, messages]) => {
+                    if (Array.isArray(messages)) {
+                        messages.forEach(msg => toast.error(msg));
+                    } else {
+                        toast.error(messages);
+                    }
+                });
+            } else {
+
+                toast.error(errorMessage);
+            }
+        }
     };
+
+
     return (
         <AuthWrapper>
             <div className="text-center mb-12 font-degular">
@@ -32,21 +74,19 @@ const DashboardOtpCode = () => {
                 size="large"
                 className="otp-input"
                 style={{ width: "100%", height: "50px" }}
-                length={5}
+                length={6}
                 formatter={(str) => str.toUpperCase()}
                 onChange={onChange}
             />
 
             <div className="flex justify-center pt-11">
-                <Link to="/admin/dashboard/create-new-password">
-                    <Button
-                        className="bg-primary h-12 text-sm text-white font-bold  "
-                        htmlType="submit"
-                        onClick={handleVerify}
-                    >
-                        Verify Code
-                    </Button>
-                </Link>
+                <Button
+                    className="bg-primary h-12 text-sm text-white font-bold  "
+                    htmlType="submit"
+                    onClick={handleVerify}
+                >
+                    Verify Code
+                </Button>
             </div>
 
             <p className="text-center mt-10 text-sm font-normal mb-6 text-[#5C5C5C]">

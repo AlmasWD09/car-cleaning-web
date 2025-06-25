@@ -1,16 +1,64 @@
 
 import AuthWrapper from "./AuthWrapper"
 import { Button, Form, Input } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useResetPasswordApiMutation } from "../../../redux/authontication/authApi";
+import toast from "react-hot-toast";
 
 const DashboardCreateNewPassword = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const queryEmail = queryParams.get('email');
 
-    const onFinish = (values) => {
-        console.log(values);
-        navigate("/auth/login");
+
+    const [resetPasswordApi] = useResetPasswordApiMutation()
+
+
+
+    const onFinish = async (values) => {
+        const formData = new FormData();
+
+
+        formData.append("email", queryEmail);
+        formData.append("password", values?.password);
+        formData.append("c_password", values?.c_password);
+
+
+
+        try {
+            const res = await resetPasswordApi(formData).unwrap();
+            console.log(res)
+
+            if (res?.status === true) {
+                toast.success(res?.message);
+                navigate('/admin/dashboard/login')
+
+            }
+        } catch (error) {
+            const errorMessage = error?.data?.message;
+
+            if (typeof errorMessage === 'object') {
+                Object.entries(errorMessage).forEach(([field, messages]) => {
+                    if (Array.isArray(messages)) {
+                        messages.forEach(msg => toast.error(msg));
+                    } else {
+                        toast.error(messages);
+                    }
+                });
+            } else {
+
+                toast.error(errorMessage);
+            }
+        }
     };
+
+
+
+
+
+
     return (
         <AuthWrapper>
             <div className="text-center mb-12 font-degular">
@@ -29,8 +77,9 @@ const DashboardCreateNewPassword = () => {
                 <div>
                     <p className="text-[24px] font-degular">New password</p>
                     <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: "Please enter your new password" }]}
+                        name="new_password"
+                        rules={[{ required: true, message: "Please Input New Password" }]}
+                        colon={false}
                     >
                         <Input.Password
                             placeholder="Write new password"
@@ -44,8 +93,25 @@ const DashboardCreateNewPassword = () => {
                 <div>
                     <p className="text-[24px] font-degular">Confirm Password</p>
                     <Form.Item
-                        name="confirmPassword"
-                        rules={[{ required: true, message: "Please confirm your password" }]}
+                        name="c_password"
+                        label=""
+                        dependencies={["new_password"]}
+                        rules={[
+                            { required: true, message: "Please input Confirm new password" },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue("new_password") === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            "The two passwords that you entered do not match!"
+                                        )
+                                    );
+                                },
+                            }),
+                        ]}
+                        colon={false}
                     >
                         <Input.Password
                             placeholder="Write confirm password"
@@ -58,14 +124,14 @@ const DashboardCreateNewPassword = () => {
                 {/* Submit Button */}
                 <Form.Item>
                     <div className="flex justify-center">
-                        <Link to="/admin/dashboard/login">
-                            <Button
-                                className="bg-primary h-12 text-sm text-white font-bold mt-6 px-10"
-                                htmlType="submit"
-                            >
-                                Update Password
-                            </Button>
-                        </Link>
+  
+                        <Button
+                            className="bg-primary h-12 text-sm text-white font-bold mt-6 px-10"
+                            htmlType="submit"
+                        >
+                            Update Password
+                        </Button>
+
                     </div>
                 </Form.Item>
             </Form>
