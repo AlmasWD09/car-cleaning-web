@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useAddServiceMutation, useDeleteServiceMutation, useGetDetailsServiceApiQuery, useGetServiceApiQuery, useUpdateServiceMutation } from "../../../redux/dashboardFeatures/services/dashboardServiceApi";
 import toast from "react-hot-toast";
 import CustomLoading from "../../../components/shared/CustomLoading";
+import axios from "axios";
 
 
 const DashboardService = () => {
@@ -34,6 +35,24 @@ const DashboardService = () => {
   const [updateService] = useUpdateServiceMutation() // update
   const [deleteService] = useDeleteServiceMutation() // delete
 
+
+  console.log(servicesData)
+
+
+  // useEffect(() => {
+  //   const getFunction =async () => {
+  //     const token = localStorage.getItem("token");
+  //     const API = import.meta.env.VITE_API_BASE_URL;
+
+  //     const res = await axios.get(`${API}/admin/services`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`
+  //       }
+  //     });
+  //     console.log(res?.data?.data)
+  //   }
+  //   getFunction()
+  // }, [])
 
 
 

@@ -73,7 +73,7 @@ const Feedbacks = () => {
 
   const handleHighest = async () => {
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = localStorage.getItem("token");
       const API = import.meta.env.VITE_API_BASE_URL;
 
       const res = await axios.get(`${API}/admin/feedback-highlight/${selectId}`, {

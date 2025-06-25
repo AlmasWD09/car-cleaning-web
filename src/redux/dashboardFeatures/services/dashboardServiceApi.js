@@ -1,8 +1,5 @@
 import { baseApi } from "../../api/baseApi";
 
-
-
-
 const dashboardServiceApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getServiceApi: builder.query({

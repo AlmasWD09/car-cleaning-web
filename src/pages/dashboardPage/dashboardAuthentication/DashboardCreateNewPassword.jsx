@@ -12,19 +12,15 @@ const DashboardCreateNewPassword = () => {
     const queryParams = new URLSearchParams(location.search);
     const queryEmail = queryParams.get('email');
 
-
     const [resetPasswordApi] = useResetPasswordApiMutation()
 
 
 
     const onFinish = async (values) => {
         const formData = new FormData();
-
-
         formData.append("email", queryEmail);
         formData.append("password", values?.password);
         formData.append("c_password", values?.c_password);
-
 
 
         try {
@@ -77,7 +73,7 @@ const DashboardCreateNewPassword = () => {
                 <div>
                     <p className="text-[24px] font-degular">New password</p>
                     <Form.Item
-                        name="new_password"
+                        name="password"
                         rules={[{ required: true, message: "Please Input New Password" }]}
                         colon={false}
                     >
@@ -95,12 +91,12 @@ const DashboardCreateNewPassword = () => {
                     <Form.Item
                         name="c_password"
                         label=""
-                        dependencies={["new_password"]}
+                        dependencies={["password"]}
                         rules={[
                             { required: true, message: "Please input Confirm new password" },
                             ({ getFieldValue }) => ({
                                 validator(_, value) {
-                                    if (!value || getFieldValue("new_password") === value) {
+                                    if (!value || getFieldValue("password") === value) {
                                         return Promise.resolve();
                                     }
                                     return Promise.reject(

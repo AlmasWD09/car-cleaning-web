@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import AuthWrapper from "./AuthWrapper";
 import { usePostAuthApiMutation } from "../../../redux/authontication/authApi";
+import toast from "react-hot-toast";
 
 
 
@@ -25,22 +26,20 @@ const DashboardLogin = () => {
 
             console.log(res)
             if (res.status === true) {
+                toast.success(res?.message)
                 localStorage.setItem("token", token);
                 localStorage.setItem("role", role);
                 navigate('/admin/dashboard')
+            } else if (res.status === false) {
+                toast.error(res?.message)
             }
-
         } catch (error) {
             console.log(error)
-            if (error && email) {
-                console.log(error?.data?.message?.email)
-            }
-            else if (error && password) {
-                console.log(error?.data?.message?.password)
-            }
         }
     };
 
+
+    
     return (
         <AuthWrapper>
             <div className="text-center mb-12 font-degular">
