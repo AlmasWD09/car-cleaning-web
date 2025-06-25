@@ -4,22 +4,55 @@ import { Button, Form, Input } from "antd";
 import { useEffect, useState } from "react";
 import TextArea from "antd/es/input/TextArea";
 import { ArrowRightOutlined } from "@ant-design/icons";
+import { useForm } from "antd/es/form/Form";
+import { usePostSupportApiMutation } from "../../redux/web/support/supportApi";
+import toast from "react-hot-toast";
 
 const Support = () => {
+  const [formOne] = useForm()
   const navigate = useNavigate();
   const [isFocused, setIsFocused] = useState(false);
 
 
+  const [postSupportApi] = usePostSupportApiMutation()
 
 
+
+  const onFinishOne = async (values) => {
+    const formData = new FormData();
+
+    formData.append("full_name", values?.full_name);
+    formData.append("subject", values?.subject);
+    formData.append("message", values?.message);
+
+    try {
+      const res = await postSupportApi(formData).unwrap();
+      
+      if (res?.status === true) {
+        toast.success(res?.message);
+        formOne.resetFields()
+      }
+    } catch (error) {
+      const errorMessage = error?.data?.message;
+
+      if (typeof errorMessage === 'object') {
+        Object.entries(errorMessage).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            messages.forEach(msg => toast.error(msg));
+          } else {
+            toast.error(messages);
+          }
+        });
+      } else {
+        toast.error(errorMessage);
+      }
+    }
+  }
 
 
   const handleNavigate = () => {
     navigate('/service-book')
   }
-
-
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -60,7 +93,7 @@ const Support = () => {
               <p>Have inquires about our services ? Send us a message. We will contact you soon.</p>
             </div>
             <div className="">
-              <Form>
+              <Form form={formOne} onFinish={onFinishOne}>
                 {/* full name */}
                 <div>
                   <Form.Item
@@ -124,6 +157,7 @@ const Support = () => {
 
                 <div className="flex justify-end">
                   <Button
+                    htmlType="submit"
                     style={{
                       width: "200px",
                       backgroundColor: "#0063E5",
