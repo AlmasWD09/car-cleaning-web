@@ -6,7 +6,7 @@ const ErrorPage = () => {
 
 
 
-  return <div className="h-screen flex justify-center items-center">
+  return <div className="h-screen flex justify-center ">
     <div className="space-y-4">
       <img src="/404.png" alt="" />
       <div className="text-center">
