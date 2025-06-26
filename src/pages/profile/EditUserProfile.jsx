@@ -26,6 +26,8 @@ const EditUserProfile = () => {
 
 
   const [updatePhotoApi] = useUpdatePhotoApiMutation()
+  const [updateProfileApi] = useUpdateProfileApiMutation()
+  const [updateSinglePhotoApi] = useUpdateSinglePhotoApiMutation()
 
 
 
@@ -113,6 +115,8 @@ const EditUserProfile = () => {
       if (res?.status === true) {
         toast.success(res?.message)
         refetch()
+      }else{
+        toast.error(res?.message);
       }
     }
     catch (errors) {
@@ -135,6 +139,8 @@ const EditUserProfile = () => {
       if (res?.status === true) {
         toast.success(res?.message)
         refetch()
+      }else{
+         toast.error(res?.message);
       }
     } catch (error) {
       const errorMessage = error?.data?.message;
@@ -356,9 +362,9 @@ const EditUserProfile = () => {
                             : "1px solid #ccc",
                           position: "relative", // Ensure correct layering
                           zIndex: isFocused ? 10 : 1,
-                          cursor: buttonTextChange
-                            ? "not-allowed"
-                            : "pointer",
+                          // cursor: buttonTextChange
+                          //   ? "not-allowed"
+                          //   : "pointer",
                           backgroundColor: buttonTextChange
                             ? "oklch(92.8% 0.006 264.531)"
                             : "",
@@ -385,9 +391,9 @@ const EditUserProfile = () => {
                             : "1px solid #ccc",
                           position: "relative", // Ensure correct layering
                           zIndex: isFocused ? 10 : 1,
-                          cursor: buttonTextChange
-                            ? "not-allowed"
-                            : "pointer",
+                          // cursor: buttonTextChange
+                          //   ? "not-allowed"
+                          //   : "pointer",
                           backgroundColor: buttonTextChange
                             ? "oklch(92.8% 0.006 264.531)"
                             : "",

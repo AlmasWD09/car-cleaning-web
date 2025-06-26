@@ -10,6 +10,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [navbar, setNavbar] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
   // =============== conditionali loaction set=========
   const location = useLocation()
   const hideNavbarButton = ["/forget-password", "/otp-code", "/create-new-password", "/password-successfull",];
@@ -20,9 +21,14 @@ const Navbar = () => {
 
 
 
-  const { data: userProfileData, isLoading, refetch } = useGetProfileApiQuery()
-  const userProfile = userProfileData?.data
+  const token = localStorage.getItem('token')
+  const { data: userProfileData, isLoading, } = useGetProfileApiQuery({},{
+    refetchOnFocus:true,
+    skip:!token
+  })
+  
 
+  
 
 
 
@@ -146,7 +152,7 @@ const Navbar = () => {
               {
                 !shouldHideNavbarButton && <div className="flex justify-center items-center gap-8">
                   {
-                    userProfile?.role === 'USER' && <span onClick={handleNotification} className="bg-primary rounded-full p-4 mr-6 cursor-pointer">
+                    userProfileData?.data?.role === 'USER' && <span onClick={handleNotification} className="bg-primary rounded-full p-4 mr-6 cursor-pointer">
                       <svg
                         width="22"
                         height="22"
@@ -175,13 +181,13 @@ const Navbar = () => {
                     ) : (
                       <>
                         {
-                          userProfile?.role === 'USER' ? <span
+                          userProfileData?.data?.role === 'USER' ? <span
                             onClick={handlNavigateUserProfile}
                             className="flex items-center bg-primary rounded-full gap-2"
                           >
-                            <img src={userProfile?.photo} alt="" className="w-[30px] h-[30px] rounded-full object-cover" />
+                            <img src={userProfileData?.data?.photo} alt="" className="w-[30px] h-[30px] rounded-full object-cover" />
                             <p className="text-[#ffffff] text-[20px] font-semibold tracking-wider">
-                              {userProfile?.name}
+                              {userProfileData?.data?.name}
                             </p>
                           </span>
                             :
