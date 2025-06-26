@@ -79,11 +79,12 @@ import CommonTitle from "../../shared/CommonTitle";
 import CustomContainer from "../../shared/CustomContainer";
 
 const PhotoGallery = () => {
+  const [showAll, setShowAll] = useState(false);
+
   const { data: gallaryPhoto } = useGetPhotoGallaryApiQuery();
   const gallaryPhotData = gallaryPhoto?.data?.data || [];
-  // console.log(gallaryPhotData)
+  console.log(gallaryPhotData)
 
-  const [showAll, setShowAll] = useState(false);
 
   const firstSeven = gallaryPhotData.slice(0, 7);
   const restPhotos = gallaryPhotData.slice(7);

@@ -20,11 +20,14 @@ const DashboardService = () => {
   const [detailsId, setDetailsId] = useState('')
   const [deleteId, setDeleteId] = useState('')
   const [slotData, setSlotData] = useState([])
+  const [serviceData, setServiceData] = useState([])
 
 
 
   const { data: servicesData, isLoading, refetch } = useGetServiceApiQuery() // get service
   const allServiceData = servicesData?.data
+
+
 
   const { data: detaislData } = useGetDetailsServiceApiQuery(detailsId); // details service
   const singleServiceDetails = detaislData?.data
@@ -36,23 +39,23 @@ const DashboardService = () => {
   const [deleteService] = useDeleteServiceMutation() // delete
 
 
-  console.log(servicesData)
 
 
-  // useEffect(() => {
-  //   const getFunction =async () => {
-  //     const token = localStorage.getItem("token");
-  //     const API = import.meta.env.VITE_API_BASE_URL;
+  // services data get function
+  useEffect(() => {
+    const getFunction = async () => {
+      const token = localStorage.getItem("token");
+      const API = import.meta.env.VITE_API_BASE_URL;
 
-  //     const res = await axios.get(`${API}/admin/services`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`
-  //       }
-  //     });
-  //     console.log(res?.data?.data)
-  //   }
-  //   getFunction()
-  // }, [])
+      const res = await axios.get(`${API}/admin/services`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setServiceData(res?.data?.data)
+    }
+    getFunction()
+  }, [serviceData])
 
 
 
@@ -74,7 +77,6 @@ const DashboardService = () => {
         interior: singleServiceDetails?.interior,
         exterior: singleServiceDetails?.exterior,
         both: singleServiceDetails?.both,
-        icon: singleServiceDetails?.icon,
 
       });
       if (singleServiceDetails.icon) {
@@ -88,7 +90,7 @@ const DashboardService = () => {
         ]);
       }
     }
-  }, [singleServiceDetails, formTwo]);
+  }, [singleServiceDetails]);
 
 
 
@@ -175,7 +177,7 @@ const DashboardService = () => {
     // });
 
     try {
-      const res = await updateService({ id: detailsId, updateInfo: formData }).unwrap()
+      const res = await updateService({updateInfo: formData, id: detailsId}).unwrap()
       console.log(res)
 
       if (res?.status === true) {
@@ -183,10 +185,11 @@ const DashboardService = () => {
         setLoading(false)
         refetch()
         setModalTwo(false)
+      }else{
+        toast.error(res?.message)
       }
     } catch (errors) {
-      const errorMessage = errors?.data?.message
-      toast.error(errorMessage?.car_type)
+     console.log(errors)
     } finally {
       setLoading(false)
     }
@@ -334,7 +337,7 @@ const DashboardService = () => {
 
       <div className="grid grid-cols-12 gap-4">
         {
-          allServiceData?.map((item, index) => {
+          serviceData?.map((item, index) => {
             return (
               <div key={index} className="col-span-4 bg-[#ffff]  border border-[#ccc] rounded-2xl p-4">
                 <div className="flex items-center justify-between">
@@ -540,7 +543,7 @@ const DashboardService = () => {
         footer={null}
         width={600}
         className='custom-service-modal'
-        maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
+        // maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
       >
 
         <div className="p-8">
@@ -559,11 +562,10 @@ const DashboardService = () => {
                   ]}
                 >
                   <Upload
-
                     accept="image/*"
                     maxCount={1}
-                    showUploadList={{ showPreviewIcon: true }}
                     fileList={ImageFileList}
+                    // showUploadList={{ showPreviewIcon: true }}
                     onChange={({ fileList }) => setImageFileList(fileList)}
                     listType="picture-card"
                     className="w-full"
