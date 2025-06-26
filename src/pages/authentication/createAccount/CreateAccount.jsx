@@ -53,10 +53,10 @@ const CreateAccount = () => {
     try {
       const res = await registerApi(formData).unwrap();
       console.log(res)
-      
+
       if (res?.status === true) {
         toast.success(res?.message);
-        navigate('/otp-code')
+        navigate('/otp-code?verify=create_account')
 
       }
     } catch (error) {

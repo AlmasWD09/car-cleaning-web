@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import CustomContainer from "../../components/shared/CustomContainer";
 import { useNavigate } from "react-router-dom";
 import { useGetAuthProfileApiQuery } from "../../redux/dashboardFeatures/setting/dashboardSettingApi";
-import { useUpdateProfileApiMutation, useUpdateSinglePhotoApiMutation } from "../../redux/authontication/authApi";
+import { useGetProfileApiQuery, useUpdateProfileApiMutation, useUpdateSinglePhotoApiMutation } from "../../redux/authontication/authApi";
 import toast from "react-hot-toast";
 import CustomLoading from "../../components/shared/CustomLoading";
 import { PlusOutlined } from "@ant-design/icons";
-
+import { useAddCarPhotoApiMutation, useUpdatePhotoApiMutation } from "../../redux/web/profile/profileApi";
 
 const EditUserProfile = () => {
   const navigate = useNavigate()
@@ -17,21 +17,64 @@ const EditUserProfile = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [buttonTextChange, setButtonTextChange] = useState(false);
+  const [uploadingIndex, setUploadingIndex] = useState(null);
 
-  const [fileList, setFileList] = useState([]);
-
-  const handleChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-  };
-
-
+  const [addCarPhotoApi] = useAddCarPhotoApiMutation()
   const { data: userProfileData, isLoading, refetch } = useGetAuthProfileApiQuery();
   const userProfile = userProfileData?.data
   const carPhoto = userProfile?.car_photos
-  console.log(userProfile)
 
-  const [updateProfileApi] = useUpdateProfileApiMutation()
-  const [updateSinglePhotoApi] = useUpdateSinglePhotoApiMutation()
+
+  const [updatePhotoApi] = useUpdatePhotoApiMutation()
+
+
+
+  const handleImageUpload = (index, isUpdate = false, photoId) => async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setUploadingIndex(index);
+
+
+    const formData = new FormData();
+    formData.append('photo', file);
+
+    try {
+      let res;
+      if (isUpdate && photoId) {
+        formData.append('_method', 'PUT');
+        res = await updatePhotoApi({
+          updateInfo: formData,
+          id: photoId
+        }).unwrap();
+      } else {
+        // If adding a new photo
+        res = await addCarPhotoApi(formData).unwrap();
+      }
+
+      console.log('ressp----------->', res)
+      if (res?.status === true) {
+        toast.success(res?.message);
+        await refetch()
+      }
+    } catch (error) {
+      const errorMessage = error?.data?.message;
+
+      if (typeof errorMessage === 'object') {
+        Object.entries(errorMessage).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            messages.forEach(msg => toast.error(msg));
+          } else {
+            toast.error(messages);
+          }
+        });
+      } else {
+        toast.error(errorMessage);
+      }
+    } finally {
+      setUploadingIndex(null);
+    }
+  };
 
 
 
@@ -43,7 +86,6 @@ const EditUserProfile = () => {
       formOne.setFieldsValue({
         ...userProfile,
         email: userProfile?.email,
-
       })
     }
 
@@ -51,7 +93,6 @@ const EditUserProfile = () => {
       setImageUrl(userProfile?.photo);
     }
   }, [userProfile]);
-
 
 
   // only image upload function
@@ -116,15 +157,6 @@ const EditUserProfile = () => {
 
 
 
-
-  const handleUploadCarImage = async (options) => {
-    const { file, onSuccess, onError } = options;
-
-    const formData = new FormData();
-    formData.append('image', file);
-
-  }
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -153,13 +185,10 @@ const EditUserProfile = () => {
           </div>
         </div>
 
-
-
-        <div className="flex flex-col lg:flex-row items-center justify-between  gap-12">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
 
           {/* left side */}
           <div className=" w-full lg:w-[60%]">
-
 
             <Form form={formOne} onFinish={createAccountFinish}>
               <div className="rounded-lg flex justify-center items-center w-full mx-auto">
@@ -392,29 +421,53 @@ const EditUserProfile = () => {
           </div>
 
 
-
-
-
-
-
-
-
           {/* right side */}
           <div className="w-full lg:w-[40%]">
             <p className="text-[28px] font-medium font-degular text-[#000000 py-2">Pictures</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {
-                [...Array(6)].map((item,index) => {
-                  return (
-                    <button key={index} className=" col-span-1 h-[146px] rounded-2xl border border-[#ccc] text-7xl flex justify-center items-center">+</button>
-                  )
-                })
-              }
+              {[...Array(6)].map((_, index) => {
+                const photo = carPhoto?.[index];
+                return (
+                  <div key={index} className="relative col-span-1 h-[146px] rounded-2xl border border-[#ccc] flex justify-center items-center">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload(index, !!photo, photo?.id)}
+                      className="hidden"
+                      id={`image-upload-${index}`}
+                      disabled={uploadingIndex === index}
+                    />
+
+                    <label
+                      htmlFor={`image-upload-${index}`}
+                      className={`w-full h-full flex justify-center items-center cursor-pointer ${uploadingIndex === index ? 'opacity-50' : ''
+                        }`}
+                    >
+                      {uploadingIndex === index ? (
+                        <span className="text-lg">Uploading...</span>
+                      ) : photo ? (
+                        <>
+                          <img
+                            src={photo.photo}
+                            alt={`Car ${index + 1}`}
+                            className="w-full h-full object-cover rounded-2xl"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                            <span className="text-white font-semibold">Update Photo</span>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-7xl">+</span>
+                      )}
+                    </label>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </CustomContainer>
-    </section >
+    </section>
   )
 }
 

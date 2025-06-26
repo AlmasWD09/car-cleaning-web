@@ -218,14 +218,14 @@ const UserProfile = () => {
                         <div>
 
 
-                            <div className="space-y-4">
+                            <div className={`space-y-4 ${serviceData?.length > 0 ? 'h-[430px] overflow-y-auto' : ''}`}>
                                 {
                                     serviceData?.length > 0 ? (
                                         serviceData?.map((item, index) => {
                                             return (
                                                 <div
                                                     key={index}
-                                                    className="bg-white border border-gray-300 rounded-lg p-4 flex flex-col md:flex-row md:justify-between md:items-center"
+                                                    className=" bg-white border border-gray-300 rounded-lg p-4 flex flex-col md:flex-row md:justify-between md:items-center"
                                                 >
                                                     <div className="flex flex-col md:flex-row md:items-center gap-4">
                                                         <span>

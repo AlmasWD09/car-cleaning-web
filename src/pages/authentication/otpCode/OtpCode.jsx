@@ -12,6 +12,8 @@ const OtpCode = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const queryEmail = queryParams.get('email');
+    const verifyText = queryParams.get('verify');
+
 
     const [otpSendApi] = useOtpSendApiMutation()
     const [forgetPasswordApi] = useForgetPasswordApiMutation()
@@ -33,7 +35,11 @@ const OtpCode = () => {
                 localStorage.setItem("token", token);
                 localStorage.setItem("role", role);
                 toast.success(res?.message);
-                navigate(`/create-new-password?email=${email}`)
+                if (verifyText === 'create_account') {
+                    navigate(`/`)
+                } else {
+                    navigate(`/create-new-password?email=${email}`)
+                }
             }
         } catch (error) {
             const errorMessage = error?.data?.message;

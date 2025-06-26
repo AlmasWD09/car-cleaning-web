@@ -35,6 +35,8 @@ const Login = () => {
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
         navigate('/')
+      }else{
+        toast.error(res?.message)
       }
 
     } catch (error) {
