@@ -16,9 +16,17 @@ const dashboardFeedbackApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['feedback'],
         }),
+        postFeedback: builder.mutation({
+            query: (feedbackInfo) => ({
+                url: `/feedbacks`,
+                method: "POST",
+                body:feedbackInfo,
+            }),
+            invalidatesTags: ['feedback'],
+        }),
 
     })
 })
 
 
-export const { useGetFeedbackApiQuery, useDeleteFeedbackMutation } = dashboardFeedbackApi;
+export const { useGetFeedbackApiQuery, useDeleteFeedbackMutation,usePostFeedbackMutation } = dashboardFeedbackApi;

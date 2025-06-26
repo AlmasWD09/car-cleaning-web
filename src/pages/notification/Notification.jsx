@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import CustomContainer from "../../components/shared/CustomContainer"
-import { Modal } from "antd";
+import { Modal, Rate } from "antd";
 import ReactStarsRating from 'react-awesome-stars-rating';
 import { useGetNotificationApiQuery } from "../../redux/dashboardFeatures/notification/dashboardNotificationApi";
 import CustomLoading from "../../components/shared/CustomLoading";
+import { usePostFeedbackMutation } from "../../redux/dashboardFeatures/feedback/dashboardFeedbackApi";
+import toast from "react-hot-toast";
 
 
 
 const Notification = () => {
     const [modalOpenOne, setModalOpenOne] = useState(false);
     const [rating, setRating] = useState(0);
-    const [description, setDescription] = useState("");
+    const [ratingId, setRatingId] = useState('');
+    const [reviewText, setReviewText] = useState('');
+
+
+    const [postFeedback] = usePostFeedbackMutation();
 
 
     const { data: getNotification, isLoading, refetch } = useGetNotificationApiQuery()
@@ -25,16 +31,57 @@ const Notification = () => {
     });
 
 
-    const showmodalOne = () => {
+
+
+
+    const showmodalOne = (id) => {
+        setRatingId(id)
         setModalOpenOne(true)
     }
 
-    const handleModalOneOk = () => {
-        setModalOpenOne(false)
+    const handleModalOneOk = async () => {
+
+        const formData = new FormData();
+
+        formData.append("service_id", parseInt(ratingId));
+        formData.append("comment", reviewText);
+        formData.append("rating", rating);
+
+        try {
+            const res = await postFeedback(formData).unwrap();
+
+
+            if (res?.status === true) {
+                toast.success(res?.message);
+                setModalOpenOne(false)
+                setRating(0);
+                setReviewText('');
+            } else {
+                toast.error(res?.message);
+            }
+        } catch (error) {
+            const errorMessage = error?.data?.message;
+
+            if (typeof errorMessage === 'object') {
+                Object.entries(errorMessage).forEach(([field, messages]) => {
+                    if (Array.isArray(messages)) {
+                        messages.forEach(msg => toast.error(msg));
+                    } else {
+                        toast.error(messages);
+                    }
+                });
+            } else {
+
+                toast.error(errorMessage);
+            }
+        }
+
     }
 
     const handleCancelModalOne = () => {
         setModalOpenOne(false)
+        setRating(0);
+        setReviewText('');
     }
 
 
@@ -44,7 +91,9 @@ const Notification = () => {
     };
 
 
-
+    const handleReviewChange = (e) => {
+        setReviewText(e.target.value);
+    };
 
 
 
@@ -111,7 +160,7 @@ const Notification = () => {
                                             </div>
                                                 :
                                                 <div
-                                                    onClick={() => showmodalOne()}
+                                                    onClick={() => showmodalOne(item?.data?.service_id)}
                                                     className="bg-[#F27712]  w-fit cursor-pointer py-4 px-6 rounded-[14px] text-xl flex items-center gap-4">
                                                     <span className="cursor-pointer flex items-center">
                                                         <svg width="30" height="28" viewBox="0 0 30 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -159,13 +208,17 @@ const Notification = () => {
                     <div>
                         <textarea name="" id=""
                             placeholder="Add your review"
+                            value={reviewText}
+                            onChange={handleReviewChange}
                             className="border border-gray-200 w-full h-[200px] rounded-xl  focus:outline-none  mt-4 p-4 resize-none"
                         ></textarea>
                     </div>
 
                     <div className="flex items-center justify-end gap-4 mt-6">
                         <button onClick={handleCancelModalOne} className="border px-4 py-1 rounded-md">Cancel</button>
-                        <button type="submit" className="border px-4 py-1 rounded-md bg-primary text-[#fff]">Submit</button>
+                        <button type="submit"
+                            onClick={handleModalOneOk}
+                            className="border px-4 py-1 rounded-md bg-primary text-[#fff]">Submit</button>
                     </div>
                 </div>
             </Modal>
