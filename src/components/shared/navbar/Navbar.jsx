@@ -4,6 +4,7 @@ import { TfiClose } from "react-icons/tfi";
 import { VscMenu } from "react-icons/vsc";
 import { useEffect, useState } from "react";
 import { useGetProfileApiQuery } from "../../../redux/authontication/authApi";
+import CustomLoading from "../CustomLoading";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Navbar = () => {
 
 
 
-  const { data: userProfileData ,refetch} = useGetProfileApiQuery()
+  const { data: userProfileData,isLoading,refetch} = useGetProfileApiQuery()
   const userProfile = userProfileData?.data
 
 
@@ -65,7 +66,9 @@ const Navbar = () => {
     navigate("/user-profile");
   };
 
-
+if(isLoading){
+  return <CustomLoading />
+}
 
   return (
     <nav>

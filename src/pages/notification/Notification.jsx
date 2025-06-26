@@ -10,58 +10,20 @@ import CustomLoading from "../../components/shared/CustomLoading";
 const Notification = () => {
     const [modalOpenOne, setModalOpenOne] = useState(false);
     const [rating, setRating] = useState(0);
-  const [description, setDescription] = useState("");
-  
+    const [description, setDescription] = useState("");
+
 
     const { data: getNotification, isLoading, refetch } = useGetNotificationApiQuery()
-    const notificationData = getNotification?.data
+    const notificationData = [...(getNotification?.data || [])]?.sort((a, b) => {
+        if (
+            (a.data.type === "Booking successful" && b.data.type === "Booking successful") ||
+            (a.data.type !== "Booking successful" && b.data.type !== "Booking successful")
+        ) {
+            return 0;
+        }
+        return a.data.type === "Booking successful" ? -1 : 1;
+    });
 
-    console.log(notificationData)
-
-
-
-
-    const notificationsData = [
-        {
-            name: "Booking Successful",
-            title1: "Thursday, March 27, 2025",
-            title2: "10:00 PM",
-            rating1: "SUV",
-            rating2: "Exterior",
-        },
-        {
-            name: "Booking Successful",
-            title1: "Thursday, March 27, 2025",
-            title2: "10:00 PM",
-            rating1: "SUV",
-            rating2: "Exterior",
-        },
-        {
-            name: "Order Completed",
-            title1: "SUV",
-            title2: "Exterior",
-            rating1: "",
-            rating2: "",
-            rating3: "Leave a review",
-        },
-        {
-            name: "Order Completed",
-            title1: "SUV",
-            title2: "Exterior",
-            rating1: "",
-            rating2: "",
-            rating3: "Leave a review",
-        },
-        {
-            name: "Order Completed",
-            title1: "SUV",
-            title2: "Exterior",
-            rating1: "",
-            rating2: "",
-            rating3: "Leave a review",
-        },
-
-    ];
 
     const showmodalOne = () => {
         setModalOpenOne(true)
@@ -148,9 +110,9 @@ const Notification = () => {
                                                 <p className="text-[24px]">{item.data?.service_type}</p>
                                             </div>
                                                 :
-                                                <div 
-                                                onClick={() => showmodalOne()}
-                                                className="bg-[#F27712]  w-fit cursor-pointer py-4 px-6 rounded-[14px] text-xl flex items-center gap-4">
+                                                <div
+                                                    onClick={() => showmodalOne()}
+                                                    className="bg-[#F27712]  w-fit cursor-pointer py-4 px-6 rounded-[14px] text-xl flex items-center gap-4">
                                                     <span className="cursor-pointer flex items-center">
                                                         <svg width="30" height="28" viewBox="0 0 30 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M15 0.5L18.3677 10.8647H29.2658L20.4491 17.2705L23.8168 27.6353L15 21.2295L6.18322 27.6353L9.55093 17.2705L0.734152 10.8647H11.6323L15 0.5Z" fill="white" />
