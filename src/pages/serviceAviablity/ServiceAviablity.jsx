@@ -1,7 +1,11 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import CustomContainer from "../../components/shared/CustomContainer"
 import React, { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
+import { useGetServiceAvilityApiQuery } from "../../redux/web/serviceAvility/serviceAvilityApi";
+
+
+
 
 
 
@@ -13,6 +17,77 @@ const ServiceAviablity = () => {
   const [activeTimes, setActiveTimes] = useState([]);
   const [clickable, setClickable] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null);
+  const location = useLocation();
+  const { id, type, name, price } = location.state || {};
+  // console.log(id, type, name, price)
+
+
+  const { data: getBlockService } = useGetServiceAvilityApiQuery()
+  const blockServiceDate = getBlockService?.data?.data;
+
+
+
+
+
+  const today = new Date();
+  const disabledBefore = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  // Get array of already blocked dates
+  const blockedDates = blockServiceDate?.map(item => new Date(item.date)) || [];
+
+  // ==================== date formate and ui show start ==========================
+  const date = new Date('Sun Jun 29 2025 00:00:00 GMT+0600');
+
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const monthName = months[date.getMonth()]; // "June"
+  const singleDay = date.getDate(); // 29
+  const singleYear = date.getFullYear(); // 2025
+
+  const singleFormattedDate = `${monthName} ${singleDay}, ${singleYear}`;
+  console.log("singleFormattedDate", singleFormattedDate); // Output: "June 29, 2025"
+
+  // ==================== date formate and ui show end ============================
+
+
+
+
+
+
+
+
+
+
+
+
+  // ✅ Local date format function (YYYY-MM-DD)
+  const formatDateLocal = (date) => {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // 🔹 User date select handler
+  const handleDateSelect = (date) => {
+    if (date) {
+      setSelectedDate(date);
+    }
+  };
+
+  console.log(selectedDate)
+
+
+  const year = selectedDate?.getFullYear();
+  const month = String(selectedDate?.getMonth() + 1).padStart(2, '0');
+  const day = String(selectedDate?.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
+
+
+
 
 
   const timeallData = [
@@ -62,6 +137,8 @@ const ServiceAviablity = () => {
   };
 
 
+
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -94,21 +171,21 @@ const ServiceAviablity = () => {
             <div className="bg-gray-100 shadow-md p-4 h-[340px]">
               <DayPicker
                 mode="single"
-                // selected={selectedDate}
-                // onSelect={handleDateSelect}
-                // disabled={[
-                //   { before: disabledBefore }, // Disable past dates
-                //   ...blockedDates.map(date => ({ from: date, to: date })) // Disable already blocked dates
-                // ]}
-                // modifiersClassNames={{
-                //   disabled: "cursor-not-allowed opacity-50",
-                //   selected: "bg-primary text-white"
-                // }}
+                selected={selectedDate}
+                onSelect={handleDateSelect}
+                disabled={[
+                  { before: disabledBefore }, // Disable past dates
+                  ...blockedDates.map(date => ({ from: date, to: date })) // Disable already blocked dates
+                ]}
+                modifiersClassNames={{
+                  disabled: "cursor-not-allowed opacity-50",
+                  selected: "bg-primary text-white"
+                }}
               />
             </div>
             <div className="flex flex-col md:flex-row justify-between gap-3 lg:gap-0 rounded-lg p-4 font-degular mt-6">
               <div>
-                <p className='text-[28px]  font-bold font-degular'>Today is March 26, 2025. </p>
+                <p className='text-[28px]  font-bold font-degular'>Today is {singleFormattedDate}. </p>
                 <p className='text-[20px]  font-degular'>No availability until 27 March</p>
 
               </div>
@@ -136,10 +213,10 @@ const ServiceAviablity = () => {
                 Change</button>
             </div>
             <div className="flex flex-col md:flex-row justify-between border border-[#ccc] rounded-lg p-4 font-degular mt-6">
-              <p className='text-[28px]  font-degular text-primary'>Compact</p>
+              <p className='text-[28px]  font-degular text-primary font-medium'>{type}</p>
               <div>
-                <p className='text-[20px]  font-degular'>Both</p>
-                <p className='text-[28px]  font-bold text-primary font-degular'>$180.00</p>
+                <p className='text-[20px]  font-degular'>{name}</p>
+                <p className='text-[28px]  font-bold text-primary font-degular'>${price}</p>
               </div>
             </div>
           </div>

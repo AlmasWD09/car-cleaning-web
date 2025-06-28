@@ -43,7 +43,7 @@ const Banner = () => {
                   <button onClick={() => handleServiceBookPage()} className="bg-primary text-[#ffff] text-[20px] py-2 md:py-4 px-[40px] md:px-[57px] rounded-full">
                     Book Now
                   </button>
-                  <button className="bg-primary text-[#ffff] p-4 md:p-6 rounded-full">
+                  <button onClick={() => handleServiceBookPage()} className="bg-primary text-[#ffff] p-4 md:p-6 rounded-full">
                     <svg
                       width="13"
                       height="13"
@@ -60,7 +60,7 @@ const Banner = () => {
                 </div>
 
                 {/* group avater component */}
-                <div className="h-[220px]  mb-2">
+                <div className="h-[220px]  md:mb-2">
                 </div>
               </div>
 
@@ -74,7 +74,7 @@ const Banner = () => {
 
 
               {/* right side image */}
-              <div className="relative top-16">
+              <div className="relative md:top-16">
                 <svg
                   className="w-[280px] md:w-[600px] mx-auto"
                   viewBox="0 0 758 126"

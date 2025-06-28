@@ -8,7 +8,7 @@ const profileApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: carInfo
             }),
-            providesTags: ['webProfile'],
+            invalidatesTags: ['webProfile'],
         }),
         updatePhotoApi: builder.mutation({
             query: ({updateInfo,id}) => ({

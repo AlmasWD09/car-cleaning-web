@@ -16,6 +16,7 @@ const ManageDates = () => {
   const [addBlockDateApi] = useAddBlockDateApiMutation(); // post
   const [deleteUnBlockDateApi] = useDeleteUnBlockDateApiMutation(); // delete
   const allDateData = manageDateData?.data?.data;
+  console.log(allDateData)
 
   const today = new Date();
   const disabledBefore = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -54,6 +55,9 @@ const ManageDates = () => {
   const month = String(selectedDate?.getMonth() + 1).padStart(2, '0');
   const day = String(selectedDate?.getDate()).padStart(2, '0');
   const formattedDate = `${year}-${month}-${day}`;
+
+
+  
 
   // =============  modal one start ===============
   const onFinishOne = async () => {

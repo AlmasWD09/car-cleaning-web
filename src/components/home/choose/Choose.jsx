@@ -24,7 +24,7 @@ const Choose = () => {
               {/* list items */}
               <div>
 
-                <p className="text-[24px] font-degular flex gap-2">
+                <p className="text-[20px] md:text-[24px] font-degular flex gap-2">
                   <span className="mt-2">
                     <svg
                       width="20"
@@ -45,7 +45,7 @@ const Choose = () => {
                   detail.
                 </p>
 
-                <p className="text-[24px] font-degular flex gap-2">
+                <p className="text-[20px] md:text-[24px] font-degular flex gap-2">
                   <span className="mt-2">
                     <svg
                       width="20"
@@ -65,7 +65,7 @@ const Choose = () => {
                   Advanced Equipment – High-end tools for superior results
                 </p>
 
-                <p className="text-[24px] font-degular flex gap-2">
+                <p className="text-[20px] md:text-[24px] font-degular flex gap-2">
                   <span className="mt-2">
                     <svg
                       width="20"
@@ -86,7 +86,7 @@ const Choose = () => {
                 </p>
 
 
-                <p className="text-[24px] font-degular flex gap-2">
+                <p className="text-[20px] md:text-[24px] font-degular flex gap-2">
                   <span className="mt-2">
                     <svg
                       width="20"
@@ -107,7 +107,7 @@ const Choose = () => {
                   products.
                 </p>
 
-                <p className="text-[24px] font-degular flex gap-2">
+                <p className="text-[20px] md:text-[24px] font-degular flex gap-2">
                   <span className="mt-2">
                     <svg
                       width="20"
@@ -126,7 +126,7 @@ const Choose = () => {
                   </span>
                   Customer Satisfaction – Your car comes FULL CIRCLE every time.
                 </p>
-                <p className="text-[24px] font-degular flex gap-2">
+                <p className="text-[20px] md:text-[24px] font-degular flex gap-2">
                   Most of our profits are donated to community schools. We thank you for your business.
                 </p>
           
@@ -134,7 +134,7 @@ const Choose = () => {
                   <button onClick={() => handleServiceBookPage()} className="bg-primary text-[#ffff] text-[20px] py-2 md:py-4 px-[40px] md:px-[57px] rounded-full">
                     Book Now
                   </button>
-                  <button className="bg-primary text-[#ffff] p-4 md:p-6 rounded-full">
+                  <button onClick={() => handleServiceBookPage()} className="bg-primary text-[#ffff] p-4 md:p-6 rounded-full">
                     <svg
                       width="13"
                       height="13"

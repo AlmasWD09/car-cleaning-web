@@ -12,27 +12,12 @@ const Pricing = () => {
   const [selectId, setSelectId] = useState('')
   const [singlePriceValue, setSinglePriceValue] = useState({})
 
-const {data:getPrice} = useGetPriceApiQuery();
-const priceData = getPrice?.data
-// console.log(priceData)
+  const { data: getPrice } = useGetPriceApiQuery();
+  const priceData = getPrice?.data
+  // console.log(priceData)
 
-console.log(singlePriceValue)
+  // console.log(singlePriceValue)
 
-
-  const serviceBookAllData = [
-    {
-      title: "Interior",
-      price: "70.00"
-    },
-    {
-      title: "Interior",
-      price: "80.00"
-    },
-    {
-      title: "Interior",
-      price: "60.00"
-    },
-  ];
 
   const showModal = (item) => {
     setSelectId(item?.id)
@@ -44,6 +29,11 @@ console.log(singlePriceValue)
   }
   const handleModalCancel = () => {
     setModalOpen(false)
+  }
+
+
+  const handlePrice = (id, type, name, price) => {
+    navigate(`/service-aviablity`, { state: { id,type,name, price } })
   }
 
 
@@ -71,35 +61,35 @@ console.log(singlePriceValue)
                 return (
                   <div
                     key={index}
-                    className="flex justify-between items-center border rounded-xl mb-4 p-2 lg:p-4 font-degular"
+                    className="grid grid-cols-12 border rounded-xl mb-4 p-2 lg:p-4 font-degular"
                   >
-                    <div className="lg:w-[300px]">
+                    <div className="col-start-1 col-end-4 ">
                       <h1 className="text-[28px] lg:text-[30px]">{item?.car_type}</h1>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="col-start-4 col-end-10  flex items-center gap-4">
                       <div className=" lg:w-[300px]">
-                        <p className="text-[20px] lg:text-[24px]">interior</p>
+                        <p className="text-[20px] lg:text-[24px]">Interior</p>
                         <p className="text-[28px] lg:text-[48px] font-semibold text-primary">
                           ${item?.interior}
                         </p>
                       </div>
                       <div className=" lg:w-[300px]">
-                        <p className="lg:text-[24px] ">exterior</p>
+                        <p className="lg:text-[24px] ">Exterior</p>
                         <p className="text-[28px] lg:text-[48px] font-semibold text-primary ">
                           ${item?.exterior}
                         </p>
                       </div>
                       <div className=" lg:w-[300px]">
-                        <p className="lg:text-[24px]">both</p>
+                        <p className="lg:text-[24px]">Both</p>
                         <p className="text-[28px] lg:text-[48px] font-semibold text-primary">
                           ${item.both}
                         </p>
                       </div>
                     </div>
 
-                    <div className="lg:w-[200px] flex justify-end ">
-                      <button onClick={()=>showModal(item)} className="bg-primary text-[#ffffff] px-[74px] py-2 lg:py-[14px] text-[24px] rounded-full my-2">
+                    <div className="col-start-10 col-end-13  flex justify-end items-center ">
+                      <button onClick={() => showModal(item)} className="bg-primary h-[60px] flex justify-center items-center text-[#ffffff] px-[74px] py-2 lg:py-[14px] text-[24px] rounded-full m-2">
                         Select
                       </button>
                     </div>
@@ -126,32 +116,63 @@ console.log(singlePriceValue)
           className='custom-service-modal'
           maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
         >
-          <p className='text-[24px] font-degular font-medium text-center'>Which service you wants to book ?</p>
+          <p className='text-[24px] font-degular font-medium text-center py-8'>Which service you wants to book ?</p>
 
-          {
-            serviceBookAllData.map((item, index) => {
-              return (
-                <div key={index} className='p-4'>
-                  <div className='flex justify-between items-center border border-[#ccc] rounded-xl p-4 mb-4 hover:bg-primary hover:bg-opacity-15'>
-                    <div>
-                      <p className='text-[24px] font-degular'>{item.title}</p>
-                      <p className='text-[24px] font-degular font-semibold text-primary'>$ {item.price}</p>
-                    </div>
-                    <Link to="/service-aviablity">
-                      <span className="cursor-pointer">
-                        <svg
-                          className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
-                          viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect width="60" height="60" rx="30" fill="#0063E6" />
-                          <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
-                        </svg>
-                      </span>
-                    </Link>
-                  </div>
+          {/* interior card */}
+          <div className="pb-4">
+            <div className='px-4'>
+              <div className='flex justify-between items-center border border-[#ccc] rounded-xl p-4 mb-4 hover:bg-primary hover:bg-opacity-15'>
+                <div>
+                  <p className='text-[24px] font-degular'>Interior</p>
+                  <p className='text-[24px] font-degular font-semibold text-primary'>${singlePriceValue?.interior}</p>
                 </div>
-              )
-            })
-          }
+                <span onClick={() => handlePrice((singlePriceValue?.id),(singlePriceValue?.car_type), ("Interior"), (singlePriceValue?.interior))} className="cursor-pointer">
+                  <svg
+                    className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
+                    viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="60" height="60" rx="30" fill="#0063E6" />
+                    <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            {/* exterior card */}
+            <div className='px-4'>
+              <div className='flex justify-between items-center border border-[#ccc] rounded-xl p-4 mb-4 hover:bg-primary hover:bg-opacity-15'>
+                <div>
+                  <p className='text-[24px] font-degular'>Exterior</p>
+                  <p className='text-[24px] font-degular font-semibold text-primary'>${singlePriceValue?.exterior}</p>
+                </div>
+                <span onClick={() => handlePrice((singlePriceValue?.id),(singlePriceValue?.car_type), ("Exterior"), (singlePriceValue?.exterior))} className="cursor-pointer">
+                  <svg
+                    className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
+                    viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="60" height="60" rx="30" fill="#0063E6" />
+                    <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            {/* Both card*/}
+            <div className='px-4'>
+              <div className='flex justify-between items-center border border-[#ccc] rounded-xl p-4 mb-4 hover:bg-primary hover:bg-opacity-15'>
+                <div>
+                  <p className='text-[24px] font-degular'>Both</p>
+                  <p className='text-[24px] font-degular font-semibold text-primary'>${singlePriceValue?.both}</p>
+                </div>
+                <span onClick={() => handlePrice((singlePriceValue?.id),(singlePriceValue?.car_type), ("Both"), (singlePriceValue?.both))} className="cursor-pointer">
+                  <svg
+                    className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
+                    viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="60" height="60" rx="30" fill="#0063E6" />
+                    <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
 
 
         </Modal>
