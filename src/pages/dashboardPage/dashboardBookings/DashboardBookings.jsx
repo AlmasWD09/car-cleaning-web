@@ -330,7 +330,6 @@ const DashboardBookings = () => {
         >
 
           <div className="p-8">
-            <p>{detailsBooking?.id}</p>
             <div className="max-w-6xl mx-auto p-6 bg-white">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Left Side - Car Details */}

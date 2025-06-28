@@ -1,9 +1,10 @@
-import { Button, Card, Form, Modal, Upload } from "antd";
+import { Button, Card, Form, Modal, Pagination, Upload } from "antd";
 import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useAddPhotoMutation, useDeletePhotoMutation, useGetPhotoApiQuery, useUpdatePhotoMutation } from "../../../redux/dashboardFeatures/manageImages/dashboardManageImagesApi";
 import toast from "react-hot-toast";
+import CustomLoading from "../../../components/shared/CustomLoading";
 
 
 const ManageImages = () => {
@@ -14,16 +15,18 @@ const ManageImages = () => {
   const [imageID, setimageID] = useState(null);
   const [mondalOne, setModalOne] = useState(false);
   const [mondalTwo, setModalTwo] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+
 
 
   const [addPhoto] = useAddPhotoMutation() // post
-  const { data: getPhoto } = useGetPhotoApiQuery() // get
+  const { data: getPhoto, isLoading, refetch } = useGetPhotoApiQuery({ per_page: perPage, page: currentPage }) // get
   const [updatePhoto] = useUpdatePhotoMutation() // update
   const [deletePhoto] = useDeletePhotoMutation() // delete
   const allPhoto = getPhoto?.data?.data
+  const totalPagination = getPhoto?.data?.total
   const selectedImage = allPhoto?.find(item => item.id === imageID);
-
-
 
 
 
@@ -223,12 +226,26 @@ const ManageImages = () => {
 
 
 
+  useEffect(() => {
+    refetch();
+  }, [currentPage, perPage, refetch]);
 
+  if (isLoading) {
+    return <CustomLoading />
+  }
 
   return (
     <div>
+      <div className="pb-6">
+        <button
+          onClick={showModalOne}
+          type="button" className="w-[274px] h-[64px] bg-primary text-[#ffff] px-8 py-2 rounded-[20px] text-xl">+ Add more</button>
+      </div>
+
+
       <div className="grid grid-cols-4 gap-5">
-        {allPhoto?.slice(0, 8).map((item, index) => {
+        {/* {allPhoto?.slice(0, 8).map((item, index) => { */}
+        {allPhoto?.map((item, index) => {
           return (
             <div key={index}>
               <div className="relative">
@@ -296,12 +313,21 @@ const ManageImages = () => {
         })}
       </div>
 
-
-      <div className="py-8">
-        <button
-          onClick={showModalOne}
-          type="button" className="w-[274px] h-[64px] bg-primary text-[#ffff] px-8 py-2 rounded-[20px] text-xl">+ Add more</button>
+      <div className="flex justify-end pt-4">
+        <Pagination
+          current={currentPage}
+          pageSize={perPage}
+          total={totalPagination || 0}
+          onChange={(page, pageSize) => {
+            setCurrentPage(page)
+            setPerPage(pageSize)
+          }}
+        />
       </div>
+
+
+
+
 
       {/* modal component */}
       {/* modal one */}

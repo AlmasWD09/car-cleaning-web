@@ -87,7 +87,7 @@ const Navbar = () => {
             {/* large devie */}
             <div className={`lg:flex items-center transition-all duration-500 ease-in-out ${!shouldHideNavbarButton ? "justify-between" : "justify-start gap-10 "}`}>
               <div onClick={handleNavigate} className="cursor-pointer ">
-                <img src="/logo1.png" alt="" />
+                <img src="/logo.png" alt="" className="w-[200px] h-[100px] object-contain"/>
               </div>
               <div
                 className={`flex transition-colors duration-500 ease-in-out ${shouldHideNavbarButton ? "justify-start items-center " : "justify-end items-center"} rounded-full space-x-20 font-medium text-[20px] pl-6 ${navbar ? "bg-[#ffff] " : "bg-[#ffffff] "
@@ -227,16 +227,16 @@ const Navbar = () => {
             <div onClick={handleNavigate} className="cursor-pointer">
               {/* small device image */}
               <img
-                src="/smallCarLogo.png"
+                src="/logo.png"
                 alt=""
-                className="w-full h-full object-cover md:hidden"
+                className="w-[180px] h-[60px] object-contain md:hidden"
               />
 
               {/* medium device image */}
               <img
-                src="/mediumCarLogo.png"
+                src="/logo.png"
                 alt=""
-                className="w-full h-full object-cover hidden md:block"
+                className="w-[200px] h-[80px] object-contain hidden md:block"
               />
               {/* dfsofks;kfspkf */}
             </div>

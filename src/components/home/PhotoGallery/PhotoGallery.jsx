@@ -109,14 +109,16 @@ const PhotoGallery = () => {
 
           {/* If showAll is true, show rest photos below on mobile */}
           {showAll && restPhotos.length > 0 && (
-            restPhotos.map((item, index) => (
-              <img
-                key={item.id}
-                src={item.photo}
-                alt={`Gallery Mobile Extra ${index + 1}`}
-                className="w-full h-[300px] rounded-lg object-cover"
-              />
-            ))
+            restPhotos.map((item, index) => {
+              return (
+                <img
+                  key={item.id}
+                  src={item.photo}
+                  alt={`Gallery Mobile Extra ${index + 1}`}
+                  className="w-full h-[300px] rounded-lg object-cover"
+                />
+              )
+            })
           )}
         </div>
 
@@ -150,15 +152,27 @@ const PhotoGallery = () => {
 
         {/* === Load More Section (standard grid) === */}
         {showAll && restPhotos.length > 0 && (
-          <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-            {restPhotos.map((item) => (
-              <img
-                key={item.id}
-                src={item.photo}
-                alt="Gallery Extra"
-                className="w-full h-[250px] object-cover rounded-lg"
-              />
-            ))}
+          <div className="hidden md:grid grid-cols-12 grid-rows-12 gap-4 h-auto md:h-[400px] lg:h-[600px] mt-4">
+            {restPhotos.map((item,index) => {
+              const gridStyles = [
+                "col-start-1 col-end-4 row-start-1 row-end-4",
+                "col-start-4 col-end-7 row-start-1 row-end-5",
+                "col-start-7 col-end-13 row-start-1 row-end-5",
+                // "col-start-6 col-end-10 row-start-5 row-end-9",
+                // "col-start-10 col-end-13 row-start-7 row-end-13",
+                // "col-start-6 col-end-10 row-start-9 row-end-13",
+                // "col-start-1 col-end-6 row-start-7 row-end-13",
+              ];
+              return (
+                <div key={index} className={`bg-gray-300 rounded-xl ${gridStyles[index]}`}>
+                  <img
+                    src={item.photo}
+                    alt="Gallery Extra"
+                    className="w-full h-[250px] object-cover rounded-lg"
+                  />
+                </div>
+              )
+            })}
           </div>
         )}
 

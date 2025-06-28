@@ -120,62 +120,69 @@ const Notification = () => {
             <CustomContainer>
                 <p className="text-[36px] font-degular font-medium text-[#000000] pb-[32px]">Notifications</p>
 
-                <div className="overflow-x-auto whitespace-nowrap">
-                    <div className="">
-                        {notificationData?.map((item, index) => {
-                            const formattedDate = new Date(item?.created_at).toLocaleDateString("en-US", {
-                                weekday: "long", // e.g., Monday
-                                year: "numeric", // 2025
-                                month: "long",   // June
-                                day: "numeric"   // 23
-                            });
-                            const formatTime = (isoDate) => {
-                                const date = new Date(isoDate);
-                                let hours = date.getHours();
-                                const minutes = String(date.getMinutes()).padStart(2, '0');
-                                const ampm = hours >= 12 ? 'PM' : 'AM';
-                                hours = hours % 12 || 12;
-                                return `${hours}:${minutes} ${ampm}`;
-                            };
-                            return (
-                                <div key={index} className="grid grid-cols-12 border border-[#ccc] mb-2 rounded-xl p-4">
-                                    <div className="col-span-5">
-                                        <p className="text-[30px] font-semibold text-[##000000]">{item?.data?.title}</p>
-                                        <h1 className={`${item?.data?.sub_title === "Booking successful" ? "text-primary text-[30px]" : "text-[#319F43] text-[30px]"}`}>{item?.data?.sub_title}</h1>
-                                    </div>
+                {
+                    notificationData.length > 0 ? <div className="overflow-x-auto whitespace-nowrap">
+                        <div className="">
+                            {notificationData?.map((item, index) => {
+                                const formattedDate = new Date(item?.created_at).toLocaleDateString("en-US", {
+                                    weekday: "long", // e.g., Monday
+                                    year: "numeric", // 2025
+                                    month: "long",   // June
+                                    day: "numeric"   // 23
+                                });
+                                const formatTime = (isoDate) => {
+                                    const date = new Date(isoDate);
+                                    let hours = date.getHours();
+                                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                                    const ampm = hours >= 12 ? 'PM' : 'AM';
+                                    hours = hours % 12 || 12;
+                                    return `${hours}:${minutes} ${ampm}`;
+                                };
+                                return (
+                                    <div key={index} className="grid grid-cols-12 border border-[#ccc] mb-2 rounded-xl p-4">
+                                        <div className="col-span-5">
+                                            <p className="text-[30px] font-semibold text-[##000000]">{item?.data?.title}</p>
+                                            <h1 className={`${item?.data?.sub_title === "Booking successful" ? "text-primary text-[30px]" : "text-[#319F43] text-[30px]"}`}>{item?.data?.sub_title}</h1>
+                                        </div>
 
-                                    <div className="flex flex-col col-span-5">
-                                        <p className="text-[24px]">{formattedDate}</p>
-                                        <p className="text-[#888888]">
-                                            {formatTime(item?.created_at)}
-                                        </p>
-                                    </div>
+                                        <div className="flex flex-col col-span-5">
+                                            <p className="text-[24px]">{formattedDate}</p>
+                                            <p className="text-[#888888]">
+                                                {formatTime(item?.created_at)}
+                                            </p>
+                                        </div>
 
 
-                                    <div className="col-span-2 flex justify-center items-center">
-                                        {
-                                            item?.data?.sub_title === "Booking successful" ? <div className="flex flex-col text-center">
-                                                <p className="text-[24px]">{item.data?.service_name}</p>
-                                                <p className="text-[24px]">{item.data?.service_type}</p>
-                                            </div>
-                                                :
-                                                <div
-                                                    onClick={() => showmodalOne(item?.data?.service_id)}
-                                                    className="bg-[#F27712]  w-fit cursor-pointer py-4 px-6 rounded-[14px] text-xl flex items-center gap-4">
-                                                    <span className="cursor-pointer flex items-center">
-                                                        <svg width="30" height="28" viewBox="0 0 30 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M15 0.5L18.3677 10.8647H29.2658L20.4491 17.2705L23.8168 27.6353L15 21.2295L6.18322 27.6353L9.55093 17.2705L0.734152 10.8647H11.6323L15 0.5Z" fill="white" />
-                                                        </svg>
-                                                    </span>
-                                                    <p className="text-[24px] font-medium font-degular text-[#FFFFFF]">Leave a review</p>
+                                        <div className="col-span-2 flex justify-center items-center">
+                                            {
+                                                item?.data?.sub_title === "Booking successful" ? <div className="flex flex-col text-center">
+                                                    <p className="text-[24px]">{item.data?.service_name}</p>
+                                                    <p className="text-[24px]">{item.data?.service_type}</p>
                                                 </div>
-                                        }
+                                                    :
+                                                    <div
+                                                        onClick={() => showmodalOne(item?.data?.service_id)}
+                                                        className="bg-[#F27712]  w-fit cursor-pointer py-4 px-6 rounded-[14px] text-xl flex items-center gap-4">
+                                                        <span className="cursor-pointer flex items-center">
+                                                            <svg width="30" height="28" viewBox="0 0 30 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M15 0.5L18.3677 10.8647H29.2658L20.4491 17.2705L23.8168 27.6353L15 21.2295L6.18322 27.6353L9.55093 17.2705L0.734152 10.8647H11.6323L15 0.5Z" fill="white" />
+                                                            </svg>
+                                                        </span>
+                                                        <p className="text-[24px] font-medium font-degular text-[#FFFFFF]">Leave a review</p>
+                                                    </div>
+                                            }
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })}
+                        </div>
                     </div>
-                </div>
+
+                        :
+                        <div className="h-[370px]  rounded-lg flex justify-center items-center">
+                            <p className="lg:text-6xl md:text-1xl text-base font-bold text-gray-200 uppercase text-center">No data found</p>
+                        </div>
+                }
             </CustomContainer>
 
             {/* modal components */}

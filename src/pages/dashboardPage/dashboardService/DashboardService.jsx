@@ -462,10 +462,10 @@ const DashboardService = () => {
                 <Form.Item name="interior" className="mb-0"
                   rules={[
                     { required: true, message: "Interior price is required" },
-                    {
-                      pattern: /^[0-9]+$/,
-                      message: "Interior price must be a number",
-                    },
+                    // {
+                    //   pattern: /^[0-9]+$/,
+                    //   message: "Interior price must be a number",
+                    // },
                   ]}
                 >
                   <Input placeholder="interior price" style={{ height: "50px", borderRadius: "20px" }} />
@@ -478,10 +478,10 @@ const DashboardService = () => {
                 <Form.Item name="exterior" className="mb-0"
                   rules={[
                     { required: true, message: "Exterior price is required" },
-                    {
-                      pattern: /^[0-9]+$/,
-                      message: "Exterior price must be a number",
-                    },
+                    // {
+                    //   pattern: /^[0-9]+$/,
+                    //   message: "Exterior price must be a number",
+                    // },
                   ]}
                 >
                   <Input placeholder="exterior price" style={{ height: "50px", borderRadius: "20px" }} />
@@ -494,10 +494,10 @@ const DashboardService = () => {
                 <Form.Item name="both" className="mb-0"
                   rules={[
                     { required: true, message: "Both price is required" },
-                    {
-                      pattern: /^[0-9]+$/,
-                      message: "Both price must be a number",
-                    },
+                    // {
+                    //   pattern: /^[0-9]+$/,
+                    //   message: "Both price must be a number",
+                    // },
                   ]}
                 >
                   <Input placeholder="both price" style={{ height: "50px", borderRadius: "20px" }} />
@@ -596,10 +596,10 @@ const DashboardService = () => {
                 <Form.Item name="interior" className="mb-0"
                   rules={[
                     { required: true, message: "Interior price is required" },
-                    {
-                      pattern: /^[0-9]+$/,
-                      message: "Interior price must be a number",
-                    },
+                    // {
+                    //   pattern: /^[0-9]+$/,
+                    //   message: "Interior price must be a number",
+                    // },
                   ]}
                 >
                   <Input placeholder="interior price" style={{ height: "50px", borderRadius: "20px" }} />
@@ -612,10 +612,10 @@ const DashboardService = () => {
                 <Form.Item name="exterior" className="mb-0"
                   rules={[
                     { required: true, message: "Exterior price is required" },
-                    {
-                      pattern: /^[0-9]+$/,
-                      message: "Exterior price must be a number",
-                    },
+                    // {
+                    //   pattern: /^[0-9]+$/,
+                    //   message: "Exterior price must be a number",
+                    // },
                   ]}
                 >
                   <Input placeholder="exterior price" style={{ height: "50px", borderRadius: "20px" }} />
@@ -628,10 +628,10 @@ const DashboardService = () => {
                 <Form.Item name="both" className="mb-0"
                   rules={[
                     { required: true, message: "Both price is required" },
-                    {
-                      pattern: /^[0-9]+$/,
-                      message: "Both price must be a number",
-                    },
+                    // {
+                    //   pattern: /^[0-9]+$/,
+                    //   message: "Both price must be a number",
+                    // },
                   ]}
                 >
                   <Input placeholder="both price" style={{ height: "50px", borderRadius: "20px" }} />

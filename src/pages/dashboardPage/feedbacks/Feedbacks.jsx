@@ -23,12 +23,12 @@ const Feedbacks = () => {
 
 
 
-  const { data: feebackData, refetch } = useGetFeedbackApiQuery({ per_page: perPage, page: currentPage }) // get
   const [deleteFeedback] = useDeleteFeedbackMutation()
-  const allFeedbackData = feebackData?.data?.data
+  const { data: feebackData, refetch } = useGetFeedbackApiQuery() // get 
+  const allFeedbackData = feebackData?.data
   const totalPaginationData = feebackData?.data?.total
 
-
+  console.log('feedback',feebackData)
 
   // find unic notification data
   const existInId = allFeedbackData?.find(item => item?.id === parseInt(feedbackId));

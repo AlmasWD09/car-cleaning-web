@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import CommonTitle from "../../components/shared/CommonTitle";
 import CustomContainer from "../../components/shared/CustomContainer";
+import { useGetPhotoGallaryApiQuery } from "../../redux/web/photoGallary/webPhotoGallaryApi";
 
 
 const PhotoGallery = () => {
+    const { data: gallaryPhoto } = useGetPhotoGallaryApiQuery();
+    const gallaryPhotData = gallaryPhoto?.data?.data
+    console.log(gallaryPhotData)
 
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -3,8 +3,8 @@ import { baseApi } from "../../api/baseApi";
 const dashboardFeedbackApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getFeedbackApi: builder.query({
-            query: ({ per_page, page }) => ({
-                url: `/admin/feedbacks?per_page=${per_page}&page=${page}`,
+            query: () => ({
+                url: `/admin/feedbacks`,
                 method: "GET"
             }),
             providesTags: ['feedback'],
