@@ -16,8 +16,7 @@ const Choose = () => {
             <div className="order-2 lg:order-1">
               <CommonTitle text={"Why choose us ?"} />
               <p className="text-[24px] text-[#000000] text-wrap font-degular pt-3">
-                At------we are dedicated to providing top-notch car washing and
-                detailing services with quality, efficiency, and care.
+                Our name comes from our mission to transform challenges into shining successes.
               </p>
               <h3 className="font-semibold font-degular text-[32px] text-[#000000] pt-[25px] pb-[34px]">
                 Our Commitment
@@ -125,27 +124,10 @@ const Choose = () => {
                       />
                     </svg>
                   </span>
-                  Customer Satisfaction – A spotless shine, every time.
+                  Customer Satisfaction – Your car comes FULL CIRCLE every time.
                 </p>
                 <p className="text-[24px] font-degular flex gap-2">
-                  <span className="mt-2">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM8.823 12.14L6.058 9.373L5 10.431L8.119 13.552C8.30653 13.7395 8.56084 13.8448 8.826 13.8448C9.09116 13.8448 9.34547 13.7395 9.533 13.552L15.485 7.602L14.423 6.54L8.823 12.14Z"
-                        fill="#0063E6"
-                      />
-                    </svg>
-                  </span>
-                  Trust ------ for a professional and reliable car wash
-                  experience!
+                  Most of our profits are donated to community schools. We thank you for your business.
                 </p>
           
                 <div className="pt-8 lg:pt-[137px] flex items-center gap-2">

@@ -393,7 +393,7 @@ const CreateAccount = () => {
                   paddingInline: "20px",
                 }}
               >
-                Create account
+                Create Account
               </Button>
 
               <div className="flex flex-col gap-3 mt-6">

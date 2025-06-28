@@ -4,57 +4,20 @@ import CommonTitle from "../../shared/CommonTitle";
 import CustomContainer from "../../shared/CustomContainer";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useGetPriceApiQuery } from "../../../redux/web/pricing/pricingApi";
 
 const Pricing = () => {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
-  const priceAllData = [
-    {
-      name: "Compact",
-      price_one_name: "Interior",
-      price_one: "654",
-      price_two_name: "Exterior",
-      price_two: "58764",
-      bothPrice_name: " Both",
-      bothPrice: " 84654",
-    },
-    {
-      name: "SUV",
-      price_one_name: "Interior",
-      price_one: "654",
-      price_two_name: "Exterior",
-      price_two: "5876",
-      bothPrice_name: " Both",
-      bothPrice: " 84654",
-    },
-    {
-      name: "Extra large",
-      price_one_name: "Interior",
-      price_one: "654",
-      price_two_name: "Exterior ",
-      price_two: "58764",
-      bothPrice_name: " Both",
-      bothPrice: " 84654",
-    },
-    {
-      name: "Truck",
-      price_one_name: "Interior",
-      price_one: "654",
-      price_two_name: "Exterior ",
-      price_two: "58764",
-      bothPrice_name: " Both",
-      bothPrice: " 84654",
-    },
-    {
-      name: "Sports Car",
-      price_one_name: "Interior",
-      price_one: "654",
-      price_two_name: "Exterior ",
-      price_two: "58764",
-      bothPrice_name: " Both",
-      bothPrice: " 84654",
-    },
-  ];
+  const [selectId, setSelectId] = useState('')
+  const [singlePriceValue, setSinglePriceValue] = useState({})
+
+const {data:getPrice} = useGetPriceApiQuery();
+const priceData = getPrice?.data
+// console.log(priceData)
+
+console.log(singlePriceValue)
+
 
   const serviceBookAllData = [
     {
@@ -71,7 +34,9 @@ const Pricing = () => {
     },
   ];
 
-  const showModal = () => {
+  const showModal = (item) => {
+    setSelectId(item?.id)
+    setSinglePriceValue(item)
     setModalOpen(true)
   }
   const handleModalOkPenOk = () => {
@@ -102,39 +67,39 @@ const Pricing = () => {
           <CommonTitle text={"Pricing"} />
           <div className="overflow-x-auto whitespace-nowrap">
             <div className="min-w-[1000px]">
-              {priceAllData.map((item, index) => {
+              {priceData?.map((item, index) => {
                 return (
                   <div
                     key={index}
                     className="flex justify-between items-center border rounded-xl mb-4 p-2 lg:p-4 font-degular"
                   >
                     <div className="lg:w-[300px]">
-                      <h1 className="text-[28px] lg:text-[30px]">{item.name}</h1>
+                      <h1 className="text-[28px] lg:text-[30px]">{item?.car_type}</h1>
                     </div>
 
                     <div className="flex items-center gap-4">
                       <div className=" lg:w-[300px]">
-                        <p className="text-[20px] lg:text-[24px]">{item.price_one_name}</p>
+                        <p className="text-[20px] lg:text-[24px]">interior</p>
                         <p className="text-[28px] lg:text-[48px] font-semibold text-primary">
-                          ${item.price_one}
+                          ${item?.interior}
                         </p>
                       </div>
                       <div className=" lg:w-[300px]">
-                        <p className="lg:text-[24px] ">{item.price_two_name}</p>
+                        <p className="lg:text-[24px] ">exterior</p>
                         <p className="text-[28px] lg:text-[48px] font-semibold text-primary ">
-                          ${item.price_two}
+                          ${item?.exterior}
                         </p>
                       </div>
                       <div className=" lg:w-[300px]">
-                        <p className="lg:text-[24px]">{item.bothPrice_name}</p>
+                        <p className="lg:text-[24px]">both</p>
                         <p className="text-[28px] lg:text-[48px] font-semibold text-primary">
-                          ${item.bothPrice}
+                          ${item.both}
                         </p>
                       </div>
                     </div>
 
                     <div className="lg:w-[200px] flex justify-end ">
-                      <button onClick={showModal} className="bg-primary text-[#ffffff] px-[74px] py-2 lg:py-[14px] text-[24px] rounded-full my-2">
+                      <button onClick={()=>showModal(item)} className="bg-primary text-[#ffffff] px-[74px] py-2 lg:py-[14px] text-[24px] rounded-full my-2">
                         Select
                       </button>
                     </div>

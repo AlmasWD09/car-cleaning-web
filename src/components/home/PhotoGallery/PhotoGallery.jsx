@@ -9,7 +9,7 @@ const PhotoGallery = () => {
 
   const { data: gallaryPhoto } = useGetPhotoGallaryApiQuery();
   const gallaryPhotData = gallaryPhoto?.data?.data || [];
-  console.log(gallaryPhotData)
+  // console.log(gallaryPhotData)
 
 
   const firstSeven = gallaryPhotData.slice(0, 7);

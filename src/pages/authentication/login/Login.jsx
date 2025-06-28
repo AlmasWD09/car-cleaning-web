@@ -73,6 +73,7 @@ const Login = () => {
 
         {/* right side image */}
         <div className="w-full p-4 lg:w-[50%] lg:mr-[200px]">
+          <h1 className="text-[48px] font-medium font-degular text-[#000000] pb-4">Login</h1>
           <div>
             <Form form={form} onFinish={onFinish}>
               {/* email */}

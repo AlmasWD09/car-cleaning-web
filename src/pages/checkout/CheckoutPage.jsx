@@ -297,7 +297,7 @@ const CheckoutPage = () => {
 
 
               <div className="border border-[#ccc] flex flex-col md:flex-row md:justify-between md:items-center gap-10 md:gap-0 p-4 rounded-lg">
-                <p className="text-[28px] font-degular font-semibold text-[#000000]">Appointment Note</p>
+                <p className="text-[28px] font-degular font-semibold text-[#000000]">Appointment Notes</p>
                 <button
                   onClick={showModal}
                   type="button" className="bg-primary text-[#ffff] px-8 py-2 rounded text-xl">+ Add</button>
@@ -380,7 +380,7 @@ const CheckoutPage = () => {
           <div className=" w-full lg:w-[40%]">
 
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-              <p className='text-[20px]  font-medium font-degular'>Appointment Summery</p>
+              <p className='text-[20px]  font-medium font-degular'>Appointment Summary</p>
               <button onClick={() => navigate(-1)} className="flex items-center gap-2 border border-primary px-4 py-2 rounded text-[16px] font-semibold text-primary font-degular"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.71 4.04125C18.1 3.65125 18.1 3.00125 17.71 2.63125L15.37 0.291249C15 -0.0987512 14.35 -0.0987512 13.96 0.291249L12.12 2.12125L15.87 5.87125M0 14.2512V18.0012H3.75L14.81 6.93125L11.06 3.18125L0 14.2512Z" fill="#0063E6" />
               </svg>
@@ -461,7 +461,7 @@ const CheckoutPage = () => {
 
 
               <div>
-                <p className="font-degular text-[#30313D]">Country</p>
+                <p className="font-degular text-[#30313D]">State</p>
                 <div className="border border-[#ccc] rounded-lg px-2 py-3 cursor-pointer flex justify-between items-center">
                   <p>Select</p>
                   <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">

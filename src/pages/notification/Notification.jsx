@@ -200,7 +200,7 @@ const Notification = () => {
             >
 
                 <div className="p-8">
-                    <h1 className="text-[20px] font-semibold text-center">Add your rating and review</h1>
+                    <h1 className="text-[20px] font-semibold text-center">Share your experience</h1>
                     <div className="">
                         <ReactStarsRating
                             onChange={onChange}

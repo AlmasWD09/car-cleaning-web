@@ -10,10 +10,9 @@ const ErrorPage = () => {
     <div className="space-y-4">
       <img src="/404.png" alt="" />
       <div className="text-center">
-        <p className="text-[26px]">!oops</p>
+        <p className="text-[26px]">!Oops</p>
         <h2 className="text-[34px] font-bold">Page not found</h2>
       </div>
-      <p className="text-[20px] font-medium">It’s look like which page you are searching for is not found.</p>
       <div className="flex justify-center">
         <button
           onClick={() => navigate(-1)}

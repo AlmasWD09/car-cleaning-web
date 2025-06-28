@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom"
 import CustomContainer from "../../components/shared/CustomContainer"
 import React, { useEffect, useState } from "react";
-import DatePicker from "react-multi-date-picker";
+import { DayPicker } from "react-day-picker";
 
 
 
@@ -11,8 +11,8 @@ const ServiceAviablity = () => {
   const [value, setValue] = useState(new Date());
   const [selectDate, setSelectDate] = useState(false)
   const [activeTimes, setActiveTimes] = useState([]);
-
   const [clickable, setClickable] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(null);
 
 
   const timeallData = [
@@ -69,7 +69,7 @@ const ServiceAviablity = () => {
   return (
     <section className=" pt-20 lg:pt-[120px] pb-[52px] bg-[#f6f6f6]">
       <CustomContainer>
-        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-0 pt-10 lg:pt-0">
+        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-0 pt-10 lg:pt-0 min-h-[200px]">
           <div>
             <span onClick={() => navigate(-1)} className="cursor-pointer">
               <svg
@@ -91,17 +91,21 @@ const ServiceAviablity = () => {
           <div className="w-full lg:w-[40%]">
             {/* date picker conponent */}
             <p className='text-[20px]  font-medium font-degular'>Select Date</p>
-            <DatePicker
-              style={{
-                height: "60px",
-                width: "280px",
-                fontSize: "18px",
-                padding: "10px"
-              }}
-              value={value}
-              onChange={setValue}
-              multiple
-            />
+            <div className="bg-gray-100 shadow-md p-4 h-[340px]">
+              <DayPicker
+                mode="single"
+                // selected={selectedDate}
+                // onSelect={handleDateSelect}
+                // disabled={[
+                //   { before: disabledBefore }, // Disable past dates
+                //   ...blockedDates.map(date => ({ from: date, to: date })) // Disable already blocked dates
+                // ]}
+                // modifiersClassNames={{
+                //   disabled: "cursor-not-allowed opacity-50",
+                //   selected: "bg-primary text-white"
+                // }}
+              />
+            </div>
             <div className="flex flex-col md:flex-row justify-between gap-3 lg:gap-0 rounded-lg p-4 font-degular mt-6">
               <div>
                 <p className='text-[28px]  font-bold font-degular'>Today is March 26, 2025. </p>

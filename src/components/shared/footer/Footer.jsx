@@ -7,10 +7,9 @@ const Footer = () => {
       <CustomContainer>
         <div className="grid gap-8 md:gap-0  md:gap-y-28 lg:gap-y-0 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-[54px] lg:pt-10">
           <div className="relative z-10  ">
-            <img src="/footerImage/footerlogo.png" alt="" />
+            <img src="/logoWhite.png" alt="" className="w-[300px]"/>
             <p className="md:w-[340px] text-wrap pt-[11px]">
-              Car wash is a brand which is latterly going to change the people
-              think about car cleaning.
+              Transforming challenges into shining successes.
             </p>
             <div className="flex items-center gap-6 pt-[23px] pb-[14px]">
               <span>
@@ -27,24 +26,7 @@ const Footer = () => {
                   />
                 </svg>
               </span>
-              <p className="text-[20px]">example@gmail.com</p>
-            </div>
-            <div className="flex items-center gap-6">
-              <span>
-                <svg
-                  width="20"
-                  height="21"
-                  viewBox="0 0 20 21"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4.02222 9.15556C5.62222 12.3 8.2 14.8667 11.3444 16.4778L13.7889 14.0333C14.0889 13.7333 14.5333 13.6333 14.9222 13.7667C16.1667 14.1778 17.5111 14.4 18.8889 14.4C19.5 14.4 20 14.9 20 15.5111V19.3889C20 20 19.5 20.5 18.8889 20.5C8.45556 20.5 0 12.0444 0 1.61111C0 1 0.5 0.5 1.11111 0.5H5C5.61111 0.5 6.11111 1 6.11111 1.61111C6.11111 3 6.33333 4.33333 6.74444 5.57778C6.86667 5.96667 6.77778 6.4 6.46667 6.71111L4.02222 9.15556Z"
-                    fill="#D9D9D9"
-                  />
-                </svg>
-              </span>
-              <p className="text-[20px]">+1254896325</p>
+              <p className="text-[20px]">bradyborghesi@gmail.com</p>
             </div>
           </div>
 
@@ -99,7 +81,12 @@ const Footer = () => {
 
         <div className="relative z-10 ">
           <div className="text-xs md:text-[18px] lg:text-center flex md:items-center md:justify-center md:gap-2">
-            Copyright 2025 @ Reserved by LWR Bro’s Car Detailing
+            Copyright 2025 <span className="px-1 md:px-0">
+              <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.38 7.14C11.66 7.2 11.99 8.29 12.01 8.8H13.8C13.72 6.82 12.31 5.61 10.35 5.61C8.14 5.61 6.5 7 6.5 10.14C6.5 12.08 7.43 14.38 10.34 14.38C12.56 14.38 13.75 12.73 13.78 11.43H11.99C11.96 12.02 11.54 12.81 10.36 12.87C9.05 12.83 8.5 11.81 8.5 10.14C8.5 7.25 9.78 7.16 10.38 7.14ZM10.5 0C4.98 0 0.5 4.48 0.5 10C0.5 15.52 4.98 20 10.5 20C16.02 20 20.5 15.52 20.5 10C20.5 4.48 16.02 0 10.5 0ZM10.5 18C6.09 18 2.5 14.41 2.5 10C2.5 5.59 6.09 2 10.5 2C14.91 2 18.5 5.59 18.5 10C18.5 14.41 14.91 18 10.5 18Z" fill="white" />
+              </svg>
+
+            </span> Reserved by FULL CIRCLE Detailing
           </div>
         </div>
       </CustomContainer>

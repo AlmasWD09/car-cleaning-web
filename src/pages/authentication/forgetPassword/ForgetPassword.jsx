@@ -82,7 +82,7 @@ const ForgetPassword = () => {
 
                                 <div className="pt-[20px] lg:pt-[105px]">
                                     <h2 className="text-[28px] md:text-[48px] font-degular font-medium">Forgot your Password ?</h2>
-                                    <p className="text-[20px] font-degular md:w-[748px] pt-[6px] py-[19px] text-[#00000] text-wrap">Enter your valid email address that you used to create your account. We will send a 6 digit code to your provided email.</p>
+                                    <p className="text-[20px] font-degular md:w-[748px] pt-[6px] py-[19px] text-[#00000] text-wrap">Enter the email address that you used to create your account .</p>
                                 </div>
                             </div>
 

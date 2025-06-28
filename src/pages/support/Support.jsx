@@ -90,7 +90,7 @@ const Support = () => {
           <div >
             <div className="flex flex-col justify-center items-center pb-8">
               <h2 className="text-[24px] lg:text-[50px] font-medium font-degular">Support</h2>
-              <p>Have inquires about our services ? Send us a message. We will contact you soon.</p>
+              <p>Have inquires about our services ? Send us a message. We will contact you ASAP.</p>
             </div>
             <div className="">
               <Form form={formOne} onFinish={onFinishOne}>

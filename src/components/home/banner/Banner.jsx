@@ -9,7 +9,7 @@ const Banner = () => {
   const navigate = useNavigate();
 
 
-  const { data: getHome,isLoading } = useGetHomeApiQuery()
+  const { data: getHome, isLoading } = useGetHomeApiQuery()
   const homeData = getHome?.data
   const happyClientPhoto = homeData?.latest_images
   const rating = homeData?.latest_comment?.rating
@@ -21,9 +21,9 @@ const Banner = () => {
   };
 
 
-if(isLoading){
-  return <CustomLoading />
-}
+  if (isLoading) {
+    return <CustomLoading />
+  }
 
 
   return (
@@ -37,8 +37,7 @@ if(isLoading){
                   Keep your car clean always
                 </h1>
                 <p className="text-[24px] lg:text-[28px]">
-                  Car wash is a brand which is latterly going to change the
-                  people think about car cleaning.
+                  Mobile car detailing services in Lakewood Ranch.
                 </p>
                 <div className="pt-[60px] flex items-center gap-2">
                   <button onClick={() => handleServiceBookPage()} className="bg-primary text-[#ffff] text-[20px] py-2 md:py-4 px-[40px] md:px-[57px] rounded-full">
@@ -61,12 +60,7 @@ if(isLoading){
                 </div>
 
                 {/* group avater component */}
-                <div className="pt-[50px] lg:pt-[109px]">
-                  <h2 className="font-bold text-[24px] text-[#000000]">
-                    {homeData?.happy_clients} +
-                  </h2>
-                  <p className="text-[20px]">Happy Clients</p>
-                  <GroupAvater happyClientPhoto={happyClientPhoto} />
+                <div className="h-[220px]  mb-2">
                 </div>
               </div>
 
@@ -158,8 +152,8 @@ if(isLoading){
         <div className="flex  justify-center items-center gap-4">
           <div className="md:h-[359px] md:w-[439px] flex flex-col justify-center items-center px-[53px] bg-[#FFFFFF] rounded-[37px]">
             <img src="/service/serviceLogo1.svg" alt="" />
-            <h3 className="font-degular text-primary text-[30px]">
-              Professional Services
+            <h3 className="font-degular text-primary text-[30px] font-semibold">
+              Premium Service
             </h3>
             <p className="text-[16px] font-montserrat text-[#000000] text-center">
               Professional car washing ensures thorough cleaning, detailing, and
@@ -169,8 +163,8 @@ if(isLoading){
           </div>
           <div className="md:h-[359px] md:w-[439px] flex flex-col justify-center items-center px-[53px] bg-[#FFFFFF] rounded-[37px]">
             <img src="/service/serviceLogo1.svg" alt="" />
-            <h3 className="font-degular text-primary text-[30px]">
-              Professional Services
+            <h3 className="font-degular text-primary text-[30px] font-semibold">
+              Advanced Equipment
             </h3>
             <p className="text-[16px] font-montserrat text-[#000000] text-center">
               Professional car washing ensures thorough cleaning, detailing, and
@@ -180,8 +174,8 @@ if(isLoading){
           </div>
           <div className="md:h-[359px] md:w-[439px] flex flex-col justify-center items-center px-[53px] bg-[#FFFFFF] rounded-[37px]">
             <img src="/service/serviceLogo1.svg" alt="" />
-            <h3 className="font-degular text-primary text-[30px]">
-              Professional Services
+            <h3 className="font-degular text-primary text-[30px] font-semibold">
+              Affordable Pricing
             </h3>
             <p className="text-[16px] font-montserrat text-[#000000] text-center">
               Professional car washing ensures thorough cleaning, detailing, and

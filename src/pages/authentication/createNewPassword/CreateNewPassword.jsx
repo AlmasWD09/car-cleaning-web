@@ -79,7 +79,7 @@ const CreateNewPassword = () => {
 
                 <div className="pt-[20px] lg:pt-[105px]">
                   <h2 className="text-[28px] md:text-[48px] font-degular font-medium">Change Password</h2>
-                  <p className="text-[20px] font-degular md:w-[748px] pt-[6px] py-[19px] text-[#00000] text-wrap">Password must contain 8 characters.</p>
+                  <p className="text-[20px] font-degular md:w-[748px] pt-[6px] py-[19px] text-[#00000] text-wrap">at least 8 characters.</p>
                 </div>
               </div>
 
@@ -185,7 +185,7 @@ const CreateNewPassword = () => {
                     paddingInline: "20px",
                   }}
                 >
-                  Change password
+                  Change Password
                 </Button>
               </Form>
             </div>

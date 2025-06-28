@@ -11,7 +11,7 @@ const PhotoGallery = () => {
 
   const { data: gallaryPhoto, isLoading } = useGetPhotoGallaryApiQuery();
   const gallaryPhotData = gallaryPhoto?.data?.data || [];
-  console.log(gallaryPhotData)
+  // console.log(gallaryPhotData)
 
 
   const firstSeven = gallaryPhotData.slice(0, 7);
