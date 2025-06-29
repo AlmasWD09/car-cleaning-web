@@ -1,7 +1,7 @@
 import { Button, Form, Input, Modal, Upload } from "antd";
 import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react"
-import { useAddServiceMutation, useDeleteServiceMutation, useGetDetailsServiceApiQuery, useGetServiceApiQuery, useUpdateServiceMutation } from "../../../redux/dashboardFeatures/services/dashboardServiceApi";
+import { useAddServiceMutation, useDeleteServiceMutation, useGetDetailsServiceApiQuery,useGetServiceQuery,useUpdateServiceMutation } from "../../../redux/dashboardFeatures/services/dashboardServiceApi";
 import toast from "react-hot-toast";
 import CustomLoading from "../../../components/shared/CustomLoading";
 import axios from "axios";
@@ -20,16 +20,18 @@ const DashboardService = () => {
   const [detailsId, setDetailsId] = useState('')
   const [deleteId, setDeleteId] = useState('')
   const [slotData, setSlotData] = useState([])
-  const [serviceData, setServiceData] = useState([])
 
 
 
-  const { data: servicesData, isLoading, refetch } = useGetServiceApiQuery() // get service
-  const allServiceData = servicesData?.data
 
 
 
-  const { data: detaislData } = useGetDetailsServiceApiQuery(detailsId); // details service
+const {data: getServiceData,isLoading,refetch } = useGetServiceQuery()
+const allServiceData = getServiceData?.data
+
+
+
+  const { data: detaislData,} = useGetDetailsServiceApiQuery(detailsId); // details service
   const singleServiceDetails = detaislData?.data
   const timeSlots = singleServiceDetails?.time
 
@@ -37,25 +39,6 @@ const DashboardService = () => {
   const [addService] = useAddServiceMutation() // post 
   const [updateService] = useUpdateServiceMutation() // update
   const [deleteService] = useDeleteServiceMutation() // delete
-
-
-
-
-  // services data get function
-  useEffect(() => {
-    const getFunction = async () => {
-      const token = localStorage.getItem("token");
-      const API = import.meta.env.VITE_API_BASE_URL;
-
-      const res = await axios.get(`${API}/admin/services`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      setServiceData(res?.data?.data)
-    }
-    getFunction()
-  }, [serviceData])
 
 
 
@@ -127,6 +110,7 @@ const DashboardService = () => {
 
       if (res?.status === true) {
         toast.success(res?.message)
+        refetch()
         setLoading(false)
         setImageFileList([])
         formOne.resetFields()
@@ -173,9 +157,9 @@ const DashboardService = () => {
     formData.append("both", values?.both);
     formData.append("_method", "PUT");
 
-    formData.forEach((value, key) => {
-      console.log('key------>', key, 'value------>', value);
-    });
+    // formData.forEach((value, key) => {
+    //   console.log('key------>', key, 'value------>', value);
+    // });
 
     try {
       const res = await updateService({ updateInfo: formData, id: detailsId }).unwrap()
@@ -184,7 +168,7 @@ const DashboardService = () => {
       if (res?.status === true) {
         toast.success(res?.message)
         setLoading(false)
-        refetch()
+       refetch()
         setModalTwo(false)
       } else {
         toast.error(res?.message)
@@ -230,7 +214,7 @@ const DashboardService = () => {
       }).unwrap()
 
       if (res?.status === true) {
-        toast.success('update success-------->')
+        toast.success(res?.message)
         refetch()
         setLoading(false)
         setModalThree(false)
@@ -266,6 +250,7 @@ const DashboardService = () => {
       const res = await deleteService(deleteId).unwrap()
       if (res?.status === true) {
         toast.success(res?.message)
+        refetch()
         setModalFour(false)
       }
     } catch (error) {
@@ -338,7 +323,7 @@ const DashboardService = () => {
 
       <div className="grid grid-cols-12 gap-4">
         {
-          serviceData?.map((item, index) => {
+          allServiceData?.map((item, index) => {
             return (
               <div key={index} className="col-span-4 bg-[#ffff]  border border-[#ccc] rounded-2xl p-4">
                 <div className="flex items-center justify-between">
@@ -411,7 +396,6 @@ const DashboardService = () => {
         footer={null}
         width={600}
         className='custom-service-modal'
-        maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
       >
 
         <div className="p-8">
@@ -544,7 +528,6 @@ const DashboardService = () => {
         footer={null}
         width={600}
         className='custom-service-modal'
-      // maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
       >
 
         <div className="p-8">
@@ -654,7 +637,7 @@ const DashboardService = () => {
                 }}
               >
                 {
-                  loading ? 'Loading' : "Save changes"
+                  loading ? 'Loading' : "Save Changes"
                 }
               </Button>
             </div>
@@ -679,7 +662,6 @@ const DashboardService = () => {
         footer={null}
         width={800}
         className='custom-service-modal'
-        maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
       >
 
         <div className="p-8">
@@ -745,7 +727,7 @@ const DashboardService = () => {
                   marginTop: "20px"
                 }}
               >
-                update
+                Update
               </Button>
             </div>
           </Form>
@@ -768,7 +750,6 @@ const DashboardService = () => {
         footer={false}
         width={600}
         className='custom-service-modal'
-        maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
       >
 
         <div className="flex justify-center">

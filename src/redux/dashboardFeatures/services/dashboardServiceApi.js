@@ -2,13 +2,6 @@ import { baseApi } from "../../api/baseApi";
 
 const dashboardServiceApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getServiceApi: builder.query({
-            query: () => ({
-                url: `/admin/services`,
-                method: "GET"
-            }),
-            providesTags: ['service'],
-        }),
         getDetailsServiceApi: builder.query({
             query: (detailsId) => ({
                 url: `/admin/services/${detailsId}`,
@@ -39,9 +32,16 @@ const dashboardServiceApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['service'],
         }),
+        getService: builder.query({
+            query: () => ({
+                url: `/admin/services`,
+                method: "GET",
+            }),
+            invalidatesTags: ['service'],
+        }),
 
     })
 })
 
 
-export const { useGetServiceApiQuery,useGetDetailsServiceApiQuery, useAddServiceMutation, useUpdateServiceMutation,useDeleteServiceMutation } = dashboardServiceApi;
+export const {useGetDetailsServiceApiQuery, useAddServiceMutation, useUpdateServiceMutation,useDeleteServiceMutation,useGetServiceQuery } = dashboardServiceApi;
