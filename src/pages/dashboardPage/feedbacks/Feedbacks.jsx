@@ -1,6 +1,6 @@
 import { Button, Form, Input, Modal, Pagination, Rate } from "antd";
 import { useEffect, useState } from "react";
-import { useDeleteFeedbackMutation, useGetFeedbackApiQuery, } from "../../../redux/dashboardFeatures/feedback/dashboardFeedbackApi";
+import { useDeleteFeedbackMutation, useGetDBFeedbackApiQuery,  } from "../../../redux/dashboardFeatures/feedback/dashboardFeedbackApi";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -23,12 +23,14 @@ const Feedbacks = () => {
 
 
 
-  const [deleteFeedback] = useDeleteFeedbackMutation()
-  const { data: feebackData, refetch } = useGetFeedbackApiQuery() // get 
-  const allFeedbackData = feebackData?.data
-  const totalPaginationData = feebackData?.data?.total
-
+  const { data: feebackData, refetch } = useGetDBFeedbackApiQuery() // get 
+  const allFeedbackData = feebackData?.data?.data
+  const totalPaginationData = feebackData?.data?.data?.total
   console.log('feedback',feebackData)
+
+
+  const [deleteFeedback] = useDeleteFeedbackMutation()
+
 
   // find unic notification data
   const existInId = allFeedbackData?.find(item => item?.id === parseInt(feedbackId));

@@ -2,19 +2,19 @@ import { baseApi } from "../../api/baseApi";
 
 const dashboardFeedbackApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getFeedbackApi: builder.query({
+        getDBFeedbackApi: builder.query({
             query: () => ({
                 url: `/admin/feedbacks`,
                 method: "GET"
             }),
-            providesTags: ['feedback'],
+            providesTags: ['feedback-db'],
         }),
         deleteFeedback: builder.mutation({
             query: (deleteId) => ({
                 url: `/admin/feedbacks/${deleteId}`,
                 method: "DELETE"
             }),
-            invalidatesTags: ['feedback'],
+            invalidatesTags: ['feedback-db'],
         }),
         postFeedback: builder.mutation({
             query: (feedbackInfo) => ({
@@ -22,11 +22,11 @@ const dashboardFeedbackApi = baseApi.injectEndpoints({
                 method: "POST",
                 body:feedbackInfo,
             }),
-            invalidatesTags: ['feedback'],
+            invalidatesTags: ['feedback-db'],
         }),
 
     })
 })
 
 
-export const { useGetFeedbackApiQuery, useDeleteFeedbackMutation,usePostFeedbackMutation } = dashboardFeedbackApi;
+export const {useGetDBFeedbackApiQuery, useDeleteFeedbackMutation,usePostFeedbackMutation } = dashboardFeedbackApi;

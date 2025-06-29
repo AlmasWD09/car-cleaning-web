@@ -7,7 +7,7 @@ const feedbackApi = baseApi.injectEndpoints({
                 url: `/feedback`,
                 method: "GET"
             }),
-            providesTags: ['feedback'],
+            providesTags: ['feedback-web'],
         }),
     })
 })

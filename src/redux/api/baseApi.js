@@ -16,6 +16,6 @@ export const baseApi = createApi({
         }
     }),
     // refresh for this tag
-    tagTypes: ["manage_user", "chart", "booking", "service", "manage_image", "manage_date", "transition", "feedback", "setting", "notification","gallary","home","feedback","webProfile","auth","serviceAvility"],
+    tagTypes: ["manage_user", "chart", "booking", "service", "manage_image", "manage_date", "transition", "feedback-web", "setting", "notification","gallary","home","feedback-db","webProfile","auth","serviceAvility"],
     endpoints: () => ({}),
 });
