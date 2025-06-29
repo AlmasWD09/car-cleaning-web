@@ -163,21 +163,22 @@ const DashboardService = () => {
 
     setLoading(true)
     const formData = new FormData();
-    if (ImageFileList) {
-      formData.append("icon", ImageFileList[0]?.originFileObj);
+    if (ImageFileList[0]?.originFileObj) {
+      formData.append("icon", ImageFileList[0].originFileObj);
     }
+
     formData.append("car_type", values?.car_type);
     formData.append("interior", values?.interior);
     formData.append("exterior", values?.exterior);
     formData.append("both", values?.both);
     formData.append("_method", "PUT");
 
-    // formData.forEach((value, key) => {
-    //   console.log('key------>', key, 'value------>', value);
-    // });
+    formData.forEach((value, key) => {
+      console.log('key------>', key, 'value------>', value);
+    });
 
     try {
-      const res = await updateService({updateInfo: formData, id: detailsId}).unwrap()
+      const res = await updateService({ updateInfo: formData, id: detailsId }).unwrap()
       console.log(res)
 
       if (res?.status === true) {
@@ -185,11 +186,11 @@ const DashboardService = () => {
         setLoading(false)
         refetch()
         setModalTwo(false)
-      }else{
+      } else {
         toast.error(res?.message)
       }
     } catch (errors) {
-     console.log(errors)
+      console.log(errors)
     } finally {
       setLoading(false)
     }
@@ -543,7 +544,7 @@ const DashboardService = () => {
         footer={null}
         width={600}
         className='custom-service-modal'
-        // maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
+      // maskStyle={{ backgroundColor: 'rgba(134, 134, 134, 0.4)' }}
       >
 
         <div className="p-8">
