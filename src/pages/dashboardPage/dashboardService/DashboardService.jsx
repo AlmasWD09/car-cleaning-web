@@ -1,10 +1,12 @@
 import { Button, Form, Input, Modal, Upload } from "antd";
 import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react"
-import { useAddServiceMutation, useDeleteServiceMutation, useGetDetailsServiceApiQuery,useGetServiceQuery,useUpdateServiceMutation } from "../../../redux/dashboardFeatures/services/dashboardServiceApi";
+import { useAddServiceMutation, useAddTimeMutation, useDeleteServiceMutation, useGetDetailsServiceApiQuery, useGetServiceQuery, useUpdateServiceMutation } from "../../../redux/dashboardFeatures/services/dashboardServiceApi";
 import toast from "react-hot-toast";
 import CustomLoading from "../../../components/shared/CustomLoading";
-import axios from "axios";
+import { Space, TimePicker } from 'antd';
+import TimePickerModal from "./TimePickerModal";
+
 
 
 const DashboardService = () => {
@@ -20,25 +22,41 @@ const DashboardService = () => {
   const [detailsId, setDetailsId] = useState('')
   const [deleteId, setDeleteId] = useState('')
   const [slotData, setSlotData] = useState([])
+  const [initialTime, setInitialTime] = useState({ hour: 12, minute: 0, second: 0, period: "AM" });
+  const [selectedTime, setSelectTime] = useState(null)
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
 
 
 
 
-
-const {data: getServiceData,isLoading,refetch } = useGetServiceQuery()
-const allServiceData = getServiceData?.data
-
+  const { data: getServiceData, isLoading, refetch } = useGetServiceQuery()
+  const allServiceData = getServiceData?.data
 
 
-  const { data: detaislData,} = useGetDetailsServiceApiQuery(detailsId); // details service
+
+  const { data: detaislData, } = useGetDetailsServiceApiQuery(detailsId); // details service
   const singleServiceDetails = detaislData?.data
-  const timeSlots = singleServiceDetails?.time
+  const timeSlots = singleServiceDetails?.service_times
+
+  // console.log(singleServiceDetails)
+
+
 
 
   const [addService] = useAddServiceMutation() // post 
   const [updateService] = useUpdateServiceMutation() // update
   const [deleteService] = useDeleteServiceMutation() // delete
+
+
+
+  const [addTime] = useAddTimeMutation();
+
+
+
+
 
 
 
@@ -168,7 +186,7 @@ const allServiceData = getServiceData?.data
       if (res?.status === true) {
         toast.success(res?.message)
         setLoading(false)
-       refetch()
+        refetch()
         setModalTwo(false)
       } else {
         toast.error(res?.message)
@@ -265,32 +283,61 @@ const allServiceData = getServiceData?.data
 
 
 
+  // ======================         ======================
 
-  const handleAddTime = () => {
-    const now = new Date();
 
-    let hours = now.getHours(); // 0 - 23
-    let minutes = now.getMinutes(); // 0 - 59
+  const handleHourChange = (hour) => {
+    setInitialTime((prev) => ({ ...prev, hour }));
+  };
 
-    const ampm = hours >= 12 ? "PM" : "AM";
+  const handleMinuteChange = (minute) => {
+    setInitialTime((prev) => ({ ...prev, minute }));
+  };
 
-    hours = hours % 12;
-    hours = hours ? hours : 12; // 0 => 12
+  const handleSecondChange = (second) => {
+    setInitialTime((prev) => ({ ...prev, second }));
+  };
 
-    const formattedHours = hours.toString().padStart(2, "0");
-    const formattedMinutes = minutes.toString().padStart(2, "0");
+  const handlePeriodChange = (period) => {
+    setInitialTime((prev) => ({ ...prev, period }));
+  };
 
-    const formattedTime = `${formattedHours}:${formattedMinutes}${ampm}`;
+  const formatNumber = (num) => num.toString().padStart(2, "0");
 
-    setSlotData((prev) => [...prev, formattedTime]);
+  const formatTimeString = () => {
+    const { hour, minute, second, period } = initialTime;
+    return `${formatNumber(hour)}:${formatNumber(minute)}: ${period}`;
+  };
 
+
+
+
+  const showTimeModal = () => {
+
+    setIsModalOpen(true)
+    setModalThree(false)
+  }
+  const handleOkTime = () => {
+    setSelectTime(formatTimeString)
+    setIsModalOpen(false)
+  }
+  const handleCancelTime = () => {
+    setIsModalOpen(false)
   }
 
 
-  const handleDelete = (indexToDelete) => {
-    const newSlots = slotData?.filter((_, index) => index !== indexToDelete);
-    setSlotData(newSlots);
-  }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -661,74 +708,62 @@ const allServiceData = getServiceData?.data
         onCancel={handleCancelModalThree}
         footer={null}
         width={800}
+        zIndex={100}
         className='custom-service-modal'
       >
 
         <div className="p-8">
           <Form form={formThree} onFinish={onFinishThree}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Existing Time Slots */}
-              {slotData?.map((slot, index) => (
-                <div
-                  key={index}
-                  className="bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="flex-1">
-                    <span className="text-lg font-semibold text-gray-900">{slot}</span>
-                  </div>
 
-                  <div className="flex items-center gap-3">
-                    {/* Blue Clock/Edit Icon */}
-                    <button>
-                      <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="50" height="50" rx="15" fill="#E8F2FF" />
-                        <path d="M25 13C18.376 13 13 18.376 13 25C13 31.624 18.376 37 25 37C31.624 37 37 31.624 37 25C37 18.376 31.624 13 25 13ZM25.072 33.4V30.988H25C23.464 30.988 21.928 30.4 20.752 29.236C19.7752 28.2582 19.1655 26.9735 19.0256 25.5986C18.8857 24.2236 19.2242 22.8425 19.984 21.688L21.304 23.008C20.452 24.604 20.668 26.62 22.012 27.964C22.852 28.804 23.956 29.2 25.06 29.176V26.608L28.456 30.004L25.072 33.4ZM30.004 28.312L28.684 26.992C29.536 25.396 29.32 23.38 27.976 22.036C27.5865 21.6431 27.1229 21.3316 26.612 21.1194C26.1011 20.9072 25.5532 20.7986 25 20.8H24.928V23.38L21.532 19.996L24.928 16.6V19.024C26.488 19 28.06 19.564 29.248 20.764C31.288 22.804 31.54 25.984 30.004 28.312Z" fill="#0063E5" />
-                      </svg>
+              {/* Always show 6 slots (time slots + placeholders if needed) */}
+              {[...Array(6)].map((_, index) => {
+                // If time exists for this index, show time button
+                if (timeSlots && timeSlots[index]) {
+                  return (
+                    <div
+                      key={timeSlots[index].id}
+                      className="bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-between "
+                    >
+                      <div className="flex-1">
+                        <span className="text-lg font-semibold text-gray-900">{timeSlots[index].time}</span>
+                      </div>
 
-                    </button>
+                      <div className="flex items-center gap-3">
 
-                    {/* Red Delete Icon */}
-                    <button onClick={() => handleDelete(index)} type="button">
-                      <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="50" height="50" rx="15" fill="#FFE2E2" />
-                        <path d="M34.5 14.3333H29.75L28.3929 13H21.6071L20.25 14.3333H15.5V17H34.5M16.8571 34.3333C16.8571 35.0406 17.1431 35.7189 17.6521 36.219C18.1612 36.719 18.8516 37 19.5714 37H30.4286C31.1484 37 31.8388 36.719 32.3479 36.219C32.8569 35.7189 33.1429 35.0406 33.1429 34.3333V18.3333H16.8571V34.3333Z" fill="#FF3F3F" />
-                      </svg>
+                        <button onClick={() => showTimeModal(timeSlots[index]?.id)}>
+                          <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="50" height="50" rx="15" fill="#E8F2FF" />
+                            <path d="M25 13C18.376 13 13 18.376 13 25C13 31.624 18.376 37 25 37C31.624 37 37 31.624 37 25C37 18.376 31.624 13 25 13ZM25.072 33.4V30.988H25C23.464 30.988 21.928 30.4 20.752 29.236C19.7752 28.2582 19.1655 26.9735 19.0256 25.5986C18.8857 24.2236 19.2242 22.8425 19.984 21.688L21.304 23.008C20.452 24.604 20.668 26.62 22.012 27.964C22.852 28.804 23.956 29.2 25.06 29.176V26.608L28.456 30.004L25.072 33.4ZM30.004 28.312L28.684 26.992C29.536 25.396 29.32 23.38 27.976 22.036C27.5865 21.6431 27.1229 21.3316 26.612 21.1194C26.1011 20.9072 25.5532 20.7986 25 20.8H24.928V23.38L21.532 19.996L24.928 16.6V19.024C26.488 19 28.06 19.564 29.248 20.764C31.288 22.804 31.54 25.984 30.004 28.312Z" fill="#0063E5" />
+                          </svg>
 
-                    </button>
-                  </div>
-                </div>
-              ))}
+                        </button>
 
-              {/* Add New Slot Button */}
-              <button
-                onClick={handleAddTime}
-                type="button"
-                className="h-[90px] bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-center shadow-sm hover:shadow-md hover:bg-gray-50 transition-all group"
-              >
-                <svg width="241" height="24" viewBox="0 0 241 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M118.786 13.7143H108.5V10.2857H118.786V0H122.214V10.2857H132.5V13.7143H122.214V24H118.786V13.7143Z" fill="black" />
-                </svg>
 
-              </button>
-            </div>
+                        <button type="button">
+                          <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="50" height="50" rx="15" fill="#FFE2E2" />
+                            <path d="M34.5 14.3333H29.75L28.3929 13H21.6071L20.25 14.3333H15.5V17H34.5M16.8571 34.3333C16.8571 35.0406 17.1431 35.7189 17.6521 36.219C18.1612 36.719 18.8516 37 19.5714 37H30.4286C31.1484 37 31.8388 36.719 32.3479 36.219C32.8569 35.7189 33.1429 35.0406 33.1429 34.3333V18.3333H16.8571V34.3333Z" fill="#FF3F3F" />
+                          </svg>
 
-            <div className="flex justify-center">
-              <Button
-                htmlType="submit"
-                block
-                style={{
-                  backgroundColor: "#0063E5",
-                  color: "#ffffff",
-                  fontSize: "20px",
-                  fontWeight: "600",
-                  height: "60px",
-                  borderRadius: "20px",
-                  paddingInline: "20px",
-                  marginTop: "20px"
-                }}
-              >
-                Update
-              </Button>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
+                // Else, show placeholder button
+                return (
+                  <button
+                    key={`${index}`} // Unique key for placeholder
+                    type="button"
+                    className="h-[90px] bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-center group"
+                  >
+                    <svg width="241" height="24" viewBox="0 0 241 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M118.786 13.7143H108.5V10.2857H118.786V0H122.214V10.2857H132.5V13.7143H122.214V24H118.786V13.7143Z" fill="black" />
+                    </svg>
+                  </button>
+                );
+              })}
             </div>
           </Form>
         </div>
@@ -736,7 +771,7 @@ const allServiceData = getServiceData?.data
 
 
 
-      {/* modal four */}
+      {/* modal four ------ DELETE-------*/}
       <Modal
         centered
         title={
@@ -776,6 +811,130 @@ const allServiceData = getServiceData?.data
             className="w-[212px] h-[60px] bg-[#EF4444] text-[#fff] rounded-[30px]">Delete</button>
         </div>
       </Modal>
+
+
+
+
+      {/* time picker component */}
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        {
+          isModalOpen && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]">
+            <div className="bg-white rounded-lg p-6 w-full max-w-xl mx-4 shadow-xl">
+              {/* Header */}
+              <h2 className="text-xl font-semibold text-gray-800 mb-6">Select Time</h2>
+
+              {/* Time Display */}
+              <div className="flex items-center justify-center mb-6">
+                {/* Hour Section */}
+                <div className="flex flex-col items-center mx-1">
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 min-w-[70px] text-center">
+                    <span className="text-2xl font-medium text-gray-800">
+                      {formatNumber(initialTime.hour)}
+                    </span>
+                  </div>
+                  <span className="text-xs text-gray-500 mt-1">Hour</span>
+                </div>
+
+                <div className="text-2xl font-light text-gray-400 mx-1">:</div>
+
+                {/* Minute Section */}
+                <div className="flex flex-col items-center mx-1">
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 min-w-[70px] text-center">
+                    <span className="text-2xl font-medium text-gray-800">
+                      {formatNumber(initialTime.minute)}
+                    </span>
+                  </div>
+                  <span className="text-xs text-gray-500 mt-1">Minute</span>
+                </div>
+
+                <div className="text-2xl font-light text-gray-400 mx-1">:</div>
+
+
+
+                {/* AM/PM Section */}
+                <div className="ml-4 flex flex-col">
+                  <button
+                    onClick={() => handlePeriodChange("AM")}
+                    className={`px-4 py-2 rounded-t-lg border text-sm font-medium ${initialTime.period === "AM"
+                      ? "bg-blue-100 border-blue-300 text-blue-700"
+                      : "bg-white border-gray-300 text-gray-600"
+                      }`}
+                  >
+                    AM
+                  </button>
+                  <button
+                    onClick={() => handlePeriodChange("PM")}
+                    className={`px-4 py-2 rounded-b-lg border border-t-0 text-sm font-medium ${initialTime.period === "PM"
+                      ? "bg-blue-100 border-blue-300 text-blue-700"
+                      : "bg-white border-gray-300 text-gray-600"
+                      }`}
+                  >
+                    PM
+                  </button>
+                </div>
+              </div>
+
+              {/* Time Selection Grids */}
+              <div className="space-y-4">
+                {/* Hour Selection */}
+                <div>
+                  <h3 className="text-sm font-medium text-gray-700 mb-2">Hour</h3>
+                  <div className="grid grid-cols-6 gap-2">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((hour) => (
+                      <button
+                        key={hour}
+                        onClick={() => handleHourChange(hour)}
+                        className={`py-2 rounded-md text-sm ${initialTime.hour === hour
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          }`}
+                      >
+                        {hour}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Minute Selection */}
+                <div>
+                  <h3 className="text-sm font-medium text-gray-700 mb-2">Minute</h3>
+                  <div className="grid grid-cols-6 gap-2 max-h-40 overflow-y-auto p-1">
+                    {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
+                      <button
+                        key={minute}
+                        onClick={() => handleMinuteChange(minute)}
+                        className={`py-1 rounded-md text-xs ${initialTime.minute === minute
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          }`}
+                      >
+                        {formatNumber(minute)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Footer */}
+              <div className="flex justify-end mt-6 space-x-3">
+                <button
+                  onClick={handleCancelTime}
+                  className="px-4 py-2 text-gray-700 font-medium rounded-md hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleOkTime}
+                  className="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
     </div>
   )
 }
