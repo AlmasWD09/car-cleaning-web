@@ -9,7 +9,7 @@ const Service = () => {
   }, []);
 
   return <>
-    <section className="bg-[#f6f6f6] py-10 pt-20 lg:pt-[120px]">
+    <section className="bg-[#f6f6f6] py-10 pt-28 lg:pt-[120px]">
       <CustomContainer>
         <div className="pb-[22px]">
           <CommonTitle text={"Our Services"} />

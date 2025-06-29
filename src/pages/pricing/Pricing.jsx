@@ -60,7 +60,7 @@ const Pricing = () => {
 
 
   return (
-    <section className="bg-[#f6f6f6] py-10 pt-20 lg:pt-[140px]">
+    <section className="bg-[#f6f6f6] py-10 pt-28 lg:pt-[140px]">
       <CustomContainer>
         <div>
           <CommonTitle text={"Pricing"} />
