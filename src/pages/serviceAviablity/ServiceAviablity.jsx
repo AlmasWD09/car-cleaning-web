@@ -120,7 +120,7 @@ const ServiceAviablity = () => {
 
   const handleCheckoutPage = () => {
     if (activeTimes.length === 0) return; // Do nothing if nothing is selected
-    navigate("/checkout");
+    navigate(`/checkout`,{ state: { id, type ,name, price } });
   }
   const handleData = (dateValue) => {
     setSelectDate(true)
@@ -245,7 +245,7 @@ const ServiceAviablity = () => {
             </div>
             <div>
               <button onClick={handleCheckoutPage} className={`w-full flex justify-center items-center  text-[20px] py-2 md:py-4  rounded-full gap-2 my-8 ${activeTimes.length > 0 ? "bg-primary text-[#ffff] cursor-pointer" : "bg-gray-300 text-[#ffff] cursor-not-allowed"}`}>
-                next
+                Next
                 <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6.29425e-05 6L11.5861 6L7.08606 1.5L8.50006 0.0859985L15.4141 7L8.50006 13.914L7.08606 12.5L11.5861 8L6.29425e-05 8V6Z" fill="white" />
                 </svg>

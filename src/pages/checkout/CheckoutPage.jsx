@@ -1,10 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import CustomContainer from "../../components/shared/CustomContainer"
 import { Button, Checkbox, Form, Input, Modal, Select, Upload } from "antd";
 import { useEffect, useState } from "react";
 import TextArea from "antd/es/input/TextArea";
 import { useForm } from "antd/es/form/Form";
 import { UploadCloud } from "lucide-react";
+import { useGetAuthProfileApiQuery } from "../../redux/dashboardFeatures/setting/dashboardSettingApi";
 
 const CheckoutPage = () => {
   const [formOne] = Form.useForm();
@@ -13,6 +14,34 @@ const CheckoutPage = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [ImageFileList, setImageFileList] = useState([]);
+  const [textAreaValue, setTextAreaValue] = useState('')
+  const location = useLocation();
+  const { id, type, name, price } = location.state || {};
+  console.log(id, type, name, price)
+
+
+
+
+  const { data: userProfileData, isLoading, refetch } = useGetAuthProfileApiQuery();
+  const userProfile = userProfileData?.data
+  const carPhoto = userProfile?.car_photos
+
+
+
+  useEffect(() => {
+    if (userProfile) {
+      formOne.setFieldsValue({
+        ...userProfile,
+        phone: userProfile?.phone,
+        name: userProfile?.name,
+        email: userProfile?.email,
+      })
+    }
+
+  }, [userProfile]);
+
+
+
 
 
 
@@ -64,10 +93,31 @@ const CheckoutPage = () => {
 
   const onFinishOne = (values) => {
     console.log(values)
+    console.log(textAreaValue)
     const formData = new FormData();
-    if (ImageFileList[0]?.originFileObj) {
-      formData.append("image", ImageFileList[0].originFileObj);
-    }
+    // formData.append('phone', values?.phone);
+    // formData.append('name', values?.name);
+    // formData.append('email', values?.email);
+    // formData.append('car_band', values?.car_band);
+    // formData.append('car_model', values?.car_model);
+    // formData.append('booking_note', textAreaValue);
+    // formData.append('booking_note', values?.booking_note);
+
+
+
+
+    formData.append('service_id', values?.service_id);
+    formData.append('service_name', values?.service_name);
+    formData.append('service_type', values?.service_type);
+    formData.append('booking_date', values?.booking_date);
+    formData.append('booking_time', values?.booking_time);
+    formData.append('price', values?.price);
+    formData.append('booking_note', values?.booking_note);
+    formData.append('car_brand', values?.car_brand);
+    formData.append('car_model', values?.car_model);
+    formData.append('stripe_payment_intent_id', values?.stripe_payment_intent_id);
+
+
 
     //   try {
     //     const res = ""
@@ -82,8 +132,17 @@ const CheckoutPage = () => {
 
 
   }
-  const onFinishTwo = (values) => {
-    console.log(values)
+
+
+
+
+
+
+
+  const onFinishTwo = (value) => {
+    setTextAreaValue(value?.booking_note)
+    setModalOpen(false)
+    formTwo.resetFields()
   }
 
   useEffect(() => {
@@ -119,12 +178,10 @@ const CheckoutPage = () => {
               {/* phone number */}
               <div>
                 <Form.Item
-                  name="phone_number"
-                  rules={[
-                    { required: true, message: "phone number is required" },
-                  ]}
+                  name="phone"
                 >
                   <Input
+                    readOnly
                     placeholder="Your phone number"
                     prefix={
                       <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -144,10 +201,7 @@ const CheckoutPage = () => {
               {/* full name */}
               <div>
                 <Form.Item
-                  name="full_name"
-                  rules={[
-                    { required: true, message: "Full name is required" },
-                  ]}
+                  name="name"
                 >
                   <Input
                     placeholder="Your full name"
@@ -179,12 +233,9 @@ const CheckoutPage = () => {
               <div>
                 <Form.Item
                   name="email"
-                  rules={[
-                    { required: true, message: "Email is required" },
-                    { type: "email", message: "Enter a valid email" },
-                  ]}
                 >
                   <Input
+                    readOnly
                     placeholder="Enter your email"
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
@@ -220,7 +271,7 @@ const CheckoutPage = () => {
                 {/* brand name */}
                 <div className="w-full md:w-[50%]">
                   <p className="text-[20px] font-degular">Brand Name</p>
-                  <Form.Item name="brand_name">
+                  <Form.Item name="car_brand">
                     <Input
                       placeholder="Brand name"
                       onFocus={() => setIsFocused(true)}
@@ -264,7 +315,8 @@ const CheckoutPage = () => {
               </div>
 
 
-              <div>
+              {/* picture */}
+              {/* <div>
                 <p className="text-[20px] font-degular">picture</p>
                 <Form.Item
                   className="md:col-span-2"
@@ -277,7 +329,6 @@ const CheckoutPage = () => {
                   ]}
                 >
                   <Upload
-
                     accept="image/*"
                     maxCount={1}
                     showUploadList={{ showPreviewIcon: true }}
@@ -288,12 +339,11 @@ const CheckoutPage = () => {
                     beforeUpload={() => false}
                   >
                     <div style={{ cursor: "pointer" }} className="flex justify-center items-center">
-                      {/* <UploadCloud className="w-5 h-5 text-gray-400" /> */}
                       <span className="text-4xl">+</span>
                     </div>
                   </Upload>
                 </Form.Item>
-              </div>
+              </div> */}
 
 
               <div className="border border-[#ccc] flex flex-col md:flex-row md:justify-between md:items-center gap-10 md:gap-0 p-4 rounded-lg">
@@ -313,8 +363,13 @@ const CheckoutPage = () => {
                 </Checkbox>
               </div>
 
-              {/* submit button component */}
-              {/* <Button
+              {
+                textAreaValue && <div className="border rounded-xl h-[150px] p-2 bg-gray-200 overflow-y-auto">
+                  {textAreaValue}
+                </div>
+              }
+
+              <Button
                 htmlType="submit"
                 block
                 style={{
@@ -325,10 +380,11 @@ const CheckoutPage = () => {
                   height: "60px",
                   borderRadius: "20px",
                   paddingInline: "20px",
+                  marginTop: "20px"
                 }}
               >
-                Create account
-              </Button> */}
+                Save
+              </Button>
             </Form>
 
 
@@ -351,7 +407,7 @@ const CheckoutPage = () => {
 
               <div className='p-4'>
                 <Form form={formTwo} onFinish={onFinishTwo}>
-                  <Form.Item name="description">
+                  <Form.Item name="booking_note">
                     <TextArea placeholder="Type here" style={{ height: "300px", resize: "none" }} />
                   </Form.Item>
 
@@ -406,10 +462,10 @@ const CheckoutPage = () => {
             </div>
 
             <div className="flex flex-col md:flex-row justify-between border border-[#ccc] rounded-lg p-4 font-degular mt-6">
-              <p className='text-[28px]  font-degular text-primary'>Compact</p>
+              <p className='text-[28px]  font-degular text-primary'>{type}</p>
               <div>
-                <p className='text-[20px]  font-degular'>Both</p>
-                <p className='text-[28px]  font-bold text-primary font-degular'>$180.00</p>
+                <p className='text-[20px]  font-degular'>{name}</p>
+                <p className='text-[28px]  font-bold text-primary font-degular'>${price}</p>
               </div>
             </div>
 
@@ -446,9 +502,9 @@ const CheckoutPage = () => {
                     <div className="flex justify-between border border-[#ccc] rounded-lg px-2 py-3 cursor-pointer">
                       CVC
                       <svg width="23" height="18" viewBox="0 0 23 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path opacity="0.2" fill-rule="evenodd" clipRule="evenodd" d="M14.337 1.5C13.6146 2.00713 13.025 2.68088 12.6182 3.4642C12.2114 4.24753 11.9993 5.11734 12 6C12 7.33 12.472 8.55 13.257 9.5H3C2.73478 9.5 2.48043 9.60536 2.29289 9.79289C2.10536 9.98043 2 10.2348 2 10.5V11.5C2 11.7652 2.10536 12.0196 2.29289 12.2071C2.48043 12.3946 2.73478 12.5 3 12.5H19C19.2652 12.5 19.5196 12.3946 19.7071 12.2071C19.8946 12.0196 20 11.7652 20 11.5V10.9C20.7976 10.4917 21.484 9.89559 22 9.163V15.5C22 16.0304 21.7893 16.5391 21.4142 16.9142C21.0391 17.2893 20.5304 17.5 20 17.5H2C1.46957 17.5 0.960859 17.2893 0.585786 16.9142C0.210714 16.5391 0 16.0304 0 15.5V3.5C0 2.96957 0.210714 2.46086 0.585786 2.08579C0.960859 1.71071 1.46957 1.5 2 1.5H14.337ZM21.044 1.793C21.283 1.995 21.504 2.217 21.706 2.456C21.5406 2.18594 21.3138 1.95877 21.044 1.793Z" fill="#77787D" />
-                        <path opacity="0.4" fill-rule="evenodd" clipRule="evenodd" d="M12.6 3.5C12.1267 4.42493 11.9262 5.46542 12.022 6.5H0V3.5H12.6Z" fill="#77787D" />
-                        <path fill-rule="evenodd" clipRule="evenodd" d="M17.5 11.5C16.0413 11.5 14.6424 10.9205 13.6109 9.88909C12.5795 8.85764 12 7.45869 12 6C12 4.54131 12.5795 3.14236 13.6109 2.11091C14.6424 1.07946 16.0413 0.5 17.5 0.5C18.9587 0.5 20.3576 1.07946 21.3891 2.11091C22.4205 3.14236 23 4.54131 23 6C23 7.45869 22.4205 8.85764 21.3891 9.88909C20.3576 10.9205 18.9587 11.5 17.5 11.5ZM15.316 3.721H14.695L13.179 4.491V5.277L14.381 4.649V8.279H15.324V3.72H15.316V3.721ZM17.123 4.35C17.571 4.35 17.885 4.601 17.885 4.963C17.885 5.356 17.515 5.631 16.981 5.631H16.746V6.299H17.029C17.594 6.299 17.979 6.581 17.979 6.99C17.979 7.383 17.602 7.65 17.068 7.65C16.675 7.65 16.282 7.524 15.874 7.28V8.066C16.314 8.255 16.754 8.357 17.186 8.357C18.215 8.357 18.922 7.831 18.922 7.069C18.922 6.534 18.592 6.102 18.042 5.929C18.514 5.772 18.82 5.356 18.82 4.884C18.82 4.146 18.168 3.643 17.225 3.643C16.7998 3.64762 16.38 3.73845 15.991 3.91V4.68C16.369 4.468 16.754 4.35 17.123 4.35ZM20.517 6.063C21.091 6.063 21.491 6.401 21.491 6.841C21.491 7.304 21.091 7.626 20.517 7.626C20.171 7.626 19.81 7.516 19.441 7.289V8.098C19.826 8.271 20.219 8.358 20.604 8.358C20.808 8.358 20.996 8.326 21.177 8.278C21.5971 7.59822 21.82 6.8151 21.821 6.016L21.806 5.686C21.5138 5.51277 21.1786 5.42543 20.839 5.434C20.6891 5.43346 20.5393 5.44415 20.391 5.466V4.444H21.523C21.4247 4.19245 21.3035 3.95044 21.161 3.721H19.574V6.196C19.8817 6.11331 20.1984 6.06864 20.517 6.063Z" fill="#77787D" />
+                        <path opacity="0.2" fillRule="evenodd" clipRule="evenodd" d="M14.337 1.5C13.6146 2.00713 13.025 2.68088 12.6182 3.4642C12.2114 4.24753 11.9993 5.11734 12 6C12 7.33 12.472 8.55 13.257 9.5H3C2.73478 9.5 2.48043 9.60536 2.29289 9.79289C2.10536 9.98043 2 10.2348 2 10.5V11.5C2 11.7652 2.10536 12.0196 2.29289 12.2071C2.48043 12.3946 2.73478 12.5 3 12.5H19C19.2652 12.5 19.5196 12.3946 19.7071 12.2071C19.8946 12.0196 20 11.7652 20 11.5V10.9C20.7976 10.4917 21.484 9.89559 22 9.163V15.5C22 16.0304 21.7893 16.5391 21.4142 16.9142C21.0391 17.2893 20.5304 17.5 20 17.5H2C1.46957 17.5 0.960859 17.2893 0.585786 16.9142C0.210714 16.5391 0 16.0304 0 15.5V3.5C0 2.96957 0.210714 2.46086 0.585786 2.08579C0.960859 1.71071 1.46957 1.5 2 1.5H14.337ZM21.044 1.793C21.283 1.995 21.504 2.217 21.706 2.456C21.5406 2.18594 21.3138 1.95877 21.044 1.793Z" fill="#77787D" />
+                        <path opacity="0.4" fillRule="evenodd" clipRule="evenodd" d="M12.6 3.5C12.1267 4.42493 11.9262 5.46542 12.022 6.5H0V3.5H12.6Z" fill="#77787D" />
+                        <path fillRule="evenodd" clipRule="evenodd" d="M17.5 11.5C16.0413 11.5 14.6424 10.9205 13.6109 9.88909C12.5795 8.85764 12 7.45869 12 6C12 4.54131 12.5795 3.14236 13.6109 2.11091C14.6424 1.07946 16.0413 0.5 17.5 0.5C18.9587 0.5 20.3576 1.07946 21.3891 2.11091C22.4205 3.14236 23 4.54131 23 6C23 7.45869 22.4205 8.85764 21.3891 9.88909C20.3576 10.9205 18.9587 11.5 17.5 11.5ZM15.316 3.721H14.695L13.179 4.491V5.277L14.381 4.649V8.279H15.324V3.72H15.316V3.721ZM17.123 4.35C17.571 4.35 17.885 4.601 17.885 4.963C17.885 5.356 17.515 5.631 16.981 5.631H16.746V6.299H17.029C17.594 6.299 17.979 6.581 17.979 6.99C17.979 7.383 17.602 7.65 17.068 7.65C16.675 7.65 16.282 7.524 15.874 7.28V8.066C16.314 8.255 16.754 8.357 17.186 8.357C18.215 8.357 18.922 7.831 18.922 7.069C18.922 6.534 18.592 6.102 18.042 5.929C18.514 5.772 18.82 5.356 18.82 4.884C18.82 4.146 18.168 3.643 17.225 3.643C16.7998 3.64762 16.38 3.73845 15.991 3.91V4.68C16.369 4.468 16.754 4.35 17.123 4.35ZM20.517 6.063C21.091 6.063 21.491 6.401 21.491 6.841C21.491 7.304 21.091 7.626 20.517 7.626C20.171 7.626 19.81 7.516 19.441 7.289V8.098C19.826 8.271 20.219 8.358 20.604 8.358C20.808 8.358 20.996 8.326 21.177 8.278C21.5971 7.59822 21.82 6.8151 21.821 6.016L21.806 5.686C21.5138 5.51277 21.1786 5.42543 20.839 5.434C20.6891 5.43346 20.5393 5.44415 20.391 5.466V4.444H21.523C21.4247 4.19245 21.3035 3.95044 21.161 3.721H19.574V6.196C19.8817 6.11331 20.1984 6.06864 20.517 6.063Z" fill="#77787D" />
                       </svg>
 
                     </div>
@@ -465,7 +521,7 @@ const CheckoutPage = () => {
                 <div className="border border-[#ccc] rounded-lg px-2 py-3 cursor-pointer flex justify-between items-center">
                   <p>Select</p>
                   <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clipRule="evenodd" d="M10.1933 0.719947C10.3342 0.579117 10.5252 0.5 10.7243 0.5C10.9235 0.5 11.1145 0.579117 11.2553 0.719947C11.3962 0.860777 11.4753 1.05178 11.4753 1.25095C11.4753 1.45011 11.3962 1.64112 11.2553 1.78195L6.53034 6.50595C6.38971 6.6464 6.19909 6.72529 6.00034 6.72529C5.80159 6.72529 5.61096 6.6464 5.47034 6.50595L0.745338 1.78195C0.604508 1.64112 0.525391 1.45011 0.525391 1.25095C0.525391 1.05178 0.604508 0.860777 0.745338 0.719947C0.886168 0.579117 1.07717 0.5 1.27634 0.5C1.4755 0.5 1.66651 0.579117 1.80734 0.719947L6.00034 4.91295L10.1933 0.719947Z" fill="#6D6E78" />
+                    <path fillRule="evenodd" clipRule="evenodd" d="M10.1933 0.719947C10.3342 0.579117 10.5252 0.5 10.7243 0.5C10.9235 0.5 11.1145 0.579117 11.2553 0.719947C11.3962 0.860777 11.4753 1.05178 11.4753 1.25095C11.4753 1.45011 11.3962 1.64112 11.2553 1.78195L6.53034 6.50595C6.38971 6.6464 6.19909 6.72529 6.00034 6.72529C5.80159 6.72529 5.61096 6.6464 5.47034 6.50595L0.745338 1.78195C0.604508 1.64112 0.525391 1.45011 0.525391 1.25095C0.525391 1.05178 0.604508 0.860777 0.745338 0.719947C0.886168 0.579117 1.07717 0.5 1.27634 0.5C1.4755 0.5 1.66651 0.579117 1.80734 0.719947L6.00034 4.91295L10.1933 0.719947Z" fill="#6D6E78" />
                   </svg>
 
                 </div>
