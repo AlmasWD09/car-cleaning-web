@@ -28,7 +28,7 @@ const DashboardService = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-console.log(selectedTime)
+  // console.log(selectedTime)
 
 
 
@@ -42,7 +42,6 @@ console.log(selectedTime)
   const timeSlots = singleServiceDetails?.service_times
 
   // console.log(singleServiceDetails)
-
 
 
 
@@ -61,7 +60,7 @@ console.log(selectedTime)
   useEffect(() => {
     if (timeSlots) {
       setSlotData(timeSlots)
-    } 
+    }
   }, [timeSlots])
 
 
@@ -323,20 +322,19 @@ console.log(selectedTime)
 
 
 
+  // ADD SERVICE TIME
+  const handleAdd = async (id) => {
+    const formData = new FormData();
+    formData.append("service_id", id);
+    formData.append("time", "05:30 PM");
 
-// UPDATE SERVICE TIME
-const handleUpdate = async (id) =>{
-const formData = new FormData();
-    formData.append("time", "12:20 PM");
-    formData.append("_method", "PUT");
 
-    
     // formData.forEach((value, key) => {
     //   console.log('key------>', key, 'value------>', value);
     // });
 
- try {
-      const res = await updateTime({updateTimeId:id,updateTimeinfo:formData}).unwrap()
+    try {
+      const res = await addTime(formData).unwrap()
       console.log(res)
 
       if (res?.status === true) {
@@ -348,12 +346,39 @@ const formData = new FormData();
     } catch (errors) {
       console.log(errors)
     }
-}
+  }
 
 
-// DELETE SERVICE TIME-- DONE
-const handleDelete = async (id) =>{
- try {
+  // UPDATE SERVICE TIME
+  const handleUpdate = async (id) => {
+    const formData = new FormData();
+    formData.append("time", "12:20 PM");
+    formData.append("_method", "PUT");
+
+
+    // formData.forEach((value, key) => {
+    //   console.log('key------>', key, 'value------>', value);
+    // });
+
+    try {
+      const res = await updateTime({ updateTimeId: id, updateTimeinfo: formData }).unwrap()
+      console.log(res)
+
+      if (res?.status === true) {
+        toast.success(res?.message)
+        refetch()
+      } else {
+        toast.error(res?.message)
+      }
+    } catch (errors) {
+      console.log(errors)
+    }
+  }
+
+
+  // DELETE SERVICE TIME-- DONE
+  const handleDelete = async (id) => {
+    try {
       const res = await deleteTime(id).unwrap()
       console.log(res)
 
@@ -366,7 +391,7 @@ const handleDelete = async (id) =>{
     } catch (errors) {
       console.log(errors)
     }
-}
+  }
 
 
 
@@ -753,10 +778,8 @@ const handleDelete = async (id) =>{
         <div className="p-8">
           <Form form={formThree} onFinish={onFinishThree}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
               {/* Always show 6 slots (time slots + placeholders if needed) */}
               {[...Array(6)].map((_, index) => {
-                // If time exists for this index, show time button
                 if (timeSlots && timeSlots[index]) {
                   return (
                     <div
@@ -778,7 +801,7 @@ const handleDelete = async (id) =>{
                         </button>
 
 
-                        <button onClick={()=>handleDelete(timeSlots[index]?.id)} type="button">
+                        <button onClick={() => handleDelete(timeSlots[index]?.id)} type="button">
                           <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="50" height="50" rx="15" fill="#FFE2E2" />
                             <path d="M34.5 14.3333H29.75L28.3929 13H21.6071L20.25 14.3333H15.5V17H34.5M16.8571 34.3333C16.8571 35.0406 17.1431 35.7189 17.6521 36.219C18.1612 36.719 18.8516 37 19.5714 37H30.4286C31.1484 37 31.8388 36.719 32.3479 36.219C32.8569 35.7189 33.1429 35.0406 33.1429 34.3333V18.3333H16.8571V34.3333Z" fill="#FF3F3F" />
@@ -793,6 +816,7 @@ const handleDelete = async (id) =>{
                 return (
                   <button
                     key={`${index}`} // Unique key for placeholder
+                    onClick={() => handleAdd(detailsId)}
                     type="button"
                     className="h-[90px] bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-center group"
                   >
