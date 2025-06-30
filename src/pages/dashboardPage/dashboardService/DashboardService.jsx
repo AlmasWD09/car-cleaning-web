@@ -22,14 +22,19 @@ const DashboardService = () => {
   const [detailsId, setDetailsId] = useState('')
   const [deleteId, setDeleteId] = useState('')
   const [slotData, setSlotData] = useState([])
-  const [initialTime, setInitialTime] = useState({ hour: 12, minute: 0, second: 0, period: "AM" });
+   const [currentTime, setCurrentTime] = useState({
+    hour: new Date().getHours() % 12 || 12, // 12-hour format
+    minute: new Date().getMinutes(),
+    period: new Date().getHours() >= 12 ? "PM" : "AM"
+  });
+  const [initialTime, setInitialTime] = useState(currentTime);
   const [selectedTime, setSelectTime] = useState(null)
 
 
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [slotTimeId, setSlotTimeId] = useState('')
 
   // console.log(selectedTime)
-
 
 
   const { data: getServiceData, isLoading, refetch } = useGetServiceQuery()
@@ -56,6 +61,23 @@ const DashboardService = () => {
   const [deleteTime] = useDeleteTimeMutation();
 
 
+
+  // CURRENT TIME
+  useEffect(() => {
+    // Update time every minute (60000ms)
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      const hours = now.getHours();
+
+      setCurrentTime({
+        hour: hours % 12 || 12, // Convert to 12-hour format
+        minute: now.getMinutes(),
+        period: hours >= 12 ? "PM" : "AM"
+      });
+    }, 60000);
+
+    return () => clearInterval(intervalId); // Cleanup
+  }, []);
 
   useEffect(() => {
     if (timeSlots) {
@@ -300,43 +322,25 @@ const DashboardService = () => {
   const formatNumber = (num) => num.toString().padStart(2, "0");
 
   const formatTimeString = () => {
-    const { hour, minute, second, period } = initialTime;
+    const { hour, minute, period } = initialTime;
     return `${formatNumber(hour)}:${formatNumber(minute)}: ${period}`;
   };
 
 
 
 
-  const showTimeModal = () => {
 
-    setIsModalOpen(true)
-    setModalThree(false)
-  }
-  const handleOkTime = () => {
+  const handleOkTime = async () => {
     setSelectTime(formatTimeString)
     setIsModalOpen(false)
-  }
-  const handleCancelTime = () => {
-    setIsModalOpen(false)
-  }
 
 
-
-  // ADD SERVICE TIME
-  const handleAdd = async (id) => {
     const formData = new FormData();
-    formData.append("service_id", id);
-    formData.append("time", "05:30 PM");
-
-
-    // formData.forEach((value, key) => {
-    //   console.log('key------>', key, 'value------>', value);
-    // });
+    formData.append("service_id", slotTimeId);
+    formData.append("time", selectedTime);
 
     try {
       const res = await addTime(formData).unwrap()
-      console.log(res)
-
       if (res?.status === true) {
         toast.success(res?.message)
         refetch()
@@ -346,13 +350,27 @@ const DashboardService = () => {
     } catch (errors) {
       console.log(errors)
     }
+
+  }
+  const handleCancelTime = () => {
+    setIsModalOpen(false)
+  }
+
+
+
+  // ADD SERVICE TIME
+  const handleAdd = async (id) => {
+    setSlotTimeId(id)
+    setIsModalOpen(true)
+    // setModalThree(false)
+
   }
 
 
   // UPDATE SERVICE TIME
   const handleUpdate = async (id) => {
     const formData = new FormData();
-    formData.append("time", "12:20 PM");
+    formData.append("time", selectedTime);
     formData.append("_method", "PUT");
 
 
@@ -362,7 +380,7 @@ const DashboardService = () => {
 
     try {
       const res = await updateTime({ updateTimeId: id, updateTimeinfo: formData }).unwrap()
-      console.log(res)
+      // console.log(res)
 
       if (res?.status === true) {
         toast.success(res?.message)
@@ -380,7 +398,7 @@ const DashboardService = () => {
   const handleDelete = async (id) => {
     try {
       const res = await deleteTime(id).unwrap()
-      console.log(res)
+      // console.log(res)
 
       if (res?.status === true) {
         toast.success(res?.message)
@@ -881,7 +899,7 @@ const DashboardService = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         {
           isModalOpen && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]">
-            <div className="bg-white rounded-lg p-6 w-full max-w-xl mx-4 shadow-xl">
+            <div className="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 shadow-xl">
               {/* Header */}
               <h2 className="text-xl font-semibold text-gray-800 mb-6">Select Time</h2>
 
