@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import CustomContainer from "../../components/shared/CustomContainer"
 import React, { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
-import { useGetServiceAvilityApiQuery } from "../../redux/web/serviceAvility/serviceAvilityApi";
+import { useGetServiceAvilityApiQuery, useGetTimeApiQuery } from "../../redux/web/serviceAvility/serviceAvilityApi";
 
 
 
@@ -14,9 +14,11 @@ const ServiceAviablity = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState(new Date());
   const [selectDate, setSelectDate] = useState(false)
-  const [activeTimes, setActiveTimes] = useState([]);
-  const [clickable, setClickable] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [activeTimes, setActiveTimes] = useState(false);
+  const [activeNextButton, setActiveNextButton] = useState(false);
+  const [clickable, setClickable] = useState(false) 
+  const [selectedDate, setSelectedDate] = useState(null); // send
+  const [bookingTime, setBookingTime] = useState(null); // send
   const location = useLocation();
   const { id, type, name, price } = location.state || {};
   // console.log(id, type, name, price)
@@ -26,7 +28,10 @@ const ServiceAviablity = () => {
   const blockServiceDate = getBlockService?.data?.data;
 
 
+  const { data: getTime } = useGetTimeApiQuery({service_id:id,date:selectedDate})
+  const timeallData = getTime?.data
 
+// console.log(id,selectedDate)
 
 
   const today = new Date();
@@ -48,7 +53,7 @@ const ServiceAviablity = () => {
   const singleYear = date.getFullYear(); // 2025
 
   const singleFormattedDate = `${monthName} ${singleDay}, ${singleYear}`;
-  console.log("singleFormattedDate", singleFormattedDate); // Output: "June 29, 2025"
+  // console.log("singleFormattedDate", singleFormattedDate); 
 
   // ==================== date formate and ui show end ============================
 
@@ -72,69 +77,52 @@ const ServiceAviablity = () => {
   };
 
   // 🔹 User date select handler
+  // const handleDateSelect = (date) => {
+  //   if (date) {
+  //     setSelectedDate(date);
+  //   }
+  // };
+
+  // console.log(selectedDate)
+
+
   const handleDateSelect = (date) => {
     if (date) {
-      setSelectedDate(date);
+      // Get local date components (avoids timezone issues)
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+
+      const formattedDate = `${year}-${month}-${day}`;
+      setSelectedDate(formattedDate);
     }
+    // When you need to use it as a Date object (outside this function):
+    const dateObject = selectedDate ? new Date(selectedDate) : null;
   };
 
-  console.log(selectedDate)
 
 
-  const year = selectedDate?.getFullYear();
-  const month = String(selectedDate?.getMonth() + 1).padStart(2, '0');
-  const day = String(selectedDate?.getDate()).padStart(2, '0');
-  const formattedDate = `${year}-${month}-${day}`;
+  // const year = selectedDate?.getFullYear();
+  // const month = String(selectedDate?.getMonth() + 1).padStart(2, '0');
+  // const day = String(selectedDate?.getDate()).padStart(2, '0');
+  // const formattedDate = `${year}-${month}-${day}`;
 
-
-
-
-
-  const timeallData = [
-    {
-      id: "1",
-      time: "03.00Pm"
-    },
-    {
-      id: "2",
-      time: "02.00Pm"
-    },
-    {
-      id: "3",
-      time: "01.00Pm"
-    },
-    {
-      id: "4",
-      time: "12.00Am"
-    },
-    {
-      id: "5",
-      time: "11.00Am"
-    },
-    {
-      id: "6",
-      time: "10.00Am"
-    },
-  ]
 
 
   const handleCheckoutPage = () => {
     if (activeTimes.length === 0) return; // Do nothing if nothing is selected
-    navigate(`/checkout`,{ state: { id, type ,name, price } });
+    navigate(`/checkout`, { state: { id, type, name, price,selectedDate,bookingTime } });
   }
   const handleData = (dateValue) => {
     setSelectDate(true)
   }
 
-  const handleSelectTime = (timeId) => {
-    if (activeTimes.includes(timeId)) {
-      // If already active, remove it (toggle off)
-      setActiveTimes(activeTimes.filter(id => id !== timeId));
-    } else {
-      // Else add it (toggle on)
-      setActiveTimes([...activeTimes, timeId]);
-    }
-  };
+
+
+  const handleSelectTime = (tmv) =>{
+    setBookingTime(tmv)
+    setActiveNextButton(true)
+  }
 
 
 
@@ -190,7 +178,9 @@ const ServiceAviablity = () => {
 
               </div>
               <div className="">
-                <button onClick={() => handleData(value)} className="bg-primary text-[#ffff] text-[20px] py-2 md:py-4 px-[40px] md:px-[57px] rounded-full flex items-center gap-2">
+                <button onClick={() => handleData(value)} className={`bg-primary text-[#ffff] text-[20px] py-2 md:py-4 px-[40px] md:px-[57px] rounded-full flex items-center gap-2 ${!selectedDate ? 'opacity-20 cursor-not-allowed' : ''
+                  }`}
+                  disabled={!selectedDate}>
                   Go to next date
                   <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.29425e-05 6L11.5861 6L7.08606 1.5L8.50006 0.0859985L15.4141 7L8.50006 13.914L7.08606 12.5L11.5861 8L6.29425e-05 8V6Z" fill="white" />
@@ -226,31 +216,51 @@ const ServiceAviablity = () => {
 
         {
           selectDate && <div className="lg:w-[50%] mt-8">
-            <h3 className='text-[20px] md:text-[50px] font-medium font-degular'>Wednesday March 27, 2025. </h3>
-
-            <p className='text-[20px]  font-medium font-degular py-4'>Select Time</p>
+            {
+              timeallData?.length > 0 && <h3 className='text-[20px] md:text-[50px] font-medium font-degular'>Wednesday March 27, 2025. </h3>
+            }
+            
+            {
+              timeallData?.length > 0 && <p className='text-[20px]  font-medium font-degular py-4'>Select Time</p>
+            }
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center md:place-items-baseline gap-y-4">
               {
-                timeallData.map((singleTime, index) => {
-                  const isActive = activeTimes.includes(singleTime.id);
-                  return (
-                    <div
-                      key={index}
-                      onClick={() => handleSelectTime(singleTime.id)}
-                      className={` w-fit px-[80px] py-2 hover:bg-primary hover:text-[#ffff] text-[20px] cursor-pointer rounded-lg ${isActive ? "bg-primary text-[#ffff]" : "bg-[#ffff]"}`}>{singleTime.time}</div>
-                  )
-                })
+                timeallData?.length > 0 ? (
+                  timeallData.map((singleTime, index) => {
+                    return (
+                      <div
+                        key={index}
+                        onClick={()=>handleSelectTime(singleTime)}
+                        className={`w-fit px-[80px] py-2 hover:bg-primary hover:text-[#ffff] text-[20px] cursor-pointer rounded-lg ${bookingTime === singleTime ? "bg-primary text-[#ffff]" : "bg-[#ffff]"
+                          }`}
+                      >
+                        {singleTime}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="w-full rounded-lg ">
+                    <p className="lg:text-3xl md:text-1xl text-base font-bold text-gray-200 uppercase text-center">No data found</p>
+                  </div>
+                )
               }
             </div>
-            <div>
-              <button onClick={handleCheckoutPage} className={`w-full flex justify-center items-center  text-[20px] py-2 md:py-4  rounded-full gap-2 my-8 ${activeTimes.length > 0 ? "bg-primary text-[#ffff] cursor-pointer" : "bg-gray-300 text-[#ffff] cursor-not-allowed"}`}>
-                Next
-                <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6.29425e-05 6L11.5861 6L7.08606 1.5L8.50006 0.0859985L15.4141 7L8.50006 13.914L7.08606 12.5L11.5861 8L6.29425e-05 8V6Z" fill="white" />
-                </svg>
-              </button>
-            </div>
+
+            {
+              timeallData?.length > 0 ? <div>
+                <button onClick={handleCheckoutPage} className={`w-full flex justify-center items-center  text-[20px] py-2 md:py-4  rounded-full gap-2 my-8 ${activeNextButton ? "bg-primary text-[#ffff] cursor-pointer" : "bg-gray-300 text-[#ffff] cursor-not-allowed"}`}>
+                  Next
+                  <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.29425e-05 6L11.5861 6L7.08606 1.5L8.50006 0.0859985L15.4141 7L8.50006 13.914L7.08606 12.5L11.5861 8L6.29425e-05 8V6Z" fill="white" />
+                  </svg>
+                </button>
+              </div>
+                :
+                ''
+            }
+
+
           </div>
         }
 

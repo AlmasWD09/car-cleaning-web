@@ -7,6 +7,17 @@ import { useForm } from "antd/es/form/Form";
 import { UploadCloud } from "lucide-react";
 import { useGetAuthProfileApiQuery } from "../../redux/dashboardFeatures/setting/dashboardSettingApi";
 
+import {loadStripe} from '@stripe/stripe-js';
+import {
+  PaymentElement,
+  Elements,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js';
+import toast from "react-hot-toast";
+import { useBookingSuccessMutation, useCreateIntentMutation } from "../../redux/web/serviceAvility/serviceAvilityApi";
+
+const stripePromise = loadStripe('pk_test_51QKAtBKOpUtqOuW1x5VdNqH3vG7CZZl1P6V3VuV1qsRUmPLNk26i34AXeu2zCO3QurFJAOZ9zfb0EkWeCVhqBYgH008X41cXr6');
 const CheckoutPage = () => {
   const [formOne] = Form.useForm();
   const [formTwo] = Form.useForm();
@@ -14,10 +25,12 @@ const CheckoutPage = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [ImageFileList, setImageFileList] = useState([]);
-  const [textAreaValue, setTextAreaValue] = useState('')
+  const [bookingNode, setBookingNode] = useState('')
   const location = useLocation();
-  const { id, type, name, price } = location.state || {};
-  console.log(id, type, name, price)
+  const [paymentInfo , setPaymentInfo] = useState(null)
+  // const paymentInfo = location.state || {};
+  const { id, type, name, price, selectedDate, bookingTime } = location.state || {};
+  
 
 
 
@@ -26,6 +39,7 @@ const CheckoutPage = () => {
   const userProfile = userProfileData?.data
   const carPhoto = userProfile?.car_photos
 
+  console.log(bookingNode)
 
 
   useEffect(() => {
@@ -92,43 +106,20 @@ const CheckoutPage = () => {
 
 
   const onFinishOne = (values) => {
-    console.log(values)
-    console.log(textAreaValue)
-    const formData = new FormData();
-    // formData.append('phone', values?.phone);
-    // formData.append('name', values?.name);
-    // formData.append('email', values?.email);
-    // formData.append('car_band', values?.car_band);
-    // formData.append('car_model', values?.car_model);
-    // formData.append('booking_note', textAreaValue);
-    // formData.append('booking_note', values?.booking_note);
 
+    const info = {
+'service_id' : id,
+'service_name' : name,
+'service_type' : type,
+'booking_date' : selectedDate,
+'booking_time' : bookingTime,
+'price' : price,
+'booking_note' : bookingNode,
+'car_brand' : values?.car_brand,
+'car_model' : values?.car_model,
+}
 
-
-
-    formData.append('service_id', values?.service_id);
-    formData.append('service_name', values?.service_name);
-    formData.append('service_type', values?.service_type);
-    formData.append('booking_date', values?.booking_date);
-    formData.append('booking_time', values?.booking_time);
-    formData.append('price', values?.price);
-    formData.append('booking_note', values?.booking_note);
-    formData.append('car_brand', values?.car_brand);
-    formData.append('car_model', values?.car_model);
-    formData.append('stripe_payment_intent_id', values?.stripe_payment_intent_id);
-
-
-
-    //   try {
-    //     const res = ""
-
-    //     if (res?.data) {
-    //         setImageFileList([]);
-    //         formOne.resetFields()
-    //         dispatch(closeTeamModalOpenOne());
-    //     }
-    // } catch (errors) {
-    // }
+setPaymentInfo(info)
 
 
   }
@@ -140,7 +131,7 @@ const CheckoutPage = () => {
 
 
   const onFinishTwo = (value) => {
-    setTextAreaValue(value?.booking_note)
+    setBookingNode(value?.booking_note)
     setModalOpen(false)
     formTwo.resetFields()
   }
@@ -148,6 +139,8 @@ const CheckoutPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+
 
   return (
     <section className=" pt-20 lg:pt-[120px] pb-[52px] bg-[#f6f6f6]">
@@ -169,7 +162,7 @@ const CheckoutPage = () => {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row justify-between pt-8">
+        <div className={`transition-all duration-300  flex flex-col lg:flex-row ${paymentInfo?.price ? "justify-between" : "justify-center"} `}>
           {/* left  */}
           <div className="w-full lg:w-[50%]">
             <Form form={formOne} onFinish={onFinishOne}>
@@ -364,8 +357,8 @@ const CheckoutPage = () => {
               </div>
 
               {
-                textAreaValue && <div className="border rounded-xl h-[150px] p-2 bg-gray-200 overflow-y-auto">
-                  {textAreaValue}
+                bookingNode && <div className="border rounded-xl h-[150px] p-2 bg-gray-200 overflow-y-auto">
+                  {bookingNode}
                 </div>
               }
 
@@ -386,7 +379,6 @@ const CheckoutPage = () => {
                 Save
               </Button>
             </Form>
-
 
             {/* node modal component */}
             <Modal
@@ -431,8 +423,109 @@ const CheckoutPage = () => {
               </div>
             </Modal>
           </div>
+          {
+            paymentInfo?.price && <Elements stripe={stripePromise} 
+        options={{
+            mode : "payment",
+            amount: parseInt(paymentInfo?.price) * 100,
+            currency: 'usd',
+  
+        }}
+        >
 
-          {/* right  */}
+         <PaymentCard paymentInfo={paymentInfo} />
+       </Elements>
+          }
+        
+        </div>
+      </CustomContainer>
+    </section>
+  )
+}
+
+export default CheckoutPage
+
+
+
+
+export const PaymentCard = ({paymentInfo}) => {
+ const [errorMessage, setErrorMessage] = useState(null);
+  const {  service_type, service_name, price, }  = paymentInfo;
+
+  const [createIntent, intentResults] = useCreateIntentMutation()
+
+  const [bookingSuccess, bookingResults] = useBookingSuccessMutation()
+
+
+    const stripe = useStripe();
+  const elements = useElements();
+
+
+  const handleSubmit = async () => {
+
+    if (elements == null) {
+      return toast.error("Something happened wrong")
+    }
+
+    // Trigger form validation and wallet collection
+    const {error: submitError} = await elements.submit();
+    if (submitError) {
+      // Show error to your customer
+      setErrorMessage(submitError.message);
+      return;
+    }
+
+    // Create the PaymentIntent and obtain clientSecret from your server endpoint
+    const res = await createIntent({
+             payment_method:"pm_card_visa",
+            amount:price,
+            service_name:service_name
+    }).unwrap()
+
+    const clientSecret = res?.data?.client_secret
+
+
+    const {error,paymentIntent} = await stripe.confirmPayment({
+      //`Elements` instance that was used to create the Payment Element
+      elements,
+      clientSecret,
+      confirmParams: {
+        return_url: 'https://example.com/order/123/complete',
+      },
+       redirect: 'if_required', // <- THIS AVOIDS REDIRECT
+    });
+
+    if (error) {
+
+      // This point will only be reached if there is an immediate error when
+      // confirming the payment. Show error to your customer (for example, payment
+      // details incomplete)
+      setErrorMessage(error.message);
+    } else {
+      paymentInfo.stripe_payment_intent_id = paymentIntent.id;
+
+
+      console.log(paymentInfo)
+
+     const res = await  bookingSuccess(
+        paymentInfo
+      ).unwrap()
+console.log(res)
+      if(res.status){
+        toast.success( "Your booking is submit successfully done!")
+      }
+      
+
+
+      // Your customer will be redirected to your `return_url`. For some payment
+      // methods like iDEAL, your customer will be redirected to an intermediate
+      // site first to authorize the payment, then redirected to the `return_url`.
+    }
+  };
+
+  return <>
+  
+   {/* right  */}
           <div className=" w-full lg:w-[40%]">
 
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
@@ -449,7 +542,8 @@ const CheckoutPage = () => {
                 <img src="/checkoutLogo.svg" alt="logo" />
                 <div>
                   <p className='text-[20px]  font-degular'>Thursday, March 27, 2025</p>
-                  <p className='text-[20px] text-gray-300 font-degular'>10:00 PM</p>
+                  {/* <p className='text-[20px] text-gray-300 font-degular'>{bookingTime}</p> */}
+                  <p className='text-[20px] text-gray-300 font-degular'>asdf</p>
                 </div>
               </div>
 
@@ -462,7 +556,7 @@ const CheckoutPage = () => {
             </div>
 
             <div className="flex flex-col md:flex-row justify-between border border-[#ccc] rounded-lg p-4 font-degular mt-6">
-              <p className='text-[28px]  font-degular text-primary'>{type}</p>
+              <p className='text-[28px]  font-degular text-primary'>{service_type}</p>
               <div>
                 <p className='text-[20px]  font-degular'>{name}</p>
                 <p className='text-[28px]  font-bold text-primary font-degular'>${price}</p>
@@ -471,7 +565,7 @@ const CheckoutPage = () => {
 
 
             {/* paypal account component */}
-            <div className=" rounded-lg p-8 bg-[#ffff] space-y-4 mt-8">
+            {/* <div className=" rounded-lg p-8 bg-[#ffff] space-y-4 mt-8">
               <div className="flex justify-between items-center">
                 <p className='text-[20px]  font-degular'>Pay with </p>
                 <img src="/paypal.svg" alt="" />
@@ -547,13 +641,38 @@ const CheckoutPage = () => {
 
                 </Button>
               </div>
+            </div> */}
+            <div className="mt-4">
+
+            <PaymentElement  />
             </div>
+              <div className="mt-4">
+                <Button
+                loading={intentResults.isLoading || bookingResults?.isLoading}
+                onClick={()=>{
+                  handleSubmit()
+                }}
+                disabled={!stripe || !elements}
+                  htmlType="submit"
+                  block
+                  style={{
+                    backgroundColor: "#0063E5",
+                    color: "#ffffff",
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    height: "60px",
+                    borderRadius: "20px",
+                    paddingInline: "20px",
+                  }}
+                >
+                  Book Appointment <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.293032 6L11.879 6L7.37903 1.5L8.79303 0.0859985L15.707 7L8.79303 13.914L7.37903 12.5L11.879 8L0.293032 8V6Z" fill="white" />
+                  </svg>
 
+                </Button>
+              </div>
+                  {/* Show error message to your customers */}
+      {errorMessage && <div className="text-red-700 text-base font-medium">{errorMessage}</div>}
           </div>
-        </div>
-      </CustomContainer>
-    </section>
-  )
+  </>
 }
-
-export default CheckoutPage

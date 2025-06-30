@@ -36,6 +36,11 @@ const Pricing = () => {
   }
 
 
+  const handlePrice = (id, type, name, price) => {
+    navigate(`/service-aviablity`, { state: { id, type, name, price } })
+  }
+
+
   useEffect(() => {
     if (modalOpen) {
       document.body.style.overflow = "hidden";
@@ -136,16 +141,18 @@ const Pricing = () => {
                   <p className='text-[24px] font-degular'>Interior</p>
                   <p className='text-[24px] font-degular font-semibold text-primary'>${singlePriceValue?.interior}</p>
                 </div>
-                <Link to="/service-aviablity">
-                  <span className="cursor-pointer">
-                    <svg
-                      className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
-                      viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="60" height="60" rx="30" fill="#0063E6" />
-                      <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
-                    </svg>
-                  </span>
-                </Link>
+
+                <span
+                  onClick={() => handlePrice((singlePriceValue?.id), (singlePriceValue?.car_type), ("Interior"), (singlePriceValue?.interior))}
+                  className="cursor-pointer">
+                  <svg
+                    className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
+                    viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="60" height="60" rx="30" fill="#0063E6" />
+                    <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
+                  </svg>
+                </span>
+
               </div>
             </div>
 
@@ -156,16 +163,16 @@ const Pricing = () => {
                   <p className='text-[24px] font-degular'>Exterior</p>
                   <p className='text-[24px] font-degular font-semibold text-primary'>${singlePriceValue?.exterior}</p>
                 </div>
-                <Link to="/service-aviablity">
-                  <span className="cursor-pointer">
-                    <svg
-                      className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
-                      viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="60" height="60" rx="30" fill="#0063E6" />
-                      <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
-                    </svg>
-                  </span>
-                </Link>
+                <span
+                  onClick={() => handlePrice((singlePriceValue?.id), (singlePriceValue?.car_type), ("Interior"), (singlePriceValue?.interior))}
+                  className="cursor-pointer">
+                  <svg
+                    className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
+                    viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="60" height="60" rx="30" fill="#0063E6" />
+                    <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
+                  </svg>
+                </span>
               </div>
             </div>
 
@@ -176,16 +183,16 @@ const Pricing = () => {
                   <p className='text-[24px] font-degular'>Both</p>
                   <p className='text-[24px] font-degular font-semibold text-primary'>${singlePriceValue?.both}</p>
                 </div>
-                <Link to="/service-aviablity">
-                  <span className="cursor-pointer">
-                    <svg
-                      className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
-                      viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="60" height="60" rx="30" fill="#0063E6" />
-                      <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
-                    </svg>
-                  </span>
-                </Link>
+                <span
+                  onClick={() => handlePrice((singlePriceValue?.id), (singlePriceValue?.car_type), ("Interior"), (singlePriceValue?.interior))}
+                  className="cursor-pointer">
+                  <svg
+                    className="w-[30px] md:w-[40px] lg:w-[60px] h-auto"
+                    viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="60" height="60" rx="30" fill="#0063E6" />
+                    <path d="M23.8433 34.7425L32.0358 26.55L25.6719 26.55L25.6719 24.5503H35.4497L35.4497 34.3282L33.45 34.3282L33.45 27.9642L25.2575 36.1568L23.8433 34.7425Z" fill="white" />
+                  </svg>
+                </span>
               </div>
             </div>
           </div>
