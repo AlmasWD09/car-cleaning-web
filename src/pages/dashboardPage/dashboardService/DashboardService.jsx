@@ -1,7 +1,7 @@
 import { Button, Form, Input, Modal, Upload } from "antd";
 import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react"
-import { useAddServiceMutation, useAddTimeMutation, useDeleteServiceMutation, useGetDetailsServiceApiQuery, useGetServiceQuery, useUpdateServiceMutation } from "../../../redux/dashboardFeatures/services/dashboardServiceApi";
+import { useAddServiceMutation, useAddTimeMutation, useDeleteServiceMutation, useDeleteTimeMutation, useGetDetailsServiceApiQuery, useGetServiceQuery, useUpdateServiceMutation, useUpdateTimeMutation } from "../../../redux/dashboardFeatures/services/dashboardServiceApi";
 import toast from "react-hot-toast";
 import CustomLoading from "../../../components/shared/CustomLoading";
 import { Space, TimePicker } from 'antd';
@@ -28,7 +28,7 @@ const DashboardService = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-
+console.log(selectedTime)
 
 
 
@@ -53,19 +53,15 @@ const DashboardService = () => {
 
 
   const [addTime] = useAddTimeMutation();
-
-
-
-
-
-
+  const [updateTime] = useUpdateTimeMutation();
+  const [deleteTime] = useDeleteTimeMutation();
 
 
 
   useEffect(() => {
     if (timeSlots) {
       setSlotData(timeSlots)
-    }
+    } 
   }, [timeSlots])
 
 
@@ -328,7 +324,49 @@ const DashboardService = () => {
 
 
 
+// UPDATE SERVICE TIME
+const handleUpdate = async (id) =>{
+const formData = new FormData();
+    formData.append("time", "12:20 PM");
+    formData.append("_method", "PUT");
 
+    
+    // formData.forEach((value, key) => {
+    //   console.log('key------>', key, 'value------>', value);
+    // });
+
+ try {
+      const res = await updateTime({updateTimeId:id,updateTimeinfo:formData}).unwrap()
+      console.log(res)
+
+      if (res?.status === true) {
+        toast.success(res?.message)
+        refetch()
+      } else {
+        toast.error(res?.message)
+      }
+    } catch (errors) {
+      console.log(errors)
+    }
+}
+
+
+// DELETE SERVICE TIME-- DONE
+const handleDelete = async (id) =>{
+ try {
+      const res = await deleteTime(id).unwrap()
+      console.log(res)
+
+      if (res?.status === true) {
+        toast.success(res?.message)
+        refetch()
+      } else {
+        toast.error(res?.message)
+      }
+    } catch (errors) {
+      console.log(errors)
+    }
+}
 
 
 
@@ -731,7 +769,7 @@ const DashboardService = () => {
 
                       <div className="flex items-center gap-3">
 
-                        <button onClick={() => showTimeModal(timeSlots[index]?.id)}>
+                        <button onClick={() => handleUpdate(timeSlots[index]?.id)}>
                           <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="50" height="50" rx="15" fill="#E8F2FF" />
                             <path d="M25 13C18.376 13 13 18.376 13 25C13 31.624 18.376 37 25 37C31.624 37 37 31.624 37 25C37 18.376 31.624 13 25 13ZM25.072 33.4V30.988H25C23.464 30.988 21.928 30.4 20.752 29.236C19.7752 28.2582 19.1655 26.9735 19.0256 25.5986C18.8857 24.2236 19.2242 22.8425 19.984 21.688L21.304 23.008C20.452 24.604 20.668 26.62 22.012 27.964C22.852 28.804 23.956 29.2 25.06 29.176V26.608L28.456 30.004L25.072 33.4ZM30.004 28.312L28.684 26.992C29.536 25.396 29.32 23.38 27.976 22.036C27.5865 21.6431 27.1229 21.3316 26.612 21.1194C26.1011 20.9072 25.5532 20.7986 25 20.8H24.928V23.38L21.532 19.996L24.928 16.6V19.024C26.488 19 28.06 19.564 29.248 20.764C31.288 22.804 31.54 25.984 30.004 28.312Z" fill="#0063E5" />
@@ -740,7 +778,7 @@ const DashboardService = () => {
                         </button>
 
 
-                        <button type="button">
+                        <button onClick={()=>handleDelete(timeSlots[index]?.id)} type="button">
                           <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="50" height="50" rx="15" fill="#FFE2E2" />
                             <path d="M34.5 14.3333H29.75L28.3929 13H21.6071L20.25 14.3333H15.5V17H34.5M16.8571 34.3333C16.8571 35.0406 17.1431 35.7189 17.6521 36.219C18.1612 36.719 18.8516 37 19.5714 37H30.4286C31.1484 37 31.8388 36.719 32.3479 36.219C32.8569 35.7189 33.1429 35.0406 33.1429 34.3333V18.3333H16.8571V34.3333Z" fill="#FF3F3F" />

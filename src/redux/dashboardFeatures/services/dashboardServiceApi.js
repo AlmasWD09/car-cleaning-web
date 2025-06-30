@@ -47,10 +47,17 @@ const dashboardServiceApi = baseApi.injectEndpoints({
             invalidatesTags: ['service'],
         }),
         updateTime: builder.mutation({
-            query: ({updateTimeId,updateTime}) => ({
+            query: ({updateTimeId,updateTimeinfo}) => ({
                 url: `/admin/service_times/${updateTimeId}`,
                 method: "POST",
-                body:updateTime,
+                body:updateTimeinfo,
+            }),
+            invalidatesTags: ['service'],
+        }),
+        deleteTime: builder.mutation({
+            query: (deleteId) => ({
+                url: `/admin/service_times/${deleteId}`,
+                method: "DELETE",
             }),
             invalidatesTags: ['service'],
         }),
@@ -59,4 +66,4 @@ const dashboardServiceApi = baseApi.injectEndpoints({
 })
 
 
-export const {useGetDetailsServiceApiQuery, useAddServiceMutation, useUpdateServiceMutation,useDeleteServiceMutation,useGetServiceQuery,useAddTimeMutation,useUpdateTimeMutation } = dashboardServiceApi;
+export const {useGetDetailsServiceApiQuery, useAddServiceMutation, useUpdateServiceMutation,useDeleteServiceMutation,useGetServiceQuery,useAddTimeMutation,useUpdateTimeMutation,useDeleteTimeMutation } = dashboardServiceApi;
